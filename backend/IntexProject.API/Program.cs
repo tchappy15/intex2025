@@ -70,12 +70,12 @@ builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<Identi
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//testing:
-//if (app.Environment.IsDevelopment())
-//{
+if (builder.Configuration.GetValue<bool>("EnableSwagger")) //switch this value in Azure portal
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
+
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
