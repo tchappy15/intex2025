@@ -69,8 +69,17 @@ builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<Identi
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (builder.Configuration.GetValue<bool>("EnableSwagger")) //switch this value in Azure portal
+// // Configure the HTTP request pipeline.
+// if (builder.Configuration.GetValue<bool>("EnableSwagger")) //switch this value in Azure portal
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+bool swaggerEnabled = builder.Configuration.GetValue<bool>("EnableSwagger");
+Console.WriteLine("Swagger enabled? " + swaggerEnabled);
+
+if (swaggerEnabled) // switch this value in Azure portal
 {
     app.UseSwagger();
     app.UseSwaggerUI();
