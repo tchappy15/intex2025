@@ -37,16 +37,19 @@ function Register() {
       // clear error message
       setError('');
       // post data to the /register api
-      fetch('https://localhost:5000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      })
+      fetch(
+        'https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      )
         //.then((response) => response.json())
         .then((data) => {
           // handle success or error from the server

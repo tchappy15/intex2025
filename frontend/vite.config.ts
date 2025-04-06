@@ -7,8 +7,19 @@ export default defineConfig({
   server: {
     port: 3000,
     headers: {
-      "Content-Security-Policy":
-        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' daata:; frame-ancestors 'none'; font-src 'self' fonts.gstatic.com data:; connect-src 'self' https://localhost:5000; object-src 'none'; base-uri 'self'; form-action 'self';"
+
+        "Content-Security-Policy":
+          "default-src 'self'; \
+          script-src 'self' 'unsafe-inline' 'unsafe-eval'; \
+          style-src 'self' 'unsafe-inline' fonts.googleapis.com; \
+          img-src 'self' data:; \
+          frame-ancestors 'none'; \
+          font-src 'self' fonts.gstatic.com data:; \
+          connect-src 'self' https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net https://gray-flower-0bd00101e.6.azurestaticapps.net; \
+          object-src 'none'; \
+          base-uri 'self'; \
+          form-action 'self';"
+
     }
   },
 });
