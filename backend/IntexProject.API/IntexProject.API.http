@@ -1,0 +1,6 @@
+@IntexProject.API_HostAddress = http://localhost:5181
+
+GET {{IntexProject.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
