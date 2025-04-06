@@ -15,7 +15,7 @@ export default defineConfig({
           img-src 'self' data:; \
           frame-ancestors 'none'; \
           font-src 'self' fonts.gstatic.com data:; \
-          connect-src 'self' https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net https://gray-flower-0bd00101e.6.azurestaticapps.net; \
+          connect-src 'self' https://localhost:5000 https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net https://gray-flower-0bd00101e.6.azurestaticapps.net; \
           object-src 'none'; \
           base-uri 'self'; \
           form-action 'self';"
