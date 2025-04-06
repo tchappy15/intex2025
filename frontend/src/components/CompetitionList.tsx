@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Rootbeer } from '../types/Rootbeer';
 import { useNavigate } from 'react-router-dom';
+import { fetchRootbeers } from '../api/api';
 
 function CompetitionList({
   selectedContainers,
@@ -15,24 +16,18 @@ function CompetitionList({
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCompetition = async () => {
-      const containerParams = selectedContainers
-        .map((cont) => `containers=${encodeURIComponent(cont)}`)
-        .join('&');
+    
+const fetchCompetition = async () => {
+  try {
+    const data = await fetchRootbeers(pageSize, pageNum, selectedContainers);
+    setCompetition(data.brews);
+    setTotalItems(data.totalNumProjects);
+    setTotalPages(Math.ceil(data.totalNumProjects / pageSize));
+  } catch (err) {
+    console.error('Error loading competition:', err);
+  }
+};
 
-      const response = await fetch(
-        `https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/Competition/GetRootbeers?pageSize=${pageSize}&pageNum=${pageNum}${selectedContainers.length ? `&${containerParams}` : ''}`, 
-          {
-            credentials: 'include',
-          }
-      );
-
-      const data = await response.json();
-
-      setCompetition(data.brews);
-      setTotalItems(data.totalNumProjects);
-      setTotalPages(Math.ceil(totalItems / pageSize));
-    };
     fetchCompetition();
   }, [pageSize, pageNum, totalItems, selectedContainers]);
 

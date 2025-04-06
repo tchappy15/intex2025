@@ -1,54 +1,36 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { Navigate } from 'react-router-dom';
-
-const UserContext = createContext<User | null>(null);
+import { pingAuth } from '../api/api';
 
 interface User {
   email: string;
 }
 
-//here we are checking to see if the user is authorized. Calling the pingauth endpoint
+const UserContext = createContext<User | null>(null);
 
 function AuthorizeView(props: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // add a loading state
-  //const navigate = useNavigate();
-  let emptyuser: User = { email: '' };
-
-  const [user, setUser] = useState(emptyuser);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({ email: '' });
 
   useEffect(() => {
-    async function fetchWithRetry(url: string, options: any) {
+    async function fetchAuthUser() {
       try {
-        const response = await fetch(url, options);
-        //console.log('AuthorizeView: Raw Response:', response);
-
-        const contentType = response.headers.get('content-type');
-
-        // Ensure response is JSON before parsing
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new Error('Invalid response format from server');
-        }
-
-        const data = await response.json();
-
+        const data = await pingAuth();
         if (data.email) {
           setUser({ email: data.email });
           setAuthorized(true);
         } else {
           throw new Error('Invalid user session');
         }
-      } catch (error) {
+      } catch {
         setAuthorized(false);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchWithRetry('https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/pingauth', {
-      method: 'GET',
-      credentials: 'include',
-    });
+    fetchAuthUser();
   }, []);
 
   if (loading) {
@@ -57,7 +39,9 @@ function AuthorizeView(props: { children: React.ReactNode }) {
 
   if (authorized) {
     return (
-      <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+      <UserContext.Provider value={user}>
+        {props.children}
+      </UserContext.Provider>
     );
   }
 
@@ -66,8 +50,7 @@ function AuthorizeView(props: { children: React.ReactNode }) {
 
 export function AuthorizedUser(props: { value: string }) {
   const user = React.useContext(UserContext);
-
-  if (!user) return null; // Prevents errors if context is null
+  if (!user) return null;
 
   return props.value === 'email' ? <>{user.email}</> : null;
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../api/api';
 
 function Register() {
   // state variables for email and passwords
@@ -24,46 +25,27 @@ function Register() {
   };
 
   // handle submit event for the form
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // validate email and passwords
-    if (!email || !password || !confirmPassword) {
-      setError('Please fill in all fields.');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Please enter a valid email address.');
-    } else if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-    } else {
-      // clear error message
-      setError('');
-      // post data to the /register api
-      fetch(
-        'https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/register',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      )
-        //.then((response) => response.json())
-        .then((data) => {
-          // handle success or error from the server
-          console.log(data);
-          if (data.ok) setError('Successful registration. Please log in.');
-          else setError('Error registering.');
-        })
-        .catch((error) => {
-          // handle network error
-          console.error(error);
-          setError('Error registering.');
-        });
+  
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  if (!email || !password || !confirmPassword) {
+    setError('Please fill in all fields.');
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setError('Please enter a valid email address.');
+  } else if (password !== confirmPassword) {
+    setError('Passwords do not match.');
+  } else {
+    try {
+      const success = await registerUser(email, password);
+      if (success) setError('Successful registration. Please log in.');
+      else setError('Error registering.');
+    } catch (error) {
+      setError('Error registering.');
     }
-  };
+  }
+};
+
 
   return (
     <div className="container">

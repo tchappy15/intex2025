@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { loginUser } from '../api/api';
 
 function LoginPage() {
   // state variables for email and passwords
@@ -30,44 +31,24 @@ function LoginPage() {
   };
 
   // handle submit event for the form
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(''); // Clear any previous errors
+  
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError('');
 
-    if (!email || !password) {
-      setError('Please fill in all fields.');
-      return;
-    }
+  if (!email || !password) {
+    setError('Please fill in all fields.');
+    return;
+  }
 
-    const loginUrl = rememberme
-      ? 'https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/login?useCookies=true'
-      : 'https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/login?useSessionCookies=true';
+  try {
+    await loginUser(email, password, rememberme);
+    navigate('/competition');
+  } catch (error: any) {
+    setError(error.message || 'Error logging in.');
+  }
+};
 
-    try {
-      const response = await fetch(loginUrl, {
-        method: 'POST',
-        credentials: 'include', // ✅ Ensures cookies are sent & received
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      // Ensure we only parse JSON if there is content
-      let data = null;
-      const contentLength = response.headers.get('content-length');
-      if (contentLength && parseInt(contentLength, 10) > 0) {
-        data = await response.json();
-      }
-
-      if (!response.ok) {
-        throw new Error(data?.message || 'Invalid email or password.');
-      }
-
-      navigate('/competition');
-    } catch (error: any) {
-      setError(error.message || 'Error logging in.');
-      console.error('Fetch attempt failed:', error);
-    }
-  };
 
   return (
     <div className="container">

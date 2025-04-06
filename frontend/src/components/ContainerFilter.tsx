@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import './ContainerFilter.css'; // Assuming you have some CSS for styling
+import './ContainerFilter.css';
+import { fetchContainers } from '../api/api'; // Assuming you have some CSS for styling
 
 function ContainerFilter({
   selectedContainers,
@@ -11,24 +12,18 @@ function ContainerFilter({
   const [containers, setContainers] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchContainers = async () => {
-      try {
-        const response = await fetch(
-          'https://intex2025-backend-bpdjaqe0f9g2cra2.eastus-01.azurewebsites.net/Competition/GetContainerTypes',
-          {
-            credentials: 'include',
-          }
-        );
+    
+const fetchData = async () => {
+  try {
+    const data = await fetchContainers();
+    setContainers(data);
+    setSelectedContainers(data);
+  } catch (error) {
+    console.error('Error fetching container types', error);
+  }
+};
+fetchData();
 
-        const data = await response.json();
-        setContainers(data);
-
-        // Automatically check all fetched containers
-        setSelectedContainers(data);
-      } catch (error) {
-        console.error('Error fetching container types', error);
-      }
-    };
     fetchContainers();
   }, [setSelectedContainers]);
 
