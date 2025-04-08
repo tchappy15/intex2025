@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Movie } from '../types/Movie';
 import { useNavigate } from 'react-router-dom';
-import { fetchMoviesByGenre } from '../api/api';
+import { fetchMoviesFiltered } from '../api/api';
 import Pagination from './Pagination';
 
-function MoviesList({ selectedGenre }: { selectedGenre: string }) {
+function MoviesList({
+  selectedGenre,
+  searchTitle,
+}: {
+  selectedGenre: string;
+  searchTitle: string;
+}) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
   const [pageNum, setPageNum] = useState<number>(1);
@@ -15,7 +21,7 @@ function MoviesList({ selectedGenre }: { selectedGenre: string }) {
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const data = await fetchMoviesByGenre(pageSize, pageNum, selectedGenre);
+        const data = await fetchMoviesFiltered(pageSize, pageNum, selectedGenre, searchTitle);
         setMovies(data.movies); // lowercase 'movies' comes from your fetch function return
         setTotalItems(data.totalCount); // rename to totalCount to match your fetch function
         setTotalPages(Math.ceil(data.totalCount / pageSize));
@@ -25,7 +31,7 @@ function MoviesList({ selectedGenre }: { selectedGenre: string }) {
     };
 
     loadMovies();
-  }, [pageSize, pageNum, selectedGenre]);
+  }, [pageSize, pageNum, selectedGenre, searchTitle]);
 
   return (
     <>
