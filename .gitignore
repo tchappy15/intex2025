@@ -8,6 +8,9 @@ Thumbs.db
 *.user
 *.suo
 
+*.sqlite-shm
+*.sqlite-wal
+
 # Ignore all ZIP files (deployment, archives, etc.)
 *.zip
 

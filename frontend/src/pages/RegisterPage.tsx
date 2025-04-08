@@ -7,6 +7,8 @@ function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   // state variable for error messages
@@ -25,32 +27,30 @@ function Register() {
   };
 
   // handle submit event for the form
-  
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (!email || !password || !confirmPassword) {
-    setError('Please fill in all fields.');
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    setError('Please enter a valid email address.');
-  } else if (password !== confirmPassword) {
-    setError('Passwords do not match.');
-  } else {
-    try {
-      const success = await registerUser(email, password);
-      if (success) setError('Successful registration. Please log in.');
-      else setError('Error registering.');
-    } catch (error) {
-      setError('Error registering.');
+    if (!email || !password || !confirmPassword) {
+      setError('Please fill in all fields.');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address.');
+    } else if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+    } else {
+      try {
+        const success = await registerUser(email, password);
+        if (success) setError('Successful registration. Please log in.');
+        else setError('Error registering.');
+      } catch (error) {
+        setError('Error registering.');
+      }
     }
-  }
-};
-
+  };
 
   return (
-    <div className="container">
+    <div className="genre">
       <div className="row">
-        <div className="card border-0 shadow rounded-3 ">
+        <div className="card border-0 shadow rounded-3">
           <div className="card-body p-4 p-sm-5">
             <h5 className="card-title text-center mb-5 fw-light fs-5">
               Register
@@ -67,27 +67,45 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <label htmlFor="email">Email address</label>
               </div>
-              <div className="form-floating mb-3">
+
+              <div className="form-floating mb-3 position-relative">
                 <input
                   className="form-control"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   value={password}
                   onChange={handleChange}
                 />
                 <label htmlFor="password">Password</label>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
               </div>
-              <div className="form-floating mb-3">
+
+              <div className="form-floating mb-3 position-relative">
                 <input
                   className="form-control"
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   value={confirmPassword}
                   onChange={handleChange}
                 />
                 <label htmlFor="confirmPassword">Confirm Password</label>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </button>
               </div>
 
               <div className="d-grid mb-2">
@@ -100,14 +118,15 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               </div>
               <div className="d-grid mb-2">
                 <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  className="btn btn-secondary btn-login text-uppercase fw-bold"
+                  type="button"
                   onClick={handleLoginClick}
                 >
                   Go to Login
                 </button>
               </div>
             </form>
-            <strong>{error && <p className="error">{error}</p>}</strong>
+            <strong>{error && <p className="text-danger">{error}</p>}</strong>
           </div>
         </div>
       </div>
