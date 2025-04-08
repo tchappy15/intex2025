@@ -7,7 +7,6 @@ import Logout from '../components/Logout';
 import ManageMovies from '../components/ManageMovies';
 import MovieTitleSearch from '../components/MovieTitleSearch';
 
-
 function MoviesPage() {
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [searchTitle, setSearchTitle] = useState<string>('');
@@ -45,12 +44,21 @@ function MoviesPage() {
             />
           </div> */}
           <div className="d-flex align-items-center sticky-top bg-white p-3 border-bottom mb-3 z-3">
-            <GenreFilter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} />
-            <MovieTitleSearch searchTitle={searchTitle} setSearchTitle={setSearchTitle} />
+            <GenreFilter
+              selectedGenre={selectedGenre}
+              setSelectedGenre={setSelectedGenre}
+            />
+            <MovieTitleSearch
+              searchTitle={searchTitle}
+              setSearchTitle={setSearchTitle}
+            />
           </div>
 
           <div className="col-md-9">
-            <MoviesList selectedGenre={selectedGenre} searchTitle={searchTitle} />
+            <MoviesList
+              selectedGenre={selectedGenre}
+              searchTitle={searchTitle}
+            />
           </div>
         </div>
       </div>
