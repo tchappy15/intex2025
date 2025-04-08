@@ -10,7 +10,7 @@ const handleLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
   try {
     const success = await logoutUser();
     if (success) {
-      navigate('/login');
+      navigate('/');
     } else {
       console.error('Logout failed');
     }

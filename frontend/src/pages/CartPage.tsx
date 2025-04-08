@@ -56,9 +56,7 @@ function CartPage() {
         </div>
         <h3>Subtotal: ${subtotal.toFixed(2)}</h3>
         <button>Proceed to Checkout</button>
-        <button onClick={() => navigate('/competition')}>
-          Continue Browsing
-        </button>
+        <button onClick={() => navigate('/movies')}>Continue Browsing</button>
       </div>
     </AuthorizeView>
   );

@@ -8,6 +8,9 @@ Thumbs.db
 *.user
 *.suo
 
+*.sqlite-shm
+*.sqlite-wal
+
 # Ignore all ZIP files (deployment, archives, etc.)
 *.zip
 
@@ -116,3 +119,4 @@ packages/
 # === LOCAL HISTORY ===
 .history/
 .localhistory/
+backend/IntexProject.API/publish/appsettings.json

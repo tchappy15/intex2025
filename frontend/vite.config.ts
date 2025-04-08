@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+//import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './', // <-- SUPER IMPORTANT for relative paths in Azure
   plugins: [react()],
   server: {
     port: 3000,
@@ -22,4 +24,7 @@ export default defineConfig({
 
     }
   },
+  build: {
+    outDir: 'dist',
+  }
 });

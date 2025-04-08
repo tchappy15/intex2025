@@ -17,8 +17,8 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddDbContext<CompetitionDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("CompetitionConnection")));
+builder.Services.AddDbContext<MoviesDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MoviesConnection")));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
@@ -35,8 +35,18 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
+    // Claims identity config
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+
+
+    // Password policy config
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 13;
+    options.Password.RequiredUniqueChars = 0;
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
@@ -57,7 +67,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Replace with your frontend URL
+            policy.WithOrigins("http://localhost:3000", "https://gray-flower-0bd00101e.6.azurestaticapps.net") // Replace with your frontend URL
                 .AllowCredentials() // Required to allow cookies
                 .AllowAnyMethod()
                 .AllowAnyHeader();
@@ -68,6 +78,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 // // Configure the HTTP request pipeline.
 // if (builder.Configuration.GetValue<bool>("EnableSwagger")) //switch this value in Azure portal

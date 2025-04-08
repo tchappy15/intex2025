@@ -1,23 +1,23 @@
-.container-filter {
+.genre-filter {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.container-list {
+.genre-list {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.container-item {
+.genre-item {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.container-checkbox {
+.genre-checkbox {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
