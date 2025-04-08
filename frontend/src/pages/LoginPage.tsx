@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { loginUser } from '../api/api';
+import './LoginPage.css';
+
 
 function LoginPage() {
   // state variables for email and passwords
@@ -52,13 +54,23 @@ function LoginPage() {
   };
 
   return (
-    <div className="genre">
-      <div className="row">
-        <div className="card border-0 shadow rounded-3 ">
-          <div className="card-body p-4 p-sm-5">
-            <h5 className="card-title text-center mb-5 fw-light fs-5">
-              Sign In
-            </h5>
+    
+    <div className="login-genre">
+      <div className="text-center mb-4">
+      <img src="/images/Logo.png" alt="Logo" className="logo-login" />
+        <div className="login-card border-0 shadow rounded-3 ">
+          <div className="card-body p-3">
+          <h5
+            style={{
+              fontFamily: 'Oswald',
+              fontWeight: '700', // Bold
+              fontSize: '2.5rem', // Adjust this size as needed
+              color: 'white'
+            }}
+            className="card-title text-center mb-4">
+            Sign In
+          </h5>
+
             <form onSubmit={handleSubmit}>
               <div className="form-floating mb-3">
                 <input
@@ -102,36 +114,37 @@ function LoginPage() {
                   checked={rememberme}
                   onChange={handleChange}
                 />
-                <label className="form-check-label" htmlFor="rememberme">
+                <label className="form-check-label text-white" htmlFor="rememberme">
                   Remember password
                 </label>
               </div>
               <div className="d-grid mb-2">
-                <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
-                  type="submit"
-                >
-                  Sign in
-                </button>
+              <button
+                className="log-btn text-uppercase fw-bold custom-rounded"
+                type="submit">
+                Sign in
+              </button>
+
               </div>
               <div className="d-grid mb-2">
                 <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
+                  className="log-btn btn-login text-uppercase fw-bold custom-rounded"
                   onClick={handleRegisterClick}
                 >
                   Register
                 </button>
               </div>
-              <hr className="my-4" />
+              <hr className="my-3" />
 
               <div className="d-grid mb-2">
-                <button
-                  onClick={() => navigate('/')}
-                  className="btn btn-google btn-login text-uppercase fw-bold"
-                  type="button"
-                >
-                  Cancel
-                </button>
+              <button
+                onClick={() => navigate('/')}
+                className="log-cancel-btn btn-login text-uppercase fw-bold custom-rounded"
+                type="button"
+              >
+                Return to Home
+              </button>
+
               </div>
 
               {/* placeholders for signing in with other accounts like Google */}
