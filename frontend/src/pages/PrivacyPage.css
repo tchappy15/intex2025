@@ -1,0 +1,43 @@
+body {
+  margin-top: 0px;
+  padding: 0px;
+  justify-content: center;
+  background-image: url('./../assets/dark-blue-blurred-background_1034-589.png');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  font-family: 'Oswald', sans-serif;
+  position: relative;
+}
+
+h1 {
+  padding-top: 100px;
+  font-weight: bold;
+  text-align: center;
+}
+
+div {
+  padding: 20px;
+  margin-top: 50px;
+  padding-left: 40px;
+}
+
+section {
+  padding: 20px;
+  font-size: larger;
+  margin: 0 auto;
+  max-width: 70%;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  section {
+    max-width: 100%;
+  }
+}
+
+img {
+  max-width: 50%;
+  margin-top: -200px;
+  margin-bottom: -200px;
+}
