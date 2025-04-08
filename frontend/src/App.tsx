@@ -17,13 +17,13 @@ function App() {
     <>
       {/* <CartProvider> */}
       <Router>
+        <CookieConsent buttonText="Sure thing!!">
+          This website uses cookies to enhance the user experience.
+        </CookieConsent>
         <Routes>
           <Route path="/" element={<PublicHomePage />} />
           <Route path="/movies" element={<MoviesPage />} />
           {/* Internal Landing page */}
-          <CookieConsent buttonText="Sure thing!!">
-            This website uses cookies to enhance the user experience.
-          </CookieConsent>
           <Route path="/movie/:title/:movieId" element={<OneMoviePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
