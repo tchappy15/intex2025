@@ -120,3 +120,4 @@ packages/
 .history/
 .localhistory/
 backend/IntexProject.API/publish/appsettings.json
+backend/IntexProject.API/publish/

@@ -24,9 +24,9 @@
   </ItemGroup>
 
 <ItemGroup>
-  <Content Include="Movies.sqlite">
+  <!-- <Content Include="Movies.sqlite">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
+  </Content> -->
   <Content Include="Identity.sqlite">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
