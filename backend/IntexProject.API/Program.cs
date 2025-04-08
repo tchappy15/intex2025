@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using IntexProject.API.Data;
 using IntexProject.API.Services;
-//using IntexProject.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +20,9 @@ builder.Services.AddDbContext<MoviesDbContext>(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+
+builder.Services.AddDbContext<RecommendationsDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("RecommendationsConnection")));
 
 builder.Services.AddAuthorization();
 
