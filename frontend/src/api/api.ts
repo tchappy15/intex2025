@@ -56,14 +56,20 @@ export async function fetchMovies(
 }
 
 // Get movies with pagination and single genre filter
-export async function fetchMoviesByGenre(
+export async function fetchMoviesFiltered(
   pageSize: number,
   pageNum: number,
-  selectedGenre: string
+  selectedGenre: string,
+  searchTitle: string
 ): Promise<FetchMoviesResponse> {
-  const genreParam = selectedGenre ? `&genre=${encodeURIComponent(selectedGenre)}` : '';
+  const params = new URLSearchParams();
+  params.append('pageSize', pageSize.toString());
+  params.append('pageNum', pageNum.toString());
 
-  const url = `${API_BASE_URL}/Movies/GetMovies?pageSize=${pageSize}&pageNum=${pageNum}${genreParam}`;
+  if (selectedGenre) params.append('genre', selectedGenre);
+  if (searchTitle) params.append('title', searchTitle);
+
+  const url = `${API_BASE_URL}/Movies/GetMovies?${params.toString()}`;
 
   const response = await fetch(url, {
     credentials: 'include',

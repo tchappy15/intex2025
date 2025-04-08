@@ -5,9 +5,12 @@ import { useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import ManageMovies from '../components/ManageMovies';
+import MovieTitleSearch from '../components/MovieTitleSearch';
+
 
 function MoviesPage() {
-  const [selectedGenre, setSelectedGenre] = useState<string>(''); // singular
+  const [selectedGenre, setSelectedGenre] = useState<string>('');
+  const [searchTitle, setSearchTitle] = useState<string>('');
 
   return (
     <AuthorizeView>
@@ -35,14 +38,19 @@ function MoviesPage() {
         <ManageMovies />
         <Header />
         <div className="row">
-          <div className="col-md-3">
+          {/* <div className="col-md-3">
             <GenreFilter
               selectedGenre={selectedGenre}
               setSelectedGenre={setSelectedGenre}
             />
+          </div> */}
+          <div className="d-flex align-items-center sticky-top bg-white p-3 border-bottom mb-3 z-3">
+            <GenreFilter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} />
+            <MovieTitleSearch searchTitle={searchTitle} setSearchTitle={setSearchTitle} />
           </div>
+
           <div className="col-md-9">
-            <MoviesList selectedGenre={selectedGenre} />
+            <MoviesList selectedGenre={selectedGenre} searchTitle={searchTitle} />
           </div>
         </div>
       </div>

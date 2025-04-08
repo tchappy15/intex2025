@@ -22,29 +22,37 @@ namespace IntexProject.API.Controllers
         }
 
         [HttpGet("GetMovies")]
-        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] string? genre = null)
+        public IActionResult GetMovies(
+            int pageSize = 10,
+            int pageNum = 1,
+            [FromQuery] string? genre = null,
+            [FromQuery] string? title = null)
         {
             var query = _moviesDbContext.Movies.AsQueryable();
 
-            // Build a map of [DisplayName -> PropertyName]
+            // Filter by title (if provided)
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                query = query.Where(m => m.Title.ToLower().Contains(title.ToLower()));
+            }
+
+            // Genre logic (already in place)
             var genreMap = typeof(Movie)
                 .GetProperties()
-                .Where(p => p.PropertyType == typeof(bool))
+                .Where(p => p.PropertyType == typeof(int))
                 .Select(p => new
                 {
                     PropertyName = p.Name,
                     DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), false)
-                                .Cast<DisplayAttribute>()
-                                .FirstOrDefault()?.Name ?? p.Name
+                                    .Cast<DisplayAttribute>()
+                                    .FirstOrDefault()?.Name ?? p.Name
                 })
                 .ToDictionary(x => x.DisplayName, x => x.PropertyName);
 
-            // Filter by selected genre (if provided and valid)
             if (!string.IsNullOrEmpty(genre) && genreMap.TryGetValue(genre, out var propertyName))
             {
-                // Dynamically build the expression: movie => EF.Property<bool>(movie, propertyName) == true
                 query = query.Where(movie =>
-                    EF.Property<bool>(movie, propertyName) == true);
+                    EF.Property<int>(movie, propertyName) == 1);
             }
 
             var totalNumMovies = query.Count();

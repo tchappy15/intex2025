@@ -1,0 +1,25 @@
+.movie-search {
+    position: relative;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  
+  .clear-btn:hover {
+    color: #000;
+  }
+  
