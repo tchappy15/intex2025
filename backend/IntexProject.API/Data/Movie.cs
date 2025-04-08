@@ -26,131 +26,131 @@ public class Movie
 
     [Column("Action")]
     [Display(Name = "Action")]
-    public bool Action { get; set; }
+    public int Action { get; set; }
 
     [Column("Adventure")]
     [Display(Name = "Adventure")]
-    public bool Adventure { get; set; }
+    public int Adventure { get; set; }
 
     [Column("Anime Series International TV Shows")]
     [Display(Name = "Anime Series / International TV Shows")]
-    public bool AnimeSeriesInternationalTVShows { get; set; }
+    public int AnimeSeriesInternationalTVShows { get; set; }
 
     [Column("British TV Shows Docuseries International TV Shows")]
     [Display(Name = "British TV / Docuseries / International")]
-    public bool BritishTVShowsDocuseriesInternationalTVShows { get; set; }
+    public int BritishTVShowsDocuseriesInternationalTVShows { get; set; }
 
     [Column("Children")]
     [Display(Name = "Children")]
-    public bool Children { get; set; }
+    public int Children { get; set; }
 
     [Column("Comedies")]
     [Display(Name = "Comedies")]
-    public bool Comedies { get; set; }
+    public int Comedies { get; set; }
 
     [Column("Comedies Dramas International Movies")]
     [Display(Name = "Comedies / Dramas / International Movies")]
-    public bool ComediesDramasInternationalMovies { get; set; }
+    public int ComediesDramasInternationalMovies { get; set; }
 
     [Column("Comedies International Movies")]
     [Display(Name = "Comedies / International Movies")]
-    public bool ComediesInternationalMovies { get; set; }
+    public int ComediesInternationalMovies { get; set; }
 
     [Column("Comedies Romantic Movies")]
     [Display(Name = "Comedies / Romantic Movies")]
-    public bool ComediesRomanticMovies { get; set; }
+    public int ComediesRomanticMovies { get; set; }
 
     [Column("Crime TV Shows Docuseries")]
     [Display(Name = "Crime TV Shows / Docuseries")]
-    public bool CrimeTVShowsDocuseries { get; set; }
+    public int CrimeTVShowsDocuseries { get; set; }
 
     [Column("Documentaries")]
     [Display(Name = "Documentaries")]
-    public bool Documentaries { get; set; }
+    public int Documentaries { get; set; }
 
     [Column("Documentaries International Movies")]
     [Display(Name = "Documentaries / International Movies")]
-    public bool DocumentariesInternationalMovies { get; set; }
+    public int DocumentariesInternationalMovies { get; set; }
 
     [Column("Docuseries")]
     [Display(Name = "Docuseries")]
-    public bool Docuseries { get; set; }
+    public int Docuseries { get; set; }
 
     [Column("Dramas")]
     [Display(Name = "Dramas")]
-    public bool Dramas { get; set; }
+    public int Dramas { get; set; }
 
     [Column("Dramas International Movies")]
     [Display(Name = "Dramas / International Movies")]
-    public bool DramasInternationalMovies { get; set; }
+    public int DramasInternationalMovies { get; set; }
 
     [Column("Dramas Romantic Movies")]
     [Display(Name = "Dramas / Romantic Movies")]
-    public bool DramasRomanticMovies { get; set; }
+    public int DramasRomanticMovies { get; set; }
 
     [Column("Family Movies")]
     [Display(Name = "Family Movies")]
-    public bool FamilyMovies { get; set; }
+    public int FamilyMovies { get; set; }
 
     [Column("Fantasy")]
     [Display(Name = "Fantasy")]
-    public bool Fantasy { get; set; }
+    public int Fantasy { get; set; }
 
     [Column("Horror Movies")]
     [Display(Name = "Horror Movies")]
-    public bool HorrorMovies { get; set; }
+    public int HorrorMovies { get; set; }
 
     [Column("International Movies Thrillers")]
     [Display(Name = "International Movies / Thrillers")]
-    public bool InternationalMoviesThrillers { get; set; }
+    public int InternationalMoviesThrillers { get; set; }
 
     [Column("International TV Shows Romantic TV Shows TV Dramas")]
     [Display(Name = "International TV / Romantic TV / TV Dramas")]
-    public bool InternationalTVShowsRomanticTVShowsTVDramas { get; set; }
+    public int InternationalTVShowsRomanticTVShowsTVDramas { get; set; }
 
     [Column("Kids' TV")]
     [Display(Name = "Kids' TV")]
-    public bool KidsTV { get; set; }
+    public int KidsTV { get; set; }
 
     [Column("Language TV Shows")]
     [Display(Name = "Language TV Shows")]
-    public bool LanguageTVShows { get; set; }
+    public int LanguageTVShows { get; set; }
 
     [Column("Musicals")]
     [Display(Name = "Musicals")]
-    public bool Musicals { get; set; }
+    public int Musicals { get; set; }
 
     [Column("Nature TV")]
     [Display(Name = "Nature TV")]
-    public bool NatureTV { get; set; }
+    public int NatureTV { get; set; }
 
     [Column("Reality TV")]
     [Display(Name = "Reality TV")]
-    public bool RealityTV { get; set; }
+    public int RealityTV { get; set; }
 
     [Column("Spirituality")]
     [Display(Name = "Spirituality")]
-    public bool Spirituality { get; set; }
+    public int Spirituality { get; set; }
 
     [Column("TV Action")]
     [Display(Name = "TV Action")]
-    public bool TVAction { get; set; }
+    public int TVAction { get; set; }
 
     [Column("TV Comedies")]
     [Display(Name = "TV Comedies")]
-    public bool TVComedies { get; set; }
+    public int TVComedies { get; set; }
 
     [Column("TV Dramas")]
     [Display(Name = "TV Dramas")]
-    public bool TVDramas { get; set; }
+    public int TVDramas { get; set; }
 
     [Column("Talk Shows TV Comedies")]
     [Display(Name = "Talk Shows / TV Comedies")]
-    public bool TalkShowsTVComedies { get; set; }
+    public int TalkShowsTVComedies { get; set; }
 
     [Column("Thrillers")]
     [Display(Name = "Thrillers")]
-    public bool Thrillers { get; set; }
+    public int Thrillers { get; set; }
 
 
 }
