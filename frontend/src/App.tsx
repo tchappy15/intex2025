@@ -10,27 +10,29 @@ import PublicHomePage from './pages/PublicHomePage';
 import AdminPage from './pages/AdminPage';
 import PrivacyPage from './pages/PrivacyPage';
 import Footer from './components/Footer';
+import CookieConsent from 'react-cookie-consent';
 
 function App() {
   return (
     <>
       {/* <CartProvider> */}
-        <Router>
-          <Routes>
-            <Route path="/" element={<PublicHomePage />} />
-            <Route path="/movies" element={<MoviesPage />} />{/* Internal Landing page */}
-            <Route
-              path="/movie/:title/:movieId"
-              element={<OneMoviePage />}
-            />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-          </Routes>
-          <Footer />
-        </Router>
+      <Router>
+        <CookieConsent buttonText="Sure thing!!">
+          This website uses cookies to enhance the user experience.
+        </CookieConsent>
+        <Routes>
+          <Route path="/" element={<PublicHomePage />} />
+          <Route path="/movies" element={<MoviesPage />} />
+          {/* Internal Landing page */}
+          <Route path="/movie/:title/:movieId" element={<OneMoviePage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+        </Routes>
+        <Footer />
+      </Router>
       {/* </CartProvider> */}
     </>
   );
