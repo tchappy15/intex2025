@@ -1,3 +1,10 @@
+import { Movie } from '../types/Movie';
+
+interface FetchMoviesResponse {
+  movies: Movie[];
+  totalCount: number;
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Ping authorization status
@@ -11,36 +18,41 @@ export async function pingAuth() {
   return await response.json();
 }
 
-// Get available container types
-export async function fetchContainers() {
-  const response = await fetch(`${API_BASE_URL}/Competition/GetContainerTypes`, {
+// Get available genre types
+export async function fetchGenres() {
+  const response = await fetch(`${API_BASE_URL}/Movies/GetGenreTypes`, {
     credentials: 'include',
   });
 
-  if (!response.ok) throw new Error('Failed to fetch containers');
+  if (!response.ok) throw new Error('Failed to fetch genres');
   return await response.json();
 }
 
-// Get rootbeers with pagination and optional container filter
-export async function fetchRootbeers(
+// Get movies with pagination and optional genre filter
+export async function fetchMovies(
   pageSize: number,
   pageNum: number,
-  selectedContainers: string[]
-) {
-  const containerParams = selectedContainers
-    .map((cont) => `containers=${encodeURIComponent(cont)}`)
+  selectedGenres: string[]
+): Promise<FetchMoviesResponse> {
+  const genreParams = selectedGenres
+    .map((cont) => `genres=${encodeURIComponent(cont)}`)
     .join('&');
 
-  const url = `${API_BASE_URL}/Competition/GetRootbeers?pageSize=${pageSize}&pageNum=${pageNum}${
-    selectedContainers.length ? `&${containerParams}` : ''
+  const url = `${API_BASE_URL}/Movies/GetMovies?pageSize=${pageSize}&pageNum=${pageNum}${
+    selectedGenres.length ? `&${genreParams}` : ''
   }`;
 
   const response = await fetch(url, {
     credentials: 'include',
   });
 
-  if (!response.ok) throw new Error('Failed to fetch competition');
-  return await response.json();
+  if (!response.ok) throw new Error('Failed to fetch movies');
+
+  const data = await response.json();
+  return {
+    movies: data.movies,
+    totalCount: data.totalNumMovies,
+  };
 }
 
 // Logout the user
@@ -57,7 +69,11 @@ export async function logoutUser() {
 }
 
 // Login the user
-export async function loginUser(email: string, password: string, remember: boolean) {
+export async function loginUser(
+  email: string,
+  password: string,
+  remember: boolean
+) {
   const loginUrl = remember
     ? `${API_BASE_URL}/login?useCookies=true`
     : `${API_BASE_URL}/login?useSessionCookies=true`;
@@ -70,7 +86,8 @@ export async function loginUser(email: string, password: string, remember: boole
   });
 
   const contentLength = response.headers.get('content-length');
-  const data = contentLength && parseInt(contentLength) > 0 ? await response.json() : null;
+  const data =
+    contentLength && parseInt(contentLength) > 0 ? await response.json() : null;
 
   if (!response.ok) {
     throw new Error(data?.message || 'Invalid email or password.');
@@ -83,10 +100,11 @@ export async function loginUser(email: string, password: string, remember: boole
 export async function registerUser(email: string, password: string) {
   const response = await fetch(`${API_BASE_URL}/register`, {
     method: 'POST',
+    credentials: 'include', // This is key for cookies
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username: email, password }),
   });
 
   return response.ok;

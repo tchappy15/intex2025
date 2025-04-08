@@ -31,27 +31,26 @@ function LoginPage() {
   };
 
   // handle submit event for the form
-  
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setError('');
 
-  if (!email || !password) {
-    setError('Please fill in all fields.');
-    return;
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
 
-  try {
-    await loginUser(email, password, rememberme);
-    navigate('/competition');
-  } catch (error: any) {
-    setError(error.message || 'Error logging in.');
-  }
-};
+    if (!email || !password) {
+      setError('Please fill in all fields.');
+      return;
+    }
 
+    try {
+      await loginUser(email, password, rememberme);
+      navigate('/movies');
+    } catch (error: any) {
+      setError(error.message || 'Error logging in.');
+    }
+  };
 
   return (
-    <div className="container">
+    <div className="genre">
       <div className="row">
         <div className="card border-0 shadow rounded-3 ">
           <div className="card-body p-4 p-sm-5">
