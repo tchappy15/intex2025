@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('/Users/tatematley/Intex 2/intex2025/frontend/src/images/dark-blue-blurred-background_1034-589.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    color: white;
+    font-family: sans-serif;
+  }
+  
