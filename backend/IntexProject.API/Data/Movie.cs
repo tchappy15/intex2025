@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 namespace IntexProject.API.Data;
 
 
@@ -14,6 +15,8 @@ public class Movie
     public string? Director { get; set; }
     public string? Cast { get; set; }
     public string? Country { get; set; }
+    
+    [JsonPropertyName("release_year")]
     public int Release_Year { get; set; }
     public string? Rating { get; set; }
     public required string Duration { get; set; }

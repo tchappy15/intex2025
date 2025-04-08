@@ -109,3 +109,49 @@ export async function registerUser(email: string, password: string) {
 
   return response.ok;
 }
+
+
+export async function deleteMovie(movieId: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/Movies/DeleteMovie/${movieId}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete movie');
+  }
+}
+
+export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/Movies/AddMovie`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newMovie)
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Failed to add movie: ${message}`);
+  }
+}
+
+
+export async function updateMovie(movieId: string, updatedMovie: Partial<Movie>): Promise<void> {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/Movies/UpdateMovie/${movieId}`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedMovie)
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Failed to update movie: ${message}`);
+  }
+}
+

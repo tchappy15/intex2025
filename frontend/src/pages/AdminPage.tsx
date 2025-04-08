@@ -1,82 +1,146 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Movie } from '../types/Movie';
+import { fetchMovies, deleteMovie } from '../api/api';
 import Pagination from '../components/Pagination';
+import NewMovieForm from '../components/NewMovieForm'; 
+import EditMovieForm from '../components/EditMovieForm'; 
 
-const AdminPage: React.FC = () => {
-  const navigate = useNavigate();
-
+const AdminPage = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageNum, setPageNum] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1); // Placeholder value
+  const [totalPages, setTotalPages] = useState<number>(0);
+
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
+
+  useEffect(() => {
+    const loadMovies = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchMovies(pageSize, pageNum, []); // empty container filter for now
+        setMovies(data.movies);
+        setTotalPages(Math.ceil(data.totalCount / pageSize));
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadMovies();
+  }, [pageSize, pageNum]);
+
+  const handleDelete = async (movieId: string) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this movie?'
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteMovie(movieId);
+      setMovies(movies.filter((m) => m.movieId !== movieId));
+    } catch (error) {
+      alert('Failed to delete movie. Please try again.');
+    }
+  };
+
+  if (loading) return <p>Loading movies...</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r shadow-md">
-        <div className="p-4 font-bold text-xl text-blue-600">Admin Dashboard</div>
-        <nav className="mt-6">
-          <ul className="space-y-2">
-            <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">Overview</li>
-            <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">Users</li>
-            <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">Settings</li>
-            <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">Reports</li>
-          </ul>
-        </nav>
-      </aside>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Admin - Movies</h1>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-white shadow-md p-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold">Welcome, Admin</h1>
-          <div className="flex gap-2">
-            <button
-              onClick={() => navigate(-1)}
-              className="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Back
-            </button>
-            <button
-              style={{
-                position: 'fixed',
-                top: '10px',
-                left: '20px',
-                background: '#f8f9fa',
-                padding: '10px 15px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                fontSize: '16px',
-              }}
-            >
-              Logout
-            </button>
-          </div>
-        </header>
+      {!showForm && (
+        <button
+          className="btn btn-success mb-3"
+          onClick={() => setShowForm(true)}
+        >
+          Add Movie
+        </button>
+      )}
 
-        {/* Content Area */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Dashboard Overview</h2>
-            <p className="text-gray-700">
-              This is your admin area. Use the sidebar to navigate through different sections.
-            </p>
-          </div>
+      {showForm && (
+        <NewMovieForm
+          onSuccess={() => {
+            setShowForm(false);
+            fetchMovies(pageSize, pageNum, []).then((data) =>
+              setMovies(data.movies)
+            );
+          }}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
 
-          <Pagination
-            pageNum={pageNum}
-            totalPages={totalPages}
-            pageSize={pageSize}
-            onPageChange={setPageNum}
-            onPageSizeChange={(newSize) => {
-              setPageSize(newSize);
-              setPageNum(1);
-            }}
-          />
-        </main>
-      </div>
+      {editingMovie && (
+        <EditMovieForm
+          movie={editingMovie}
+          onSuccess={() => {
+            fetchMovies(pageSize, pageNum, []).then((data) =>
+              setMovies(data.movies)
+            );
+          }}
+          onCancel={() => setEditingMovie(null)}
+        />
+      )}
+
+      <table className="table table-bordered table-striped w-full text-sm">
+        <thead className="bg-gray-200">
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Country</th>
+            <th>Release Year</th>
+            <th>Rating</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {movies.map((m) => {
+           return (
+            <tr key={m.movieId}>
+              <td>{m.movieId}</td>
+              <td>{m.title}</td>
+              <td>{m.director}</td>
+              <td>{m.country}</td>
+              <td>{m.release_year ?? 'N/A'}</td>
+              <td>{m.rating}</td>
+              <td>{m.duration}</td>
+              <td>
+                <button
+                  className="btn btn-primary btn-sm w-full mb-1"
+                  onClick={() => setEditingMovie(m)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger btn-sm w-full"
+                  onClick={() => handleDelete(m.movieId)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          );
+        })}
+        </tbody>
+      </table>
+
+      <Pagination
+        pageNum={pageNum}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNum}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPageNum(1);
+        }}
+      />
     </div>
   );
 };
