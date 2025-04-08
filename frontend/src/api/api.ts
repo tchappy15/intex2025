@@ -28,7 +28,7 @@ export async function fetchGenres() {
   return await response.json();
 }
 
-// Get movies with pagination and optional genre filter
+// Get movies with pagination and optional multi-genre filter
 export async function fetchMovies(
   pageSize: number,
   pageNum: number,
@@ -54,6 +54,30 @@ export async function fetchMovies(
     totalCount: data.totalNumMovies,
   };
 }
+
+// Get movies with pagination and single genre filter
+export async function fetchMoviesByGenre(
+  pageSize: number,
+  pageNum: number,
+  selectedGenre: string
+): Promise<FetchMoviesResponse> {
+  const genreParam = selectedGenre ? `&genre=${encodeURIComponent(selectedGenre)}` : '';
+
+  const url = `${API_BASE_URL}/Movies/GetMovies?pageSize=${pageSize}&pageNum=${pageNum}${genreParam}`;
+
+  const response = await fetch(url, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) throw new Error('Failed to fetch movies');
+
+  const data = await response.json();
+  return {
+    movies: data.movies,
+    totalCount: data.totalNumMovies,
+  };
+}
+
 
 // Logout the user
 export async function logoutUser() {

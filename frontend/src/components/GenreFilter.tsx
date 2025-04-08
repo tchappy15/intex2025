@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { fetchGenres } from '../api/api';
 import './GenreFilter.css';
-import { fetchGenres } from '../api/api'; // Assuming you have some CSS for styling
 
 function GenreFilter({
-  selectedGenres,
-  setSelectedGenres,
+  selectedGenre,
+  setSelectedGenre,
 }: {
-  selectedGenres: string[];
-  setSelectedGenres: (genres: string[]) => void;
+  selectedGenre: string;
+  setSelectedGenre: (genre: string) => void;
 }) {
   const [genres, setGenres] = useState<string[]>([]);
 
@@ -16,43 +16,35 @@ function GenreFilter({
       try {
         const data = await fetchGenres();
         setGenres(data);
-        setSelectedGenres(data);
       } catch (error) {
         console.error('Error fetching genre types', error);
       }
     };
     fetchData();
+  }, []);
 
-    fetchGenres();
-  }, [setSelectedGenres]);
-
-  function handleCheckboxChange({ target }: { target: HTMLInputElement }) {
-    const updatedGenres = selectedGenres.includes(target.value)
-      ? selectedGenres.filter((x) => x !== target.value)
-      : [...selectedGenres, target.value];
-
-    setSelectedGenres(updatedGenres);
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedGenre(e.target.value);
+  };
 
   return (
-    <div className="genre-filter">
-      <h5>Genre Types</h5>
-      <div className="genre-list">
-        {genres.map((c) => (
-          <div key={c} className="genre-item">
-            <input
-              type="checkbox"
-              id={c}
-              name={c}
-              value={c}
-              className="genre-checkbox"
-              onChange={handleCheckboxChange}
-              checked={selectedGenres.includes(c)}
-            />
-            <label htmlFor={c}>{c}</label>
-          </div>
+    <div className="genre-filter mb-3">
+      <label htmlFor="genre-select" className="form-label">
+        Filter by Genre:
+      </label>
+      <select
+        id="genre-select"
+        className="form-select"
+        value={selectedGenre}
+        onChange={handleChange}
+      >
+        <option value="">All Genres</option>
+        {genres.map((genre) => (
+          <option key={genre} value={genre}>
+            {genre}
+          </option>
         ))}
-      </div>
+      </select>
     </div>
   );
 }
