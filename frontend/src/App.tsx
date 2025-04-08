@@ -17,7 +17,10 @@ function App() {
     <>
       {/* <CartProvider> */}
       <Router>
-        <CookieConsent buttonText="Sure thing!!">
+        <CookieConsent
+          buttonText="Sure thing!!"
+          cookieName="user_cookie_consent"
+        >
           This website uses cookies to enhance the user experience.
         </CookieConsent>
         <Routes>
