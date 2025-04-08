@@ -8,17 +8,16 @@ namespace IntexProject.API.Data;
 public class Movie
 {
     [Key]
-    public required string MovieId { get; set; }
-
+    public string? MovieId { get; set; } = null!;
     public required string Type { get; set; }
     public required string Title { get; set; }
     public string? Director { get; set; }
     public string? Cast { get; set; }
     public string? Country { get; set; }
-    
+
     [JsonPropertyName("release_year")]
-    public int Release_Year { get; set; }
-    public string? Rating { get; set; }
+    public int release_year { get; set; }
+    public required string Rating { get; set; }
     public required string Duration { get; set; }
     public required string Description { get; set; }
 

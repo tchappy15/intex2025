@@ -146,7 +146,7 @@ namespace IntexProject.API.Controllers
             existingMovie.Director = updatedMovie.Director;
             existingMovie.Cast = updatedMovie.Cast;
             existingMovie.Country = updatedMovie.Country;
-            existingMovie.Release_Year = updatedMovie.Release_Year;
+            existingMovie.release_year = updatedMovie.release_year;
             existingMovie.Rating = updatedMovie.Rating;
             existingMovie.Duration = updatedMovie.Duration;
             existingMovie.Description = updatedMovie.Description;
