@@ -98,6 +98,8 @@ _ReSharper*/
 # === BACKEND SPECIFIC ===
 backend/IntexProject.API/publish/
 backend/IntexProject.API/publish/runtimes/
+backend/IntexProject.API/appsettings.json
+backend/IntexProject.API/appsettings.Development.json
 
 # === FRONTEND SPECIFIC ===
 frontend/node_modules/
