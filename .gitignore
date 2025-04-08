@@ -117,3 +117,4 @@ packages/
 # === LOCAL HISTORY ===
 .history/
 .localhistory/
+backend/IntexProject.API/publish/appsettings.json
