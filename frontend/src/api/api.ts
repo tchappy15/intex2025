@@ -60,7 +60,8 @@ export async function fetchMoviesFiltered(
   pageSize: number,
   pageNum: number,
   selectedGenre: string,
-  searchTitle: string
+  searchTitle: string,
+  selectedType: string
 ): Promise<FetchMoviesResponse> {
   const params = new URLSearchParams();
   params.append('pageSize', pageSize.toString());
@@ -68,6 +69,7 @@ export async function fetchMoviesFiltered(
 
   if (selectedGenre) params.append('genre', selectedGenre);
   if (searchTitle) params.append('title', searchTitle);
+  if (selectedType) params.append('type', selectedType);
 
   const url = `${API_BASE_URL}/Movies/GetMovies?${params.toString()}`;
 
