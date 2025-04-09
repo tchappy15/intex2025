@@ -1,5 +1,6 @@
 //import React from 'react';
 import './MovieRow.css';
+import { Link } from 'react-router-dom';
 
 interface Movie {
   movieId: string;
@@ -20,13 +21,23 @@ function MovieRow({ title, movies }: MovieRowProps) {
       <h2 className="row-title">{title}</h2>
       <div className="movie-scroll">
         {movies.map((movie) => (
-          <div className="movie-poster-card" key={movie.movieId}>
-            <img
-              src={movie.posterUrl || '/images/placeholder.jpg'}
-              alt={movie.title}
-            />
-            <p className="movie-title">{movie.title}</p>
-          </div>
+          <Link
+            to={`/movies/${movie.title}/${movie.movieId}`}
+            key={movie.movieId}
+            className="movie-link"
+          >
+            <div className="movie-poster-card">
+              <img
+                src={movie.posterUrl || '/images/placeholder.jpg'}
+                alt={movie.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    '/images/placeholder.jpg';
+                }}
+              />
+              <p className="movie-title">{movie.title}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

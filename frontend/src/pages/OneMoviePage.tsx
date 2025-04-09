@@ -49,7 +49,7 @@ function OneMoviePage() {
         })
         .catch((err) => console.error('Collaborative recs error:', err));
     }
-  });
+  }, [movieId]);
 
   // Safely extract email from DOM
   useEffect(() => {
