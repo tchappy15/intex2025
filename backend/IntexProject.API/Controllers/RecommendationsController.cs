@@ -101,12 +101,14 @@ public class RecommendationsController : ControllerBase
             var userTable = _context.UserRecommendations.FirstOrDefault();
             var contentTable = _context.ContentRecommendations.FirstOrDefault();
             var collabTable = _context.CollaborativeMovieRecommendations.FirstOrDefault();
+            var genreTable = _context.GenreRecommendations.FirstOrDefault();
 
             return Ok(new
             {
                 UserRecommendationsExists = userTable != null,
                 ContentRecommendationsExists = contentTable != null,
-                CollaborativeMovieRecommendationsExists = collabTable != null
+                CollaborativeMovieRecommendationsExists = collabTable != null,
+                GenreRecommendationsExists = genreTable != null
             });
         }
         catch (Exception ex)
