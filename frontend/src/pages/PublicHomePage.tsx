@@ -4,8 +4,8 @@ import './PublicHomePage.css';
 export default function HomePage() {
   return (
     
-    <div className="home-page-container">
-      <div className="card">
+    <div className="body">
+      <div className="public-card">
       <img src="/images/Logo.png" alt="Logo" className="login-logo" />
         <h1>Discover A Personally Curated<br/>Collection of Niche Films<br/>Just For You!</h1>
         <Link to="/login">
