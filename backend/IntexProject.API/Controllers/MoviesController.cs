@@ -94,10 +94,27 @@ namespace IntexProject.API.Controllers
         [HttpDelete("DeleteMovie/{movieId}")]
         public IActionResult DeleteMovie(string movieId)
         {
+                       
             var movie = _moviesDbContext.Movies.FirstOrDefault(m => m.MovieId == movieId);
             if (movie == null)
             {
                 return NotFound();
+            }
+            else if (movie.MovieId != movieId)
+            {
+                return BadRequest("Movie ID mismatch.");
+            }
+            else if (int.Parse(movie.MovieId) < 0)
+            {
+                return BadRequest("Invalid Movie ID.");
+            }
+            else if (string.IsNullOrEmpty(movie.MovieId) || movie.MovieId.StartsWith("s"))
+            {
+                return BadRequest("Invalid Movie ID format. Must be 's####'.");
+            }
+            else if (string.IsNullOrEmpty(movie.Title))
+            {
+                return BadRequest("Title is a required field.");
             }
 
             _moviesDbContext.Movies.Remove(movie);
@@ -113,6 +130,18 @@ namespace IntexProject.API.Controllers
             if (newMovie == null)
             {
                 return BadRequest("Invalid movie data.");
+            }
+            else if (newMovie.MovieId != null && int.Parse(newMovie.MovieId) < 0)
+            {
+                return BadRequest("Invalid Movie ID.");
+            }
+            else if (string.IsNullOrEmpty(newMovie.MovieId) || newMovie.MovieId.StartsWith("s"))
+            {
+                return BadRequest("Invalid Movie ID format. Must be 's####'.");
+            }
+            else if (string.IsNullOrEmpty(newMovie.Title) || string.IsNullOrEmpty(newMovie.Director) || string.IsNullOrEmpty(newMovie.Country))
+            {
+                return BadRequest("Title is a required field.");
             }
 
             // Auto-generate the next available movieId in "s####" format
@@ -142,6 +171,18 @@ namespace IntexProject.API.Controllers
             if (updatedMovie == null || movieId != updatedMovie.MovieId)
             {
                 return BadRequest("Invalid movie data.");
+            }
+            else if (string.IsNullOrEmpty(updatedMovie.MovieId) || updatedMovie.MovieId.StartsWith("s"))
+            {
+                return BadRequest("Invalid Movie ID format. Must be 's####'.");
+            }
+            else if (string.IsNullOrEmpty(updatedMovie.Title))
+            {
+                return BadRequest("Title is a required field.");
+            }
+            else if (int.Parse(updatedMovie.MovieId) < 0)
+            {
+                return BadRequest("Invalid Movie ID.");
             }
 
             var existingMovie = _moviesDbContext.Movies.FirstOrDefault(m => m.MovieId == movieId);
@@ -176,6 +217,19 @@ namespace IntexProject.API.Controllers
             {
                 return NotFound();
             }
+            else if (id != movie.MovieId || int.Parse(movie.MovieId) < 0)
+            {
+                return BadRequest("Invalid Movie ID.");
+            }
+            else if (string.IsNullOrEmpty(movie.MovieId) || movie.MovieId.StartsWith("s"))
+            {
+                return BadRequest("Invalid Movie ID format. Must be 's####'.");
+            }
+            else if (string.IsNullOrEmpty(movie.Title))
+            {
+                return BadRequest("Title is a required field.");
+            }
+
             return Ok(movie);
         }
 
