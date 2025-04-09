@@ -21,6 +21,7 @@ public class RecommendationsController : ControllerBase
         return recs != null ? Ok(recs) : NotFound();
     }
 
+    // Get similar movies by title
     // GET: api/recommendations/similar/Inception
     [HttpGet("similar/{title}")]
     public IActionResult GetSimilarRecs(string title)
@@ -31,6 +32,7 @@ public class RecommendationsController : ControllerBase
         return recs != null ? Ok(recs) : NotFound();
     }
 
+    // Get related movies by ID
     // GET: api/recommendations/movie/s1234
     [HttpGet("movie/{movieId}")]
     public IActionResult GetMovieRecs(string movieId)

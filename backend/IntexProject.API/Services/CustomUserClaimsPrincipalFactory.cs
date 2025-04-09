@@ -4,14 +4,14 @@ using Microsoft.Extensions.Options;
 
 namespace IntexProject.API.Services;
 
-public class CustomUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser>
+public class CustomUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser>
 {
     public CustomUserClaimsPrincipalFactory(
-        UserManager<IdentityUser> userManager,
+        UserManager<ApplicationUser> userManager,
         IOptions<IdentityOptions> optionsAccessor)
         : base(userManager, optionsAccessor) { }
 
-    protected override async Task<ClaimsIdentity> GenerateClaimsAsync(IdentityUser user)
+    protected override async Task<ClaimsIdentity> GenerateClaimsAsync(ApplicationUser user)
     {
         var identity = await base.GenerateClaimsAsync(user);
         identity.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? "")); // Ensure email claim is always present
