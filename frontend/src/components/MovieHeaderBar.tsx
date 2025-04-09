@@ -106,7 +106,7 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              <button onClick={() => navigate('/manage-movies')}>Manage Movies</button>
+              <button onClick={() => navigate('/admin')}>Manage Movies</button>
               <button onClick={onLogout}>Logout</button>
             </div>
           )}
