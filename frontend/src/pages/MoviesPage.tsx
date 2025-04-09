@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 import AuthorizeView from '../components/AuthorizeView';
 import MovieRow from '../components/MovieRow';
@@ -17,11 +17,22 @@ function MoviesPage() {
   useEffect(() => {
     const fetchUserRecs = async () => {
       try {
-        const userId = 1; // Replace with dynamic userId if you have auth/session
-        const response = await axios.get(
-          `/recommendations/user/${userId}/full`
+        const userId = 1; // or dynamic if you’ve got login working
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/recommendations/user/${userId}/full`,
+          {
+            credentials: 'include',
+          }
         );
-        setUserRecs(response.data); // ← now `MovieRow` will get real data
+
+        const data = await response.json();
+
+        const recsWithPosters = data.map((movie: any) => ({
+          ...movie,
+          posterUrl: `/images/movieThumbnails/${movie.title}.jpg`,
+        }));
+
+        setUserRecs(recsWithPosters);
       } catch (err) {
         console.error('Failed to fetch user recommendations:', err);
       }

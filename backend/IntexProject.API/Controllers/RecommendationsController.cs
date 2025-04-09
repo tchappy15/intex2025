@@ -39,8 +39,9 @@ public IActionResult GetUserFullRecs(int userId)
 
     // Now query MoviesDbContext by title
     var recommendedMovies = _moviesDbContext.Movies
-        .Where(m => recommendedTitles.Contains(m.Title))
+        .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
         .ToList();
+
 
     return Ok(recommendedMovies);
 }
