@@ -67,6 +67,19 @@ public IActionResult GetUserFullRecs(int userId)
 
         return recs.Any() ? Ok(recs) : NotFound();
     }
+    // GET: api/recommendations/genre/5
+    [HttpGet("genre/{userId}")]
+    public IActionResult GetGenreRecs(int userId)
+    {
+        var recEntry = _context.GenreRecommendations.FirstOrDefault(r => r.UserId == userId);
+        if (recEntry == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(recEntry);
+    }
+
 
     // GET: api/recommendations/test-connection
     [HttpGet("test-connection")]
