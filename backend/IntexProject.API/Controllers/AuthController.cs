@@ -40,10 +40,16 @@ namespace IntexProject.API.Controllers
                 return BadRequest(result.Errors);
             }
 
+            var nextUserId = _moviesDb.MoviesUsers
+                .OrderByDescending(u => u.userId)
+                .Select(u => u.userId)
+                .FirstOrDefault() + 1;
+
+
             // Save to movies_users table
             var movieUser = new MoviesUser
             {
-                userId = user.Id,
+                userId = nextUserId,
                 name = $"{request.firstName} {request.lastName}",
                 phone = request.phone,
                 phoneExtension = request.phoneExtension,

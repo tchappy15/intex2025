@@ -8,7 +8,7 @@ namespace IntexProject.API.Data;
     {
         [Key]
         [Column("user_id")]
-        public string userId { get; set; }
+        public int userId { get; set; }
 
         [Column("name")]
         public string name { get; set; }

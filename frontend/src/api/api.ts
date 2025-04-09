@@ -102,25 +102,28 @@ export async function fetchMovieById(movieId: string): Promise<Movie> {
   return movie;
 }
 
-export async function submitRating(
-  showId: string,
+export async function addRating(
+  movieId: string,
   rating: number,
   userEmail: string
-    ): Promise<void> {
-      const response = await fetch(`${API_BASE_URL}/Movies/ratings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          show_id: showId,
-          rating: rating,
-          user_email: userEmail,
-        }),
-      });
+): Promise<void> {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/Movies/AddRating/${userEmail}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        movieId: movieId,
+        rating: rating,
+      }),
+    }
+  );
 
-      if (!response.ok) {
-        throw new Error('Failed to submit rating');
-      }
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to submit rating: ${errorText}`);
+  }
 }
 
 // Logout the user
@@ -178,13 +181,14 @@ export async function registerUser(formData: any) {
   return response; // Return full response to check .ok and get error text if needed
 }
 
-
-
 export async function deleteMovie(movieId: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/Movies/DeleteMovie/${movieId}`, {
-    method: 'DELETE',
-    credentials: 'include',
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/Movies/DeleteMovie/${movieId}`,
+    {
+      method: 'DELETE',
+      credentials: 'include',
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Failed to delete movie');
@@ -196,18 +200,21 @@ export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
   const booleanGenres = Object.fromEntries(
     Object.entries(newMovie).map(([key, value]) => [
       key,
-      value === 1 ? true : value === 0 ? false : value
+      value === 1 ? true : value === 0 ? false : value,
     ])
   );
 
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/Movies/AddMovie`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(booleanGenres) // FLAT object, not wrapped
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/Movies/AddMovie`,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(booleanGenres), // FLAT object, not wrapped
+    }
+  );
 
   if (!response.ok) {
     const message = await response.text();
@@ -215,28 +222,32 @@ export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
   }
 }
 
-
-export async function updateMovie(movieId: string, updatedMovie: Partial<Movie>): Promise<void> {
+export async function updateMovie(
+  movieId: string,
+  updatedMovie: Partial<Movie>
+): Promise<void> {
   // Convert 0/1 to booleans for genres
   const booleanGenres = Object.fromEntries(
     Object.entries(updatedMovie).map(([key, value]) => [
       key,
-      value === 1 ? true : value === 0 ? false : value
+      value === 1 ? true : value === 0 ? false : value,
     ])
   );
 
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/Movies/UpdateMovie/${movieId}`, {
-    method: 'PUT',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(booleanGenres) // flat, not wrapped
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/Movies/UpdateMovie/${movieId}`,
+    {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(booleanGenres), // flat, not wrapped
+    }
+  );
 
   if (!response.ok) {
     const message = await response.text();
     throw new Error(`Failed to update movie: ${message}`);
   }
 }
-

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
-import { fetchMovieById, submitRating } from '../api/api';
+import { addRating, fetchMovieById } from '../api/api';
 
 function OneMoviePage() {
   const navigate = useNavigate();
@@ -42,13 +42,13 @@ function OneMoviePage() {
     }
 
     console.log('Submitting rating:', {
-      show_id: movieId,
+      movieId: movieId,
       rating: rating,
       user_email: userEmail,
     });
 
     try {
-      await submitRating(movieId!, rating, userEmail);
+      await addRating(movieId!, rating, userEmail);
       alert('Rating submitted!');
     } catch (err) {
       console.error(err);
@@ -80,7 +80,10 @@ function OneMoviePage() {
                 fontSize: '16px',
               }}
             >
-              Logout <span id="user-email"><AuthorizedUser value="email" /></span>
+              Logout{' '}
+              <span id="user-email">
+                <AuthorizedUser value="email" />
+              </span>
             </button>
           </Logout>
         </span>
@@ -90,14 +93,30 @@ function OneMoviePage() {
         {movie ? (
           <div className="card">
             <ul className="list-group list-group-flush">
-              <li className="list-group-item"><strong>Type:</strong> {movie.type}</li>
-              <li className="list-group-item"><strong>Release Year:</strong> {movie.release_year}</li>
-              <li className="list-group-item"><strong>Director:</strong> {movie.director || 'N/A'}</li>
-              <li className="list-group-item"><strong>Cast:</strong> {movie.cast || 'N/A'}</li>
-              <li className="list-group-item"><strong>Country:</strong> {movie.country || 'N/A'}</li>
-              <li className="list-group-item"><strong>Duration:</strong> {movie.duration}</li>
-              <li className="list-group-item"><strong>Rating:</strong> {movie.rating}</li>
-              <li className="list-group-item"><strong>Description:</strong> {movie.description}</li>
+              <li className="list-group-item">
+                <strong>Type:</strong> {movie.type}
+              </li>
+              <li className="list-group-item">
+                <strong>Release Year:</strong> {movie.release_year}
+              </li>
+              <li className="list-group-item">
+                <strong>Director:</strong> {movie.director || 'N/A'}
+              </li>
+              <li className="list-group-item">
+                <strong>Cast:</strong> {movie.cast || 'N/A'}
+              </li>
+              <li className="list-group-item">
+                <strong>Country:</strong> {movie.country || 'N/A'}
+              </li>
+              <li className="list-group-item">
+                <strong>Duration:</strong> {movie.duration}
+              </li>
+              <li className="list-group-item">
+                <strong>Rating:</strong> {movie.rating}
+              </li>
+              <li className="list-group-item">
+                <strong>Description:</strong> {movie.description}
+              </li>
             </ul>
 
             <div className="mt-3">
@@ -113,7 +132,10 @@ function OneMoviePage() {
                   </option>
                 ))}
               </select>
-              <button className="btn btn-primary ms-2" onClick={handleRatingSubmit}>
+              <button
+                className="btn btn-primary ms-2"
+                onClick={handleRatingSubmit}
+              >
                 Submit Rating
               </button>
             </div>
@@ -122,7 +144,10 @@ function OneMoviePage() {
           <p>Loading movie...</p>
         )}
 
-        <button className="btn btn-secondary mt-3" onClick={() => navigate('/movies')}>
+        <button
+          className="btn btn-secondary mt-3"
+          onClick={() => navigate('/movies')}
+        >
           Go Back
         </button>
       </AuthorizeView>

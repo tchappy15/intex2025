@@ -31,7 +31,7 @@
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
 
-
+-->
 
 
     <Content Include="recommendations.db">
