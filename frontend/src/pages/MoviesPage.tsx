@@ -21,7 +21,6 @@ function MoviesPage() {
         const response = await axios.get(
           `/recommendations/user/${userId}/full`
         );
-        console.log('🎯 User recs response:', response.data);
         setUserRecs(response.data); // ← now `MovieRow` will get real data
       } catch (err) {
         console.error('Failed to fetch user recommendations:', err);
