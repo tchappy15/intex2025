@@ -84,6 +84,42 @@ export async function fetchMoviesFiltered(
   };
 }
 
+//for the OneMoviePage
+export async function fetchMovieById(movieId: string): Promise<Movie> {
+  const url = `${API_BASE_URL}/Movies/${movieId}`;
+
+  const response = await fetch(url, {
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch movie with ID: ${movieId}`);
+  }
+
+  const movie = await response.json();
+  return movie;
+}
+
+export async function submitRating(
+  showId: string,
+  rating: number,
+  userEmail: string
+    ): Promise<void> {
+      const response = await fetch(`${API_BASE_URL}/Movies/ratings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          show_id: showId,
+          rating: rating,
+          user_email: userEmail,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit rating');
+      }
+}
 
 // Logout the user
 export async function logoutUser() {
