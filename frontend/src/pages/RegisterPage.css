@@ -1,67 +1,79 @@
 body {
-    margin-top: 0px;
-    padding: 0;
-    background-image: url('/images/dark-blue-blurred-background_1034-589.png');
-    background-size: cover;
-    background-position: center;
-    height: 100%;
-    color: white;
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
+  margin: 0;
+  padding: 0;
+  background-image: url('/images/dark-blue-blurred-background_1034-589.png');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  color: white;
+  font-family: sans-serif;
+}
 
-  .register-genre {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 100%;
-  }
-  
-  .register-card {
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent background */
-    border-radius: 20px;
-    max-width: 800px;
-    width: 100%;
-    padding: 40px;
-    position: relative;
-  }
+.register-genre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
 
-  
-  .register-logo {
-    margin-top: -90px;
-    margin-bottom: -70px;
-    width: 350px;
-    height: auto;
-  }
+.register-card {
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  margin: 0 auto;
+  margin-bottom: 100px;
+}
 
-  .register-cancel-btn {
-    background-color: #416270; 
-    border-color: #2C4D5B; 
-    color: white;
-  }
-  
-  .register-cancel-btn:hover {
-    background-color: #4f707e; 
-    border-color: #4f707e; 
-    color: white;
-  }
-  
-  .register-btn {
-    background-color: #3d7b4b; 
-    border-color: #739e7d; 
-    color: white;
-  }
-  
-  .register-btn:hover {
-    background-color: #498f58; 
-    border-color: #498f58;
-    color: white;
-  }
+.register-logo {
+  width: 35%;
+  margin-bottom: -40px;
+}
 
-  .custom-rounded {
-    border-radius: 10px;
-  }
+.register-cancel-btn {
+  background-color: #416270; 
+  border-color: #2C4D5B; 
+  color: white;
+}
+
+.register-cancel-btn:hover {
+  background-color: #4f707e; 
+  border-color: #4f707e; 
+  color: white;
+}
+
+.register-btn {
+  background-color: #3d7b4b; 
+  border-color: #739e7d; 
+  color: white;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.custom-rounded {
+border-radius: 10px;
+}
+
+.register-btn:hover {
+  background-color: #498f58; 
+  border-color: #498f58;
+  color: white;
+}
+
+.custom-rounded {
+  border-radius: 10px;
+}
+
+.register-h4 {
+  width: 100%;
+  max-width: 500px; /* match your input container width */
+  text-align: left;
+  margin: 0 auto 1rem auto; /* centers the block, aligns text left */
+  padding-left: 0rem;  
+}
