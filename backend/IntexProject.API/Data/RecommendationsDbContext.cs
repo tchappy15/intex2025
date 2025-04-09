@@ -12,6 +12,8 @@ namespace IntexProject.API.Data
         public DbSet<UserRecommendation> UserRecommendations { get; set; }
         public DbSet<ContentRecommendation> ContentRecommendations { get; set; }
         public DbSet<CollaborativeMovieRecommendation> CollaborativeMovieRecommendations { get; set; }
+        public DbSet<GenreRecommendations> GenreRecommendations { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
