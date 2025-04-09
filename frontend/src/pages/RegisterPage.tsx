@@ -101,8 +101,8 @@ function Register() {
 
   return (
     <div className="register-genre">
-      <div className="text-center mb-4">
-        <img src="/images/Logo.png" alt="Logo" className="register-logo" />
+      <div className="text-center">
+      <img src="/images/Logo.png" alt="Logo" className="register-logo" />
         <div className="register-card border-0 shadow rounded-3">
           <div className="card-body p-3">
             <h5
@@ -118,7 +118,7 @@ function Register() {
             </h5>
             {step === 1 && (
               <div>
-                <h4 style={{ color: 'white' }}>Step 1: Contact Info</h4>
+                <h4 className="register-h4" style={{ color: 'white' }}>Step 1: Contact Info</h4>
                 <input
                   name="firstName"
                   placeholder="First Name"
@@ -158,8 +158,11 @@ function Register() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className={`form-control mb-2 ${error && !formData.email ? 'is-invalid' : ''}`}
+                  className={`form-control mb-3 ${error && !formData.email ? 'is-invalid' : ''}`}
                 />
+                <small className="text-white">
+                  Password must be at least 13 characters long.
+                </small>
                 <div className="position-relative mb-2">
                   <input
                     name="password"
@@ -172,16 +175,14 @@ function Register() {
                   />
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                    className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-1"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
-                <small className="text-muted">
-                  Password must be at least 13 characters long.
-                </small>
-                <div className="position-relative mb-2">
+                
+                <div className="position-relative mb-4">
                   <input
                     name="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
@@ -193,7 +194,7 @@ function Register() {
                   />
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                    className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-1"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? 'Hide' : 'Show'}
@@ -216,7 +217,7 @@ function Register() {
                       setError('Please fill in all required fields.');
                     }
                   }}
-                  className="btn btn-primary w-100"
+                  className="log-btn btn-login text-uppercase fw-bold custom-rounded"
                 >
                   Next
                 </button>

@@ -5,18 +5,19 @@ const PrivacyPage = () => {
   return (
     <>
       <img
+        className="privacy-img"
         src="src\assets\CineNicheFull.png"
         alt="CineNiche Film Camera Logo"
       />
-      <div className="max-w-3xl mx-auto p-6 text-gray-800 container bg-white">
-        <h1 className="text-3xl font-bold mb-4">Privacy Policy – CineNiche</h1>
+      <div className="privacy-div max-w-3xl mx-auto p-6 text-gray-800 container bg-white">
+        <h1 className="privacy-h1 text-3xl font-bold mb-4">Privacy Policy – CineNiche</h1>
         <p className="text-sm text-gray-500 mb-6">
           Effective Date: 11 April 2025 <br />
           Last Updated: 11 April 2025
         </p>
 
         <section>
-          <p className="mb-4">
+          <p className="privacy-section mb-4">
             At CineNiche, your privacy is important to us. This Privacy Policy
             outlines how we collect, use, store, and protect your personal
             information in accordance with the General Data Protection
@@ -24,7 +25,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">1. Data We Collect</h2>
           <ul className="list-disc list-inside space-y-1">
             <li>Full name</li>
@@ -39,7 +40,7 @@ const PrivacyPage = () => {
           </ul>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             2. Purpose of Data Collection
           </h2>
@@ -56,7 +57,7 @@ const PrivacyPage = () => {
           </ul>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             3. Legal Basis for Processing
           </h2>
@@ -77,7 +78,7 @@ const PrivacyPage = () => {
           </ul>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             4. Data Storage and Security
           </h2>
@@ -89,7 +90,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             5. User Rights (under GDPR)
           </h2>
@@ -106,7 +107,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             6. Third Parties and Data Sharing
           </h2>
@@ -118,7 +119,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">7. Data Retention</h2>
           <p>
             We retain your data for as long as your account is active or as
@@ -127,7 +128,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">
             8. Disclaimer of Liability for Non-Subscribers
           </h2>
@@ -140,7 +141,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section className="mb-6">
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">9. Policy Updates</h2>
           <p>
             We may update this Privacy Policy from time to time. Any changes

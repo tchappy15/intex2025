@@ -6,6 +6,8 @@ import { loginUser } from '../api/api';
 import './LoginPage.css';
 
 
+
+
 function LoginPage() {
   // state variables for email and passwords
   const [email, setEmail] = useState<string>('');
@@ -56,10 +58,10 @@ function LoginPage() {
   return (
     
     <div className="login-genre">
-      <div className="text-center mb-4">
+      <div className="text-center">
       <img src="/images/Logo.png" alt="Logo" className="logo-login" />
         <div className="login-card border-0 shadow rounded-3 ">
-          <div className="card-body p-3">
+          <div className="card-body  ">
           <h5
             style={{
               fontFamily: 'Oswald',
@@ -67,12 +69,12 @@ function LoginPage() {
               fontSize: '2.5rem', // Adjust this size as needed
               color: 'white'
             }}
-            className="card-title text-center mb-4">
+            className="card-title mb-3">
             Sign In
           </h5>
 
             <form onSubmit={handleSubmit}>
-              <div className="form-floating mb-3">
+              <div className="mb-3">
                 <input
                   className="form-control"
                   type="email"
@@ -80,22 +82,22 @@ function LoginPage() {
                   name="email"
                   value={email}
                   onChange={handleChange}
+                  placeholder="Email Address"
                 />
-                <label htmlFor="email">Email address</label>
               </div>
-              <div className="form-floating mb-3 position-relative">
+              <div className="mb-3 position-relative ">
                 <input
-                  className="form-control"
+                  className="form-control pe-5"
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   name="password"
                   value={password}
                   onChange={handleChange}
+                  placeholder='Password'
                 />
-                <label htmlFor="password">Password</label>
                 <button
                   type="button"
-                  className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
+                  className="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-1"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
                 >
@@ -103,24 +105,24 @@ function LoginPage() {
                 </button>
               </div>
 
-
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="rememberme"
-                  name="rememberme"
-                  checked={rememberme}
-                  onChange={handleChange}
-                />
-                <label className="form-check-label text-white" htmlFor="rememberme">
-                  Remember password
-                </label>
+              <div className='d-flex justify-content-center mb-3'>
+                <div className="form-check d-flex align-items-center gap-2 mb-3">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="rememberme"
+                    name="rememberme"
+                    checked={rememberme}
+                    onChange={handleChange}
+                  />
+                  <label className="form-check-label text-white" htmlFor="rememberme">
+                    Remember password
+                  </label>
+                </div>
               </div>
               <div className="d-grid mb-2">
               <button
-                className="log-btn text-uppercase fw-bold custom-rounded"
+                className="log-btn btn-login text-uppercase fw-bold custom-rounded"
                 type="submit">
                 Sign in
               </button>
