@@ -16,42 +16,45 @@ public class RecommendationsController : ControllerBase
     }
 
     // GET: api/recommendations/user/5
-[HttpGet("user/{userId}/full")]
-public IActionResult GetUserFullRecs(int userId)
-{
-    try
+    [HttpGet("user/{userId}/full")]
+    public IActionResult GetUserFullRecs(int userId)
     {
-        var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
-        if (recEntry == null)
+        try
         {
-            return NotFound();
-        }
+            var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
+            if (recEntry == null)
+            {
+                Console.WriteLine($"User {userId} not found.");
+                return NotFound();
+            }
 
-        var recommendedTitles = new List<string>
-        {
-            recEntry.Rec1,
-            recEntry.Rec2,
-            recEntry.Rec3,
-            recEntry.Rec4,
-            recEntry.Rec5
-        }
-        .Where(title => !string.IsNullOrWhiteSpace(title))
-        .ToList();
-
-        Console.WriteLine($"🎯 Fetching recommendations for user {userId}: {string.Join(", ", recommendedTitles)}");
-
-        var recommendedMovies = _moviesDbContext.Movies
-            .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+            var recommendedTitles = new List<string>
+            {
+                recEntry.Rec1,
+                recEntry.Rec2,
+                recEntry.Rec3,
+                recEntry.Rec4,
+                recEntry.Rec5
+            }
+            .Where(title => !string.IsNullOrWhiteSpace(title))
             .ToList();
 
-        return Ok(recommendedMovies);
+            Console.WriteLine($"🎯 Titles for user {userId}: {string.Join(", ", recommendedTitles)}");
+
+            var recommendedMovies = _moviesDbContext.Movies
+                .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+                .ToList();
+
+            Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies.");
+            return Ok(recommendedMovies);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"🔥 ERROR in GetUserFullRecs: {ex}");
+            return StatusCode(500, new { message = "Server error", error = ex.Message });
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"🔥 ERROR in GetUserFullRecs for user {userId}: {ex.Message}");
-        return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
-    }
-}
+
 
 
 
