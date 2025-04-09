@@ -126,19 +126,20 @@ export async function loginUser(
   return data;
 }
 
-// Register a new user
-export async function registerUser(email: string, password: string) {
+// Register a new user with full form data
+export async function registerUser(formData: any) {
   const response = await fetch(`${API_BASE_URL}/register`, {
     method: 'POST',
-    credentials: 'include', // This is key for cookies
+    credentials: 'include', // Keep this for cookie-based auth
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username: email, password }),
+    body: JSON.stringify(formData),
   });
 
-  return response.ok;
+  return response; // Return full response to check .ok and get error text if needed
 }
+
 
 
 export async function deleteMovie(movieId: string): Promise<void> {

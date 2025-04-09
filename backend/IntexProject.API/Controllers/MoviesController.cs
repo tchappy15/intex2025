@@ -77,7 +77,8 @@ namespace IntexProject.API.Controllers
         {
             var genreTypes = typeof(Movie)
                 .GetProperties()
-                .Where(p => p.PropertyType == typeof(bool))
+                .Where(p => p.PropertyType == typeof(int)
+                        && p.Name != "release_year") //add more if have other type int columns to ignore
                 .Select(p =>
                 {
                     var display = p.GetCustomAttributes(typeof(DisplayAttribute), false)
