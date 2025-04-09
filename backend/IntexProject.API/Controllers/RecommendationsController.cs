@@ -7,19 +7,45 @@ using Microsoft.EntityFrameworkCore;
 public class RecommendationsController : ControllerBase
 {
     private readonly RecommendationsDbContext _context;
+    private readonly MoviesDbContext _moviesDbContext;
 
-    public RecommendationsController(RecommendationsDbContext context)
+    public RecommendationsController(RecommendationsDbContext context, MoviesDbContext moviesDbContext)
     {
         _context = context;
+        _moviesDbContext = moviesDbContext;
     }
 
     // GET: api/recommendations/user/5
-    [HttpGet("user/{userId}")]
-    public IActionResult GetUserRecs(int userId)
+[HttpGet("user/{userId}/full")]
+public IActionResult GetUserFullRecs(int userId)
+{
+    var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
+    if (recEntry == null)
     {
-        var recs = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
-        return recs != null ? Ok(recs) : NotFound();
+        return NotFound();
     }
+
+    // Extract titles from columns Rec1 through Rec5
+    var recommendedTitles = new List<string>
+    {
+        recEntry.Rec1,
+        recEntry.Rec2,
+        recEntry.Rec3,
+        recEntry.Rec4,
+        recEntry.Rec5
+    }
+    .Where(title => !string.IsNullOrWhiteSpace(title))
+    .ToList();
+
+    // Now query MoviesDbContext by title
+    var recommendedMovies = _moviesDbContext.Movies
+        .Where(m => recommendedTitles.Contains(m.Title))
+        .ToList();
+
+    return Ok(recommendedMovies);
+}
+
+
 
     // GET: api/recommendations/similar/Inception
     [HttpGet("similar/{title}")]
