@@ -19,31 +19,38 @@ public class RecommendationsController : ControllerBase
 [HttpGet("user/{userId}/full")]
 public IActionResult GetUserFullRecs(int userId)
 {
-    var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
-    if (recEntry == null)
+    try
     {
-        return NotFound();
-    }
+        var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
+        if (recEntry == null)
+        {
+            return NotFound();
+        }
 
-    // Extract titles from columns Rec1 through Rec5
-    var recommendedTitles = new List<string>
-    {
-        recEntry.Rec1,
-        recEntry.Rec2,
-        recEntry.Rec3,
-        recEntry.Rec4,
-        recEntry.Rec5
-    }
-    .Where(title => !string.IsNullOrWhiteSpace(title))
-    .ToList();
-
-    // Now query MoviesDbContext by title
-    var recommendedMovies = _moviesDbContext.Movies
-        .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+        var recommendedTitles = new List<string>
+        {
+            recEntry.Rec1,
+            recEntry.Rec2,
+            recEntry.Rec3,
+            recEntry.Rec4,
+            recEntry.Rec5
+        }
+        .Where(title => !string.IsNullOrWhiteSpace(title))
         .ToList();
 
+        Console.WriteLine($"🎯 Fetching recommendations for user {userId}: {string.Join(", ", recommendedTitles)}");
 
-    return Ok(recommendedMovies);
+        var recommendedMovies = _moviesDbContext.Movies
+            .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+            .ToList();
+
+        return Ok(recommendedMovies);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"🔥 ERROR in GetUserFullRecs for user {userId}: {ex.Message}");
+        return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+    }
 }
 
 
