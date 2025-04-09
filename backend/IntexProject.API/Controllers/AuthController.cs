@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using IntexProject.Models;
 using System.Threading.Tasks;
 using IntexProject.API.Data;
 using IntexProject.DTOs;

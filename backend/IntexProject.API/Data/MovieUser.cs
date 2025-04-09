@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IntexProject.Models
-{
+namespace IntexProject.API.Data;
+
     [Table("movies_users")]
     public class MoviesUser
     {
@@ -61,4 +61,3 @@ namespace IntexProject.Models
         [Column("Peacock")]
         public int peacock { get; set; }
     }
-}

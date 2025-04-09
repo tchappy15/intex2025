@@ -1,13 +1,63 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
+import { fetchMovieById, submitRating } from '../api/api';
 
 function OneMoviePage() {
   const navigate = useNavigate();
-  const { title, movieId, currentRetailPrice } = useParams();
-  const price = currentRetailPrice ? parseFloat(currentRetailPrice) : 0; // Convert to number or fallback to 0
+  const { title, movieId } = useParams();
+  const [movie, setMovie] = useState<any>(null);
+  const [rating, setRating] = useState(0);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    if (movieId) {
+      fetchMovieById(movieId)
+        .then(setMovie)
+        .catch((err) => console.error('Failed to load movie:', err));
+    }
+  }, [movieId]);
+
+  // Safely extract email from DOM
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const emailElement = document.getElementById('user-email');
+      if (emailElement) {
+        const email = emailElement.textContent?.trim();
+        if (email) {
+          setUserEmail(email);
+          console.log('✅ Set user email from DOM:', email);
+          clearInterval(interval); // stop polling once set
+        }
+      }
+    }, 200);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleRatingSubmit = async () => {
+    if (rating < 1 || rating > 5) {
+      alert('Please select a rating between 1 and 5');
+      return;
+    }
+
+    console.log('Submitting rating:', {
+      show_id: movieId,
+      rating: rating,
+      user_email: userEmail,
+    });
+
+    try {
+      await submitRating(movieId!, rating, userEmail);
+      alert('Rating submitted!');
+    } catch (err) {
+      console.error(err);
+      alert('Error submitting rating.');
+    }
+  };
+
   if (!title || !movieId) {
-    throw new Error('Missing required route parameters: ');
+    throw new Error('Missing required route parameters');
   }
 
   return (
@@ -15,34 +65,69 @@ function OneMoviePage() {
       <AuthorizeView>
         <span>
           <Logout>
-          <button
-          style={{
-            position: 'fixed',
-            top: '10px',
-            left: '20px', // changed from right to left
-            background: '#f8f9fa',
-            padding: '10px 15px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-            fontSize: '16px',
-          }}
-        >
-          Logout <AuthorizedUser value="email" />
-        </button>
+            <button
+              style={{
+                position: 'fixed',
+                top: '10px',
+                left: '20px',
+                background: '#f8f9fa',
+                padding: '10px 15px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                fontSize: '16px',
+              }}
+            >
+              Logout <span id="user-email"><AuthorizedUser value="email" /></span>
+            </button>
           </Logout>
         </span>
 
-      <h1>This will be the Movie Detail Page</h1>
+        <h1 style={{ color: 'white' }}>{title}</h1>
 
-        <h1>Want a cold refreshing {title}?</h1>
-        <h2>Only ${price.toFixed(2)}</h2>
+        {movie ? (
+          <div className="card">
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item"><strong>Type:</strong> {movie.type}</li>
+              <li className="list-group-item"><strong>Release Year:</strong> {movie.release_year}</li>
+              <li className="list-group-item"><strong>Director:</strong> {movie.director || 'N/A'}</li>
+              <li className="list-group-item"><strong>Cast:</strong> {movie.cast || 'N/A'}</li>
+              <li className="list-group-item"><strong>Country:</strong> {movie.country || 'N/A'}</li>
+              <li className="list-group-item"><strong>Duration:</strong> {movie.duration}</li>
+              <li className="list-group-item"><strong>Rating:</strong> {movie.rating}</li>
+              <li className="list-group-item"><strong>Description:</strong> {movie.description}</li>
+            </ul>
 
-        <button onClick={() => navigate('/movies')}>Go Back</button>
+            <div className="mt-3">
+              <h4 style={{ color: 'white' }}>Rate this movie</h4>
+              <select
+                value={rating}
+                onChange={(e) => setRating(parseInt(e.target.value))}
+              >
+                <option value={0}>Select a rating</option>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <option key={num} value={num}>
+                    {num} Star{num > 1 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+              <button className="btn btn-primary ms-2" onClick={handleRatingSubmit}>
+                Submit Rating
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p>Loading movie...</p>
+        )}
+
+        <button className="btn btn-secondary mt-3" onClick={() => navigate('/movies')}>
+          Go Back
+        </button>
       </AuthorizeView>
     </>
   );
 }
+
 export default OneMoviePage;

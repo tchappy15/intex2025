@@ -166,5 +166,68 @@ namespace IntexProject.API.Controllers
             return Ok(existingMovie);
         }
 
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMovieById(string id)
+        {
+            var movie = await _moviesDbContext.Movies.FirstOrDefaultAsync(m => m.MovieId == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            return Ok(movie);
+        }
+
+        [HttpPost("ratings")]
+public async Task<IActionResult> SubmitRating([FromBody] RatingDto dto)
+{
+    Console.WriteLine("[POST /Movies/ratings]");
+    Console.WriteLine($"Email: {dto.UserEmail}");
+    Console.WriteLine($"ShowId: {dto.ShowId}");
+    Console.WriteLine($"Rating: {dto.Rating}");
+
+    if (string.IsNullOrWhiteSpace(dto.UserEmail))
+    {
+        Console.WriteLine("❌ Missing email.");
+        return BadRequest("Missing email.");
+    }
+
+    var normalizedEmail = dto.UserEmail.Trim().ToLower();
+
+    var user = await _moviesDbContext.MoviesUsers
+        .FirstOrDefaultAsync(u => u.email.ToLower() == normalizedEmail);
+
+    if (user == null)
+    {
+        Console.WriteLine("❌ User not found in movies_users.");
+        return BadRequest("User not found.");
+    }
+
+    Console.WriteLine($"✅ Found user: {user.name} (ID: {user.userId})");
+
+    var rating = new MovieRating
+    {
+        UserId = user.userId,
+        ShowId = dto.ShowId,
+        Rating = dto.Rating
+    };
+
+    _moviesDbContext.MoviesRatings.Add(rating);
+    await _moviesDbContext.SaveChangesAsync();
+
+    Console.WriteLine("✅ Rating saved.");
+    return Ok();
+}
+
+        public class RatingDto
+        {
+            public string ShowId { get; set; }
+            public int Rating { get; set; }
+            public string UserEmail { get; set; }
+        }
+
+
+
     }
 }
