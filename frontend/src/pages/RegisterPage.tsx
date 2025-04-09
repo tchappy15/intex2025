@@ -47,30 +47,8 @@ function Register() {
     }));
   };
 
-  const validateStepOne = () => {
-    const { firstName, lastName, phone, email, password, confirmPassword } = formData;
-    return (
-      firstName &&
-      lastName &&
-      phone.length === 10 &&
-      email &&
-      password &&
-      confirmPassword
-    );
-  };
 
-  const validateStepTwo = () => {
-    const { age, gender, city, state, zip } = formData;
-    return age && gender && city && state && zip;
-  };
 
-  const nextStep = () => {
-    if ((step === 1 && validateStepOne()) || (step === 2 && validateStepTwo())) {
-      setStep((prev) => prev + 1);
-    } else {
-      setError('Please fill in all required fields.');
-    }
-  };
 
   const prevStep = () => setStep((prev) => prev - 1);
 
