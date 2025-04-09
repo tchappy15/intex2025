@@ -1,3 +1,4 @@
+import React from 'react';
 import './MovieRow.css';
 
 interface Movie {
