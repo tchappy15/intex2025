@@ -16,40 +16,46 @@ function OneMoviePage() {
   const [collabRecs, setCollabRecs] = useState([]);
 
   useEffect(() => {
-    if (movieId) {
-      fetchMovieById(movieId)
-        .then(setMovie)
-        .catch((err) => console.error('Failed to load movie:', err));
+    if (!movieId) return;
 
-      // Fetch content-based recommendations
-      fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const posters = data.map((m: any) => ({
-            ...m,
-            posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
-          }));
-          setContentRecs(posters);
-        })
-        .catch((err) => console.error('Content-based recs error:', err));
+    fetchMovieById(movieId)
+      .then(setMovie)
+      .catch((err) => console.error('Failed to load movie:', err));
 
-      // Fetch collaborative filtering recommendations
-      fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${movieId}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          const posters = data.map((m: any) => ({
-            ...m,
-            posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
-          }));
-          setCollabRecs(posters);
-        })
-        .catch((err) => console.error('Collaborative recs error:', err));
-    }
+    // Content Filtering
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const posters = data.map((m: any) => ({
+          ...m,
+          posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+        }));
+        setContentRecs(posters);
+      })
+      .catch((err) => console.error('Content-based recs error:', err));
   }, [movieId]);
+
+  // Collaborative Filtering
+  useEffect(() => {
+    if (!movie?.title) return;
+
+    const encodedTitle = encodeURIComponent(movie.title);
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${encodedTitle}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const posters = data.map((m: any) => ({
+          ...m,
+          posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+        }));
+        setCollabRecs(posters);
+      })
+      .catch((err) => console.error('Collaborative recs error:', err));
+  }, [movie]);
 
   // Safely extract email from DOM
   useEffect(() => {
