@@ -27,7 +27,14 @@
   <!-- <Content Include="Movies.sqlite">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content> -->
-  <Content Include="Identity.sqlite">
+  <!-- <Content Include="Identity.sqlite">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+
+
+
+
+    <Content Include="recommendations.db">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
 </ItemGroup>
