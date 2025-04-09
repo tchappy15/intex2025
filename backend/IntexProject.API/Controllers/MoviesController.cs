@@ -90,7 +90,7 @@ namespace IntexProject.API.Controllers
             return Ok(genreTypes);
         }
 
-
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("DeleteMovie/{movieId}")]
         public IActionResult DeleteMovie(string movieId)
         {
@@ -123,7 +123,7 @@ namespace IntexProject.API.Controllers
             return NoContent();
         }
 
-
+        [Authorize(Roles = "Administrator")]
         [HttpPost("AddMovie")]
         public IActionResult AddMovie([FromBody] Movie newMovie)
         {
@@ -165,6 +165,7 @@ namespace IntexProject.API.Controllers
             return CreatedAtAction(nameof(GetMovies), new { id = newMovie.MovieId }, newMovie);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPut("UpdateMovie/{movieId}")]
         public IActionResult UpdateMovie(string movieId, [FromBody] Movie updatedMovie)
         {
