@@ -12,11 +12,12 @@ public class MoviesDbContext: DbContext
     public DbSet<Movie> Movies { get; set; }
     public DbSet<MovieRating> MoviesRatings { get; set; }
 
- protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<MovieRating>().HasNoKey();
-    }
+    modelBuilder.Entity<MovieRating>()
+        .HasKey(r => new { r.UserId, r.MovieId }); //  composite key
+}
 
 }

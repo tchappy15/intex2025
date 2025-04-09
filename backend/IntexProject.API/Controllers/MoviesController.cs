@@ -179,54 +179,47 @@ namespace IntexProject.API.Controllers
             return Ok(movie);
         }
 
-        [HttpPost("ratings")]
-public async Task<IActionResult> SubmitRating([FromBody] RatingDto dto)
-{
-    Console.WriteLine("[POST /Movies/ratings]");
-    Console.WriteLine($"Email: {dto.UserEmail}");
-    Console.WriteLine($"ShowId: {dto.ShowId}");
-    Console.WriteLine($"Rating: {dto.Rating}");
 
-    if (string.IsNullOrWhiteSpace(dto.UserEmail))
-    {
-        Console.WriteLine("❌ Missing email.");
-        return BadRequest("Missing email.");
-    }
-
-    var normalizedEmail = dto.UserEmail.Trim().ToLower();
-
-    var user = await _moviesDbContext.MoviesUsers
-        .FirstOrDefaultAsync(u => u.email.ToLower() == normalizedEmail);
-
-    if (user == null)
-    {
-        Console.WriteLine("❌ User not found in movies_users.");
-        return BadRequest("User not found.");
-    }
-
-    Console.WriteLine($"✅ Found user: {user.name} (ID: {user.userId})");
-
-    var rating = new MovieRating
-    {
-        UserId = user.userId,
-        ShowId = dto.ShowId,
-        Rating = dto.Rating
-    };
-
-    _moviesDbContext.MoviesRatings.Add(rating);
-    await _moviesDbContext.SaveChangesAsync();
-
-    Console.WriteLine("✅ Rating saved.");
-    return Ok();
-}
-
-        public class RatingDto
+        [HttpPost("AddRating/{useremail}")]
+        public IActionResult AddRating(string useremail, [FromBody] RatingInputDto input)
         {
-            public string ShowId { get; set; }
-            public int Rating { get; set; }
-            public string UserEmail { get; set; }
+            if (input == null)
+            {
+                return BadRequest("Missing rating data");
+            }
+
+            var userId = _moviesDbContext.MoviesUsers
+                .Where(u => u.email.ToLower() == useremail.Trim().ToLower())
+                .Select(u => u.userId)
+                .FirstOrDefault();
+
+            if (userId == null)
+            {
+                Console.WriteLine($"❌ Could not find user_id for email: {useremail}");
+                return BadRequest("User not found.");
+            }
+
+            Console.WriteLine($"✅ Found user_id: {userId} for email: {useremail}");
+
+            var newRating = new MovieRating
+            {
+                UserId = userId,
+                MovieId = input.movieId,
+                Rating = input.Rating
+            };
+
+            _moviesDbContext.MoviesRatings.Add(newRating);
+            _moviesDbContext.SaveChanges();
+
+            return Ok("Rating submitted.");
         }
 
+
+        public class RatingInputDto
+        {
+            public string movieId { get; set; }
+            public int Rating { get; set; }
+        }
 
 
     }
