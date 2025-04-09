@@ -92,7 +92,7 @@ public class RecommendationsController : ControllerBase
     }
 
 
-    // GET: api/recommendations/test-connection
+    // GET: recommendations/test-connection
     [HttpGet("test-connection")]
     public IActionResult TestConnection()
     {

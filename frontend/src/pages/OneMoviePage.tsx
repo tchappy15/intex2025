@@ -1,3 +1,5 @@
+import MovieRow from '../components/MovieRow'; // If not already imported
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
@@ -10,14 +12,44 @@ function OneMoviePage() {
   const [movie, setMovie] = useState<any>(null);
   const [rating, setRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
+  const [contentRecs, setContentRecs] = useState([]);
+  const [collabRecs, setCollabRecs] = useState([]);
 
   useEffect(() => {
     if (movieId) {
       fetchMovieById(movieId)
         .then(setMovie)
         .catch((err) => console.error('Failed to load movie:', err));
+
+      // Fetch content-based recommendations
+      fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const posters = data.map((m: any) => ({
+            ...m,
+            posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+          }));
+          setContentRecs(posters);
+        })
+        .catch((err) => console.error('Content-based recs error:', err));
+
+      // Fetch collaborative filtering recommendations
+      fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${movieId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const posters = data.map((m: any) => ({
+            ...m,
+            posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+          }));
+          setCollabRecs(posters);
+        })
+        .catch((err) => console.error('Collaborative recs error:', err));
     }
-  }, [movieId]);
+  });
 
   // Safely extract email from DOM
   useEffect(() => {
@@ -138,6 +170,23 @@ function OneMoviePage() {
               >
                 Submit Rating
               </button>
+              <hr style={{ margin: '40px 0', borderTop: '1px solid #ccc' }} />
+
+              <div style={{ marginTop: '50px' }}>
+                {contentRecs.length > 0 && (
+                  <MovieRow
+                    title="You Might Also Like (Content-Based)"
+                    movies={contentRecs}
+                  />
+                )}
+
+                {collabRecs.length > 0 && (
+                  <MovieRow
+                    title="Users Also Watched (Collaborative Filtering)"
+                    movies={collabRecs}
+                  />
+                )}
+              </div>
             </div>
           </div>
         ) : (
