@@ -1,17 +1,33 @@
-//import React from 'react';
+import { useEffect } from 'react';
 import './PrivacyPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const PrivacyPage = () => {
+  const navigate = useNavigate();
+
+  //scroll user to top when they go to this page:
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+  
   return (
     <>
       <img
-        className="privacy-img"
-        src="src\assets\CineNicheFull.png"
+        className="privacy-img mx-auto block"
+        src="/images/Logo.png"
         alt="CineNiche Film Camera Logo"
       />
       <div className="privacy-div max-w-3xl mx-auto p-6 text-gray-800 container bg-white">
+          <button
+          onClick={() => navigate('/')}
+          className="sticky-btn"
+          type="button"
+          >
+            Back
+          </button>
+
         <h1 className="privacy-h1 text-3xl font-bold mb-4">Privacy Policy – CineNiche</h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-gray-500 mb-6  text-center">
           Effective Date: 11 April 2025 <br />
           Last Updated: 11 April 2025
         </p>
@@ -149,7 +165,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section>
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">10. Contact Us</h2>
           <p>
             If you have any questions or concerns about this policy or how we
