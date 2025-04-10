@@ -15,6 +15,7 @@ function OneMoviePage() {
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
 
+  //Content Filtering
   useEffect(() => {
     if (!movieId) return;
 
@@ -23,17 +24,15 @@ function OneMoviePage() {
       .catch((err) => console.error('Failed to load movie:', err));
 
     console.log('📦 Fetching content recs for:', movieId);
-    console.log('📦 Fetching collab recs for:', movie?.title);
 
-    // Content Filtering
     fetch(
       `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
     )
       .then((res) => {
-        if (!res.ok) throw new Error(`No content recs for ${movieId}`);
+        if (!res.ok)
+          throw new Error(`No content recs found — likely not enough ratings.`);
         return res.json();
       })
-
       .then((data) => {
         const posters = data.map((m: any) => ({
           ...m,
@@ -41,7 +40,10 @@ function OneMoviePage() {
         }));
         setContentRecs(posters);
       })
-      .catch((err) => console.error('Content-based recs error:', err));
+      .catch((err) => {
+        console.warn(err.message); // softer warning
+        setContentRecs([]); // show fallback message
+      });
   }, [movieId]);
 
   // Collaborative Filtering
@@ -190,18 +192,26 @@ function OneMoviePage() {
               <hr style={{ margin: '40px 0', borderTop: '1px solid #ccc' }} />
 
               <div style={{ marginTop: '50px' }}>
-                {contentRecs.length > 0 && (
-                  <MovieRow
-                    title="You Might Also Like (Content-Based)"
-                    movies={contentRecs}
-                  />
-                )}
-
-                {collabRecs.length > 0 && (
-                  <MovieRow
-                    title="Users Also Watched (Collaborative Filtering)"
-                    movies={collabRecs}
-                  />
+                {(contentRecs.length > 0 || collabRecs.length > 0) && (
+                  <>
+                    <h3 style={{ color: 'white', marginTop: '40px' }}>
+                      Recommended for You
+                    </h3>
+                    <div style={{ marginTop: '20px' }}>
+                      {contentRecs.length > 0 && (
+                        <MovieRow
+                          title="You Might Also Like (Content-Based)"
+                          movies={contentRecs}
+                        />
+                      )}
+                      {collabRecs.length > 0 && (
+                        <MovieRow
+                          title="Users Also Watched (Collaborative Filtering)"
+                          movies={collabRecs}
+                        />
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             </div>
