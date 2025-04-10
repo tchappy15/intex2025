@@ -32,8 +32,12 @@ function MoviesList({
 
         if (showRecommendedOnly) {
           const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/movies/with-recommendations`
+            `${import.meta.env.VITE_API_BASE_URL}/movies/with-recommendations`,
+            {
+              credentials: 'include',
+            }
           );
+
           const json = await res.json();
           data = { movies: json, totalCount: json.length };
         } else {
