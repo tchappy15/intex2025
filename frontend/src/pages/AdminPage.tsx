@@ -59,7 +59,7 @@ const AdminPage = () => {
     }
   };
 
-  if (loading) return <p>Loading movies...</p>;
+  if (loading) return <p style={{color: "white"}}>Loading movies...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (

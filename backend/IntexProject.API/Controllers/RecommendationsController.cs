@@ -21,16 +21,18 @@ public class RecommendationsController : ControllerBase
     {
         try
         {
+            // Fetch the user recommendations from the database
             var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
             if (recEntry == null)
             {
                 Console.WriteLine($"User {userId} not found.");
-                return NotFound();
+                return NotFound(new { message = $"User {userId} not found." });
             }
 
+            // Build the list of recommended movie titles, replacing null with empty string
             var recommendedTitles = new List<string>
             {
-                recEntry.DemoRec1 ?? "",  // Replace null with an empty string
+                recEntry.DemoRec1 ?? "",
                 recEntry.DemoRec2 ?? "",
                 recEntry.DemoRec3 ?? "",
                 recEntry.DemoRec4 ?? "",
@@ -46,29 +48,32 @@ public class RecommendationsController : ControllerBase
                 recEntry.CollabRec4 ?? "",
                 recEntry.CollabRec5 ?? ""
             }
-            .Where(title => !string.IsNullOrWhiteSpace(title))  // Still remove empty or white space titles
+            .Where(title => !string.IsNullOrEmpty(title))  // Remove empty titles
             .ToList();
-
-
 
             Console.WriteLine($"🎯 Titles for user {userId}: {string.Join(", ", recommendedTitles)}");
 
+            // Query the Movies DbContext using case-insensitive title comparison
+            // Pull all movies first, then filter by recommended titles (case-insensitive)
             var recommendedMovies = _moviesDbContext.Movies
+                .AsEnumerable() // forces client-side filtering
                 .Where(m => recommendedTitles.Contains(m.Title, StringComparer.OrdinalIgnoreCase))
                 .ToList();
 
-            // Log the resulting list of movies
+
+            // Log the resulting list of movie titles
             Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies: {string.Join(", ", recommendedMovies.Select(m => m.Title))}");
 
-            // Return the data as JSON
-            return Ok(recommendedMovies);
+            return Ok(recommendedMovies);  // Return the recommended movies
         }
         catch (Exception ex)
         {
+            // Log the error and return a 500 status code
             Console.WriteLine($"🔥 ERROR in GetUserFullRecs: {ex}");
             return StatusCode(500, new { message = "Server error", error = ex.Message });
         }
     }
+
 
 
         // GET: api/recommendations/similar/Inception
@@ -119,14 +124,24 @@ public class RecommendationsController : ControllerBase
     [HttpGet("genre/{userId}")]
     public IActionResult GetGenreRecs(int userId)
     {
-        var recEntry = _context.GenreRecommendations.FirstOrDefault(r => r.UserId == userId);
-        if (recEntry == null)
+        try
         {
-            return NotFound();
-        }
+            var recEntry = _context.GenreRecommendations.FirstOrDefault(r => r.UserId == userId);
+            if (recEntry == null)
+            {
+                return NotFound();
+            }
 
-        return Ok(recEntry);
+            return Ok(recEntry);
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            Console.WriteLine($"Error retrieving genre recommendations for user {userId}: {ex.Message}");
+            return StatusCode(500, new { message = "Server error", error = ex.Message });
+        }
     }
+
 
 
     // GET: recommendations/test-connection

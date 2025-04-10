@@ -13,15 +13,13 @@ import './OneMoviePage.css';
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
-  const [movie, setMovie] = useState<any>(null);
+
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
-
-  // Try to access UserContext if it's exported - if not, we'll use the ref approach
-  // const userContext = useContext(UserContext);
+  const [movie, setMovie] = useState<any>(null);
 
   useEffect(() => {
     if (!movieId) return;
@@ -29,22 +27,6 @@ function OneMoviePage() {
     fetchMovieById(movieId)
       .then(setMovie)
       .catch((err) => console.error('Failed to load movie:', err));
-
-    fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error('No content recs found');
-        return res.json();
-      })
-      .then((data) => {
-        const posters = data.map((m: any) => ({
-          ...m,
-          posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
-        }));
-        setContentRecs(posters);
-      })
-      .catch(() => setContentRecs([]));
   }, [movieId]);
 
   // Fetch content-based recommendations
@@ -57,13 +39,18 @@ function OneMoviePage() {
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         const posters = data.map((rec: any) => ({
-          movieId: rec.recommended_id || rec.movieId || rec.title,
-          title: rec.recommended_title || rec.title,
-          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+          movieId: rec.recommendedId || rec.movieId || rec.title,
+          title: rec.recommendedTitle || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommendedTitle || rec.title)}.jpg`,
         }));
+
         setContentRecs(posters);
       })
       .catch(() => setContentRecs([]));
+  }, [movieId]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [movieId]);
 
   // Fetch collaborative recommendations
@@ -217,7 +204,7 @@ function OneMoviePage() {
             </div>
           </div>
         ) : (
-          <p>Loading movie...</p>
+          <p style={{ color: 'white' }}>Loading movie...</p>
         )}
 
         {(contentRecs?.length > 0 || collabRecs?.length > 0) && (
