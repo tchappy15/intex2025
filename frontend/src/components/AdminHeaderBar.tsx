@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminHeaderBar.css';
+import Logout from './Logout';
 
 function AdminHeaderBar({
   searchTitle,
   setSearchTitle,
-  onLogout,
 }: {
   searchTitle: string;
   setSearchTitle: (title: string) => void;
@@ -57,11 +57,18 @@ function AdminHeaderBar({
           {dropdownOpen && (
             <div className="admin-dropdown-menu">
               <button onClick={() => navigate('/movies')}>Home</button>
-              <button onClick={onLogout}>Logout</button>
+
+              {/* added Logout for proper log out functionality */}
+              <Logout>
+                <button> 
+                  Logout
+              </button>
+              </Logout>
+
             </div>
           )}
         </div>
-        <img src="/images/user.png" alt="Profile" className="admin-avatar" />
+        <img src="/images/user.jpg" alt="Profile" className="admin-avatar" />
       </div>
     </div>
   );
