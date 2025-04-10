@@ -82,7 +82,12 @@ function MoviesList({
         >
           <div className="movie-grid">
             {movies.map((movie) => {
-              const cleanTitle = movie.title.replace(/[<>:"/\\|?*'’]/g, ""); // remove common special chars
+                const cleanTitle = movie.title
+                .normalize("NFKD")                           // Normalize accents (e.g., é → e)
+                .replace(/[\u0300-\u036f]/g, "")            // Remove leftover accent marks
+                .replace(/[<>:"/\\|?*'’!.,()&]/g, "")        // Strip punctuation
+                .replace(/\s+/g, " ")                       // Collapse multiple spaces
+                .trim();
 
               return (
                 <div
@@ -99,7 +104,7 @@ function MoviesList({
                     src={`https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`}
                     alt={movie.title}
                     onError={(e) => {
-                      e.currentTarget.src = "/images/placeholder.jpg";
+                      e.currentTarget.src = `https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg`;
                     }}
                   />
                   <div className="movie-overlay">
