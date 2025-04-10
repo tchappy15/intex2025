@@ -34,9 +34,14 @@ function MoviesList({
           const res = await fetch(
             `${import.meta.env.VITE_API_BASE_URL}/Movies/with-recommendations`,
             {
-              credentials: 'include',
+              credentials: 'include', // important if your API requires auth
             }
           );
+
+          if (!res.ok) {
+            console.error(`❌ Error: ${res.status} ${res.statusText}`);
+            return; // Exit early to avoid calling .json()
+          }
 
           const json = await res.json();
           data = { movies: json, totalCount: json.length };
