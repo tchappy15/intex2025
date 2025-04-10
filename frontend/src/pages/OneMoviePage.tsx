@@ -13,6 +13,7 @@ import './OneMoviePage.css';
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
+
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
