@@ -85,7 +85,7 @@ const InfiniteMovieList = () => {
         dataLength={movies.length}
         next={fetchMovies}
         hasMore={hasMore}
-        loader={<p className="text-center">Loading more movies...</p>}
+        loader={<p className="text-center text-white">Loading more movies...</p>}
         endMessage={
           <p className="text-center text-gray-500">No more movies to load.</p>
         }
