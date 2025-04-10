@@ -23,8 +23,7 @@ function OneMoviePage() {
       .then(setMovie)
       .catch((err) => console.error('Failed to load movie:', err));
 
-    console.log('📦 Fetching content recs for:', movieId);
-
+    // 🔎 Content-based Recommendations
     fetch(
       `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
     )
@@ -46,6 +45,7 @@ function OneMoviePage() {
     if (!movie?.title) return;
     const encodedTitle = encodeURIComponent(movie.title);
 
+    // 🧠 Collaborative Recommendations
     fetch(
       `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodedTitle}`
     )
@@ -61,8 +61,9 @@ function OneMoviePage() {
         setCollabRecs(posters);
       })
       .catch(() => setCollabRecs([]));
-  }, [movie]);
+  }, [movie?.title]);
 
+  // 🧪 Extract email from DOM
   useEffect(() => {
     const interval = setInterval(() => {
       const emailElement = document.getElementById('user-email');
