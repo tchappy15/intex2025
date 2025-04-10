@@ -5,6 +5,7 @@ using Microsoft.Net.Http.Headers;
 using IntexProject.API.Data;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace IntexProject.API.Controllers
@@ -16,9 +17,11 @@ namespace IntexProject.API.Controllers
     public class MoviesController : ControllerBase
     {
         private MoviesDbContext _moviesDbContext;
-        public MoviesController(MoviesDbContext temp)
+        private readonly IConfiguration _configuration;
+        public MoviesController(MoviesDbContext temp, IConfiguration configuration)
         {
             _moviesDbContext = temp;
+            _configuration = configuration;
         }
 
         [HttpGet("GetMovies")]
@@ -78,7 +81,6 @@ namespace IntexProject.API.Controllers
 
             return Ok(returnMovies);
         }
-
 
         [HttpGet("GetGenreTypes")]
         public IActionResult GetGenreTypes()
@@ -225,7 +227,7 @@ namespace IntexProject.API.Controllers
 
         public class RatingInputDto
         {
-            public string movieId { get; set; }
+            public required string movieId { get; set; }
             public int Rating { get; set; }
         }
 
