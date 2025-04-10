@@ -1,23 +1,43 @@
-//import React from 'react';
+
 import './PrivacyPage.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 
 const PrivacyPage = () => {
+  const navigate = useNavigate();
+
+
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
   return (
     <>
+    <Link to='/'>
       <img
         className="privacy-img"
-        src="src\assets\CineNicheFull.png"
+        src="src/assets/CineNicheFull.png"
         alt="CineNiche Film Camera Logo"
       />
-      <div className="privacy-div max-w-3xl mx-auto p-6 text-gray-800 container bg-white">
-        <h1 className="privacy-h1 text-3xl font-bold mb-4">Privacy Policy – CineNiche</h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Effective Date: 11 April 2025 <br />
-          Last Updated: 11 April 2025
-        </p>
+    </Link>
+    <div className="privacy-div">
+        <button
+          onClick={() => navigate('/')}
+          className="sticky-btn custom-rounded"
+          type="button"
+          >
+            Back
+        </button>
+        <h1 className="privacy-h1">Privacy Policy – CineNiche</h1>
+        
+        <div className="privacy-meta">
+          <p>Effective Date: 11 April 2025</p>
+          <p>Last Updated: 11 April 2025</p>
+        </div>
 
         <section>
-          <p className="privacy-section mb-4">
+          <p className="privacy2-section mb-4">
             At CineNiche, your privacy is important to us. This Privacy Policy
             outlines how we collect, use, store, and protect your personal
             information in accordance with the General Data Protection
@@ -149,7 +169,7 @@ const PrivacyPage = () => {
           </p>
         </section>
 
-        <section>
+        <section className="privacy-section mb-6">
           <h2 className="text-xl font-semibold mb-2">10. Contact Us</h2>
           <p>
             If you have any questions or concerns about this policy or how we

@@ -11,34 +11,50 @@ import AdminPage from './pages/AdminPage';
 import PrivacyPage from './pages/PrivacyPage';
 import Footer from './components/Footer';
 import CookieConsent from 'react-cookie-consent';
+import { useLocation } from 'react-router-dom'
 
-function App() {
+function AppWrapper() {
+  const location = useLocation();
+  const isPublicHomePage = location.pathname === '/';
+
   return (
-    <>
-      {/* <CartProvider> */}
-      <Router>
+    
+      <div className="app-wrapper">
         <CookieConsent
           buttonText="Sure thing!!"
           cookieName="user_cookie_consent"
         >
           This website uses cookies to enhance the user experience.
         </CookieConsent>
-        <Routes>
-          <Route path="/" element={<PublicHomePage />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          {/* Internal Landing page */}
-          <Route path="/movie/:title/:movieId" element={<OneMoviePage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-        </Routes>
+
+        <div className={isPublicHomePage ? "app-content" : ""}>
+          <Routes>
+            <Route path="/" element={<PublicHomePage />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movie/:title/:movieId" element={<OneMoviePage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+          </Routes>
+        </div>
+
         <Footer />
-      </Router>
-      {/* </CartProvider> */}
-    </>
+      </div>
+    
+  );
+}
+
+function App() {
+  return (
+    // <CartProvider>
+    <Router>
+      <AppWrapper />
+    </Router>
+    // </CartProvider>
   );
 }
 
 export default App;
+

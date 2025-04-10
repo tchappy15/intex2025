@@ -16,46 +16,78 @@ public class RecommendationsController : ControllerBase
     }
 
     // GET: api/recommendations/user/5
-[HttpGet("user/{userId}/full")]
-public IActionResult GetUserFullRecs(int userId)
+    [HttpGet("user/{userId}/full")]
+    public IActionResult GetUserFullRecs(int userId)
+    {
+        try
+        {
+            var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
+            if (recEntry == null)
+            {
+                Console.WriteLine($"User {userId} not found.");
+                return NotFound();
+            }
+
+            var recommendedTitles = new List<string>
+            {
+                recEntry.Rec1,
+                recEntry.Rec2,
+                recEntry.Rec3,
+                recEntry.Rec4,
+                recEntry.Rec5
+            }
+            .Where(title => !string.IsNullOrWhiteSpace(title))
+            .ToList();
+
+            Console.WriteLine($"🎯 Titles for user {userId}: {string.Join(", ", recommendedTitles)}");
+
+            var recommendedMovies = _moviesDbContext.Movies
+                .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+                .ToList();
+
+            Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies.");
+            return Ok(recommendedMovies);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"🔥 ERROR in GetUserFullRecs: {ex}");
+            return StatusCode(500, new { message = "Server error", error = ex.Message });
+        }
+    }
+
+    // GET: api/recommendations/similar/Inception
+  [HttpGet("similar/{title}")]
+public IActionResult GetSimilarRecs(string title)
 {
-    var recEntry = _context.UserRecommendations.FirstOrDefault(r => r.UserId == userId);
-    if (recEntry == null)
+    var recRow = _context.CollaborativeMovieRecommendations
+        .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
+
+    if (recRow == null)
     {
         return NotFound();
     }
 
-    // Extract titles from columns Rec1 through Rec5
-    var recommendedTitles = new List<string>
-    {
-        recEntry.Rec1,
-        recEntry.Rec2,
-        recEntry.Rec3,
-        recEntry.Rec4,
-        recEntry.Rec5
-    }
-    .Where(title => !string.IsNullOrWhiteSpace(title))
-    .ToList();
+    var recs = new List<object?>();
 
-    // Now query MoviesDbContext by title
-    var recommendedMovies = _moviesDbContext.Movies
-        .Where(m => recommendedTitles.Contains(m.Title))
-        .ToList();
+    if (!string.IsNullOrWhiteSpace(recRow.Rec1))
+        recs.Add(new { title = recRow.Rec1 });
 
-    return Ok(recommendedMovies);
+    if (!string.IsNullOrWhiteSpace(recRow.Rec2))
+        recs.Add(new { title = recRow.Rec2 });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec3))
+        recs.Add(new { title = recRow.Rec3 });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec4))
+        recs.Add(new { title = recRow.Rec4 });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec5))
+        recs.Add(new { title = recRow.Rec5 });
+
+    return Ok(recs);
 }
 
 
-
-    // GET: api/recommendations/similar/Inception
-    [HttpGet("similar/{title}")]
-    public IActionResult GetSimilarRecs(string title)
-    {
-        var recs = _context.CollaborativeMovieRecommendations
-            .FirstOrDefault(r => r.MovieTitle == title);
-
-        return recs != null ? Ok(recs) : NotFound();
-    }
 
     // GET: api/recommendations/movie/s1234
     [HttpGet("movie/{movieId}")]
@@ -81,7 +113,7 @@ public IActionResult GetUserFullRecs(int userId)
     }
 
 
-    // GET: api/recommendations/test-connection
+    // GET: recommendations/test-connection
     [HttpGet("test-connection")]
     public IActionResult TestConnection()
     {
@@ -90,12 +122,14 @@ public IActionResult GetUserFullRecs(int userId)
             var userTable = _context.UserRecommendations.FirstOrDefault();
             var contentTable = _context.ContentRecommendations.FirstOrDefault();
             var collabTable = _context.CollaborativeMovieRecommendations.FirstOrDefault();
+            var genreTable = _context.GenreRecommendations.FirstOrDefault();
 
             return Ok(new
             {
                 UserRecommendationsExists = userTable != null,
                 ContentRecommendationsExists = contentTable != null,
-                CollaborativeMovieRecommendationsExists = collabTable != null
+                CollaborativeMovieRecommendationsExists = collabTable != null,
+                GenreRecommendationsExists = genreTable != null
             });
         }
         catch (Exception ex)
