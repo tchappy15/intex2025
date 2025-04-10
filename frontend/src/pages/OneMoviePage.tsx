@@ -26,7 +26,7 @@ function OneMoviePage() {
     console.log('📦 Fetching content recs for:', movieId);
 
     fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
     )
       .then((res) => {
         if (!res.ok)
@@ -53,7 +53,7 @@ function OneMoviePage() {
     const encodedTitle = encodeURIComponent(movie.title);
 
     fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${encodedTitle}`
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodedTitle}`
     )
       .then((res) => {
         if (!res.ok) throw new Error(`No collab recs for ${movie?.title}`);

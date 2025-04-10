@@ -55,9 +55,6 @@ public class RecommendationsController : ControllerBase
         }
     }
 
-
-
-
     // GET: api/recommendations/similar/Inception
     [HttpGet("similar/{title}")]
     public IActionResult GetSimilarRecs(string title)
