@@ -1,10 +1,14 @@
 import MovieRow from '../components/MovieRow';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import AuthorizeView from '../components/AuthorizeView';
+import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
 import './OneMoviePage.css';
+
+// Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
+// If it's not exported, we'll use the ref approach instead
+// import { UserContext } from '../components/AuthorizeView';
 
 function OneMoviePage() {
   const navigate = useNavigate();
@@ -15,6 +19,9 @@ function OneMoviePage() {
   const [userEmail, setUserEmail] = useState('');
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
+  
+  // Try to access UserContext if it's exported - if not, we'll use the ref approach
+  // const userContext = useContext(UserContext);
 
   useEffect(() => {
     if (!movieId) return;
@@ -57,17 +64,32 @@ function OneMoviePage() {
       .catch(() => setCollabRecs([]));
   }, [movie]);
 
+  // Use a more reliable approach to get the email
   useEffect(() => {
-    const interval = setInterval(() => {
-      const emailElement = document.getElementById('user-email');
-      if (emailElement) {
-        const email = emailElement.textContent?.trim();
+    // Create a function to check for the email
+    const checkForEmail = () => {
+      const emailEl = document.getElementById('user-email-container');
+      if (emailEl && emailEl.textContent) {
+        const email = emailEl.textContent.trim();
         if (email) {
           setUserEmail(email);
-          clearInterval(interval);
+          console.log('✅ Email captured:', email);
+          return true; // Successfully got email
         }
       }
+      return false; // Didn't get email yet
+    };
+    
+    // Try immediately
+    if (checkForEmail()) return;
+    
+    // If not successful, set up an interval to check
+    const interval = setInterval(() => {
+      if (checkForEmail()) {
+        clearInterval(interval);
+      }
     }, 200);
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -77,11 +99,23 @@ function OneMoviePage() {
       return;
     }
 
+    if (!userEmail) {
+      alert('User email is not available. Please try again in a moment.');
+      console.error('User email not available for rating submission');
+      return;
+    }
+
+    console.log('Submitting rating:', {
+      movieId: movieId,
+      rating: rating,
+      user_email: userEmail,
+    });
+
     try {
       await addRating(movieId!, rating, userEmail);
       alert('Rating submitted!');
     } catch (err) {
-      console.error(err);
+      console.error('Error submitting rating:', err);
       alert('Error submitting rating.');
     }
   };
@@ -93,6 +127,11 @@ function OneMoviePage() {
   return (
     <div className="one-movie-page">
       <AuthorizeView>
+        {/* Hidden email container that we can reference */}
+        <div id="user-email-container" style={{ display: 'none' }}>
+          <AuthorizedUser value="email" />
+        </div>
+
         <div className="page-header">
           <button onClick={() => navigate('/movies')}>Go Back</button>
           <Logout>
