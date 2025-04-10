@@ -218,12 +218,7 @@ function OneMoviePage() {
           <p>Loading movie...</p>
         )}
 
-        <button
-          className="btn btn-secondary mt-3"
-          onClick={() => navigate('/movies')}
-        >
-          Go Back
-        </button>
+
         {(contentRecs.length > 0 || collabRecs.length > 0) && (
           <div className="recommendations mt-5">
             <h3 style={{ color: 'white' }}>Recommended for You</h3>
