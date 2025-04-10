@@ -34,9 +34,6 @@ function AuthorizeView(props: { children: React.ReactNode }) {
 
         roles = [...new Set(roles)];
 
-        console.log('Roles:', roles);
-        console.log('Roles typeof:', typeof roles[0]);
-
         if (data.email) {
           setUser({ email: data.email, roles: roles });
           setAuthorized(true);
@@ -52,13 +49,6 @@ function AuthorizeView(props: { children: React.ReactNode }) {
 
     fetchAuthUser();
   }, []);
-
-  useEffect(() => {
-    if (user.email || user.roles.length > 0) {
-      console.log("✅ Updated User Context:", user);
-    }
-  }, [user]);
-  
 
   if (loading) {
     return <p>Loading...</p>;

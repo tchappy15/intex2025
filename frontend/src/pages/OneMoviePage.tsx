@@ -6,9 +6,15 @@ import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
 import './OneMoviePage.css';
 
-// Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
-// If it's not exported, we'll use the ref approach instead
-// import { UserContext } from '../components/AuthorizeView';
+// Utility to clean movie titles
+const sanitizeTitle = (title: string) => {
+  return title
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '') // remove accent marks
+    .replace(/[<>:"/\\|?*'’!.,()&]/g, '') // remove punctuation
+    .replace(/\s+/g, ' ') // collapse multiple spaces
+    .trim();
+};
 
 function OneMoviePage() {
   const navigate = useNavigate();
@@ -29,7 +35,6 @@ function OneMoviePage() {
       .catch((err) => console.error('Failed to load movie:', err));
   }, [movieId]);
 
-  // Fetch content-based recommendations
   useEffect(() => {
     if (!movieId) return;
 
@@ -38,11 +43,14 @@ function OneMoviePage() {
     )
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        const posters = data.map((rec: any) => ({
-          movieId: rec.recommendedId || rec.movieId || rec.title,
-          title: rec.recommendedTitle || rec.title,
-          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommendedTitle || rec.title)}.jpg`,
-        }));
+        const posters = data.map((rec: any) => {
+          const cleanTitle = sanitizeTitle(rec.recommendedTitle || rec.title);
+          return {
+            movieId: rec.recommendedId || rec.movieId || rec.title,
+            title: rec.recommendedTitle || rec.title,
+            posterUrl: `/images/movieThumbnails/${encodeURIComponent(cleanTitle)}.jpg`,
+          };
+        });
 
         setContentRecs(posters);
       })
@@ -53,7 +61,6 @@ function OneMoviePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [movieId]);
 
-  // Fetch collaborative recommendations
   useEffect(() => {
     if (!title) return;
 
@@ -62,40 +69,34 @@ function OneMoviePage() {
     )
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        console.log('📦 Clean Collab Recs:', data); // debug log
-
-        const posters = data.map((rec: any) => ({
-          movieId: rec.title, // Use title as fallback ID
-          title: rec.title,
-          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.title)}.jpg`,
-        }));
+        const posters = data.map((rec: any) => {
+          const cleanTitle = sanitizeTitle(rec.title);
+          return {
+            movieId: rec.title,
+            title: rec.title,
+            posterUrl: `/images/movieThumbnails/${encodeURIComponent(cleanTitle)}.jpg`,
+          };
+        });
         setCollabRecs(posters);
       })
       .catch(() => setCollabRecs([]));
   }, [title]);
 
-  // Safely extract email from DOM
-
-  // Use a more reliable approach to get the email
   useEffect(() => {
-    // Create a function to check for the email
     const checkForEmail = () => {
       const emailEl = document.getElementById('user-email-container');
       if (emailEl && emailEl.textContent) {
         const email = emailEl.textContent.trim();
         if (email) {
           setUserEmail(email);
-          console.log('✅ Email captured:', email);
-          return true; // Successfully got email
+          return true;
         }
       }
-      return false; // Didn't get email yet
+      return false;
     };
 
-    // Try immediately
     if (checkForEmail()) return;
 
-    // If not successful, set up an interval to check
     const interval = setInterval(() => {
       if (checkForEmail()) {
         clearInterval(interval);
@@ -113,15 +114,8 @@ function OneMoviePage() {
 
     if (!userEmail) {
       alert('User email is not available. Please try again in a moment.');
-      console.error('User email not available for rating submission');
       return;
     }
-
-    console.log('Submitting rating:', {
-      movieId: movieId,
-      rating: rating,
-      user_email: userEmail,
-    });
 
     try {
       await addRating(movieId!, rating, userEmail);
@@ -136,10 +130,11 @@ function OneMoviePage() {
     throw new Error('Missing required route parameters');
   }
 
+  const cleanTitle = movie ? sanitizeTitle(movie.title) : '';
+
   return (
     <div className="one-movie-page">
       <AuthorizeView>
-        {/* Hidden email container that we can reference */}
         <div id="user-email-container" style={{ display: 'none' }}>
           <AuthorizedUser value="email" />
         </div>
@@ -155,7 +150,16 @@ function OneMoviePage() {
 
         {movie ? (
           <div className="card">
-            <div className="poster" />
+            <img
+              className="movie-thumbnail"
+              src={`https://cinenicheposters0215.blob.core.windows.net/movie-posters/${encodeURIComponent(cleanTitle)}.jpg`}
+              alt={movie.title}
+              onError={(e) => {
+                e.currentTarget.src =
+                  'https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg';
+              }}
+            />
+
             <div className="movie-info">
               <ul>
                 <li>
@@ -207,7 +211,7 @@ function OneMoviePage() {
           <p style={{ color: 'white' }}>Loading movie...</p>
         )}
 
-        {(contentRecs?.length > 0 || collabRecs?.length > 0) && (
+        {(contentRecs.length > 0 || collabRecs.length > 0) && (
           <div className="recommendations mt-5">
             {contentRecs.length > 0 && (
               <MovieRow

@@ -114,10 +114,6 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              <p style={{ fontSize: '0.75rem', color: '#888' }}>
-                Roles: {user?.roles.join(', ') || 'None'}
-              </p>
-              
               {user?.roles.includes('Administrator') && (
                 <button onClick={() => navigate('/admin')}>
                   Manage Movies

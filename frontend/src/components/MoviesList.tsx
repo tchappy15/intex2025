@@ -55,8 +55,17 @@ function MoviesList({
 
   const hasMore = movies.length < totalItems;
 
+  const sanitizeTitle = (title: string) => {
+    return title
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "") // remove accent marks
+      .replace(/[<>:"/\\|?*'’!.,()&]/g, "") // remove punctuation
+      .replace(/\s+/g, " ") // collapse multiple spaces
+      .trim();
+  };
+
   return (
-    <>
+    <div className="movie-scroll">
       <InfiniteScroll
         dataLength={movies.length}
         next={() => {
@@ -76,7 +85,7 @@ function MoviesList({
       >
         <div className="movie-grid">
           {movies.map((movie) => {
-            const cleanTitle = movie.title.replace(/[<>:"/\\|?*'’]/g, ''); // remove common special chars
+            const cleanTitle = sanitizeTitle(movie.title);
 
             return (
               <div
@@ -93,27 +102,22 @@ function MoviesList({
                   src={`https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`}
                   alt={movie.title}
                   onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder.jpg';
+                    e.currentTarget.src =
+                      "https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg";
                   }}
                 />
                 <div className="movie-overlay">
                   <h2 className="card-title">{movie.title}</h2>
-                  <p>
-                    <strong>Year:</strong> {movie.release_year}
-                  </p>
-                  <p>
-                    <strong>Duration:</strong> {movie.duration}
-                  </p>
-                  <p>
-                    <strong>Rating:</strong> {movie.rating}
-                  </p>
+                  <p><strong>Year:</strong> {movie.release_year}</p>
+                  <p><strong>Duration:</strong> {movie.duration}</p>
+                  <p><strong>Rating:</strong> {movie.rating}</p>
                 </div>
               </div>
             );
           })}
         </div>
       </InfiniteScroll>
-    </>
+    </div>
   );
 }
 
