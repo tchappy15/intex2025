@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './MovieHeaderBar.css';
 import { useNavigate } from 'react-router-dom';
 import { fetchGenres } from '../api/api';
+import Logout from './Logout';
 
 function MovieHeaderBar({
   selectedType,
@@ -10,7 +11,6 @@ function MovieHeaderBar({
   setSelectedGenre,
   searchTitle,
   setSearchTitle,
-  onLogout,
 }: {
   selectedType: string; 
   setSelectedType: (type: string) => void;
@@ -109,7 +109,14 @@ function MovieHeaderBar({
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
               <button onClick={() => navigate('/admin')}>Manage Movies</button> 
-              <button onClick={onLogout}>Logout</button>
+              
+              {/* added Logout for proper log out functionality */}
+              <Logout>
+                <button> 
+                  Logout
+              </button>
+              </Logout>
+              
             </div>
           )}
         </div>
