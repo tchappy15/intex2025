@@ -16,27 +16,27 @@ function MoviesPage() {
   const [genreRecs, setGenreRecs] = useState<any>(null);
 
   const normalizedGenreMap: Record<string, keyof typeof genrePosterMap> = {
-    Action: 'Action',
-    'TV Action': 'Action',
-    'Action & Adventure': 'Action',
+    Action: 'action',
+    'TV Action': 'action',
+    'Action & Adventure': 'action',
 
-    Comedies: 'Comedies',
-    'TV Comedies': 'Comedies',
-    'Romantic Comedies': 'Comedies',
+    Comedies: 'comedies',
+    'TV Comedies': 'comedies',
+    'Romantic Comedies': 'comedies',
 
-    Children: 'Children',
-    "Kids' TV": 'Children',
+    Children: 'children',
+    "Kids' TV": 'children',
 
-    Drama: 'Drama',
-    'TV Dramas': 'Drama',
-    Dramas: 'Drama',
-    'Dramas Romantic Movies': 'Drama',
+    Drama: 'drama',
+    Dramas: 'drama',
+    'TV Dramas': 'drama',
+    'Dramas Romantic Movies': 'drama',
 
-    Fantasy: 'Fantasy',
+    Fantasy: 'fantasy',
 
-    Thriller: 'Thriller',
-    Thrillers: 'Thriller',
-    'International Movies Thrillers': 'Thriller',
+    Thriller: 'thriller',
+    Thrillers: 'thriller',
+    'International Movies Thrillers': 'thriller',
   };
 
   useEffect(() => {
@@ -84,31 +84,33 @@ function MoviesPage() {
   }, []);
 
   const genrePosterMap = {
-    Action: ['Action_Rec1', 'Action_Rec2', 'Action_Rec3'],
-    Comedies: ['Comedies_Rec1', 'Comedies_Rec2', 'Comedies_Rec3'],
-    Children: ['Children_Rec1', 'Children_Rec2', 'Children_Rec3'],
-    Drama: ['Drama_Rec1', 'Drama_Rec2', 'Drama_Rec3'],
-    Fantasy: ['Fantasy_Rec1', 'Fantasy_Rec2', 'Fantasy_Rec3'],
-    Thriller: ['Thriller_Rec1', 'Thriller_Rec2', 'Thriller_Rec3'],
-  };
+    action: ['action_Rec1', 'action_Rec2', 'action_Rec3'],
+    comedies: ['comedies_Rec1', 'comedies_Rec2', 'comedies_Rec3'],
+    children: ['children_Rec1', 'children_Rec2', 'children_Rec3'],
+    drama: ['drama_Rec1', 'drama_Rec2', 'drama_Rec3'],
+    fantasy: ['fantasy_Rec1', 'fantasy_Rec2', 'fantasy_Rec3'],
+    thriller: ['thriller_Rec1', 'thriller_Rec2', 'thriller_Rec3'],
+  } as const;
 
-  const normalized = normalizedGenreMap[selectedGenre];
+  const normalizedGenre = normalizedGenreMap[selectedGenre] ?? null;
   const genreRecRow =
-    genreRecs && normalized && genrePosterMap[normalized]
-      ? genrePosterMap[normalized]
+    genreRecs && normalizedGenre && genrePosterMap[normalizedGenre]
+      ? genrePosterMap[normalizedGenre]
           .map((key) => {
             const title = genreRecs[key];
             return title
               ? {
-                  movieId: title, // fallback if you don’t have movieId
+                  movieId: title,
                   title,
                   posterUrl: `/images/movieThumbnails/${encodeURIComponent(title)}.jpg`,
                 }
               : null;
           })
           .filter(
-            (m): m is { movieId: string; title: string; posterUrl: string } =>
-              m !== null
+            (
+              movie
+            ): movie is { movieId: string; title: string; posterUrl: string } =>
+              !!movie
           )
       : [];
 
