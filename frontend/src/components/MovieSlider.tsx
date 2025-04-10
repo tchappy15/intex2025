@@ -42,15 +42,18 @@ export default function MovieSlider({ title, movies }: MovieSliderProps) {
 
       <div className="slider-outer">
         <div className="slider-fade-wrapper">
-          <button
-            className="slider-btn left"
-            onClick={() => clickScroll('left')}
-            onMouseDown={() => startScrolling('left')}
-            onMouseUp={stopScrolling}
-            onMouseLeave={stopScrolling}
-          >
-            ◀
-          </button>
+          
+        <button
+          className="slider-btn left"
+          onClick={() => clickScroll('left')}
+          onMouseDown={() => startScrolling('left')}
+          onMouseUp={stopScrolling}
+          onMouseLeave={stopScrolling}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
 
           <div className="slider" ref={scrollRef}>
             {movies.map((movie, index) => (
@@ -72,8 +75,12 @@ export default function MovieSlider({ title, movies }: MovieSliderProps) {
             onMouseUp={stopScrolling}
             onMouseLeave={stopScrolling}
           >
-            ▶
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
           </button>
+
+
 
           <div className="fade-left"></div>
           <div className="fade-right"></div>

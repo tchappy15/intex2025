@@ -4,21 +4,21 @@ import MovieSlider from '../components/MovieSlider';
 import FAQSection from '../components/FAQSection';
 
 const trendingMovies = [
-  { title: 'Dark Knight', imageUrl: '/images/HomeSliderImages/First Kiss.jpg' },
-  { title: 'Phone Swap', imageUrl: '/images/HomeSliderImages/Phone Swap.jpg' },
-  { title: '6 Years', imageUrl: '/images/HomeSliderImages/6 Years.jpg' },
-  { title: 'Transfers', imageUrl: '/images/HomeSliderImages/Transfers.jpg' },
-  { title: 'The Minions of Midas', imageUrl: '/images/HomeSliderImages/The Minions of Midas.jpg' },
-  { title: 'Nadiya Bakes', imageUrl: '/images/HomeSliderImages/Nadiya Bakes.jpg' },
-  { title: 'Last', imageUrl: '/images/HomeSliderImages/Last.jpg' },
-  { title: 'A Love So Beautiful', imageUrl: '/images/HomeSliderImages/A Love So Beautiful.jpg' },
-  { title: '21 Thunder', imageUrl: '/images/HomeSliderImages/21 Thunder.jpg' },
-  { title: 'Love Storm', imageUrl: '/images/HomeSliderImages/Love Storm.jpg' },
-  { title: 'Bloodline', imageUrl: '/images/HomeSliderImages/Bloodline.jpg' },
-  { title: 'The Platform', imageUrl: '/images/HomeSliderImages/The Platform.jpg' },
-  { title: 'Star-Crossed', imageUrl: '/images/HomeSliderImages/StarCrossed.jpg' },
-  { title: 'House of Cards', imageUrl: '/images/HomeSliderImages/House of Cards.jpg' },
-  { title: 'Bitten', imageUrl: '/images/HomeSliderImages/Bitten.jpg' },
+  { title: 'Dark Knight', imageUrl: '/images/TrendingMoviesImages/First Kiss.jpg' },
+  { title: 'Phone Swap', imageUrl: '/images/TrendingMoviesImages/Phone Swap.jpg' },
+  { title: '6 Years', imageUrl: '/images/TrendingMoviesImages/6 Years.jpg' },
+  { title: 'Transfers', imageUrl: '/images/TrendingMoviesImages/Transfers.jpg' },
+  { title: 'The Minions of Midas', imageUrl: '/images/TrendingMoviesImages/The Minions of Midas.jpg' },
+  { title: 'Nadiya Bakes', imageUrl: '/images/TrendingMoviesImages/Nadiya Bakes.jpg' },
+  { title: 'Last', imageUrl: '/images/TrendingMoviesImages/Last.jpg' },
+  { title: 'A Love So Beautiful', imageUrl: '/images/TrendingMoviesImages/A Love So Beautiful.jpg' },
+  { title: '21 Thunder', imageUrl: '/images/TrendingMoviesImages/21 Thunder.jpg' },
+  { title: 'Love Storm', imageUrl: '/images/TrendingMoviesImages/Love Storm.jpg' },
+  { title: 'Bloodline', imageUrl: '/images/TrendingMoviesImages/Bloodline.jpg' },
+  { title: 'The Platform', imageUrl: '/images/TrendingMoviesImages/The Platform.jpg' },
+  { title: 'Star-Crossed', imageUrl: '/images/TrendingMoviesImages/StarCrossed.jpg' },
+  { title: 'House of Cards', imageUrl: '/images/TrendingMoviesImages/House of Cards.jpg' },
+  { title: 'Bitten', imageUrl: '/images/TrendingMoviesImages/Bitten.jpg' },
 ];
 
 const newMovies = [
