@@ -33,10 +33,11 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
 
   useEffect(() => {
     const initialGenres = GENRES.filter(
-      (genre) => Boolean((movie as any)[genre.charAt(0).toLowerCase() + genre.slice(1)])
+      (genre) => (movie as any)[genre] === 1
     );
     setSelectedGenres(initialGenres);
   }, [movie]);
+  
 
   const handleGenreChange = (genre: string) => {
     setSelectedGenres((prev) =>
