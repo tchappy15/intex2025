@@ -1,14 +1,12 @@
+
 import './PrivacyPage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 
-
-
-
-
 const PrivacyPage = () => {
   const navigate = useNavigate();
+
 
     useEffect(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });

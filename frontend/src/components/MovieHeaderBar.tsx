@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './MovieHeaderBar.css';
 import { useNavigate } from 'react-router-dom';
 import { fetchGenres } from '../api/api';
+import Logout from './Logout';
 
 function MovieHeaderBar({
   selectedType,
@@ -10,7 +11,6 @@ function MovieHeaderBar({
   setSelectedGenre,
   searchTitle,
   setSearchTitle,
-  onLogout,
 }: {
   selectedType: string; 
   setSelectedType: (type: string) => void;
@@ -59,24 +59,26 @@ function MovieHeaderBar({
       />
 
       <div className="movie-header-buttons">
-        <button
+      <button
           className={selectedType === 'Movie' ? 'active' : ''}
-          onClick={() => setSelectedType('Movie')}
+          onClick={() => setSelectedType(selectedType === 'Movie' ? '' : 'Movie')}
         >
           Movies
         </button>
+
         <button
           className={selectedType === 'Tv Show' ? 'active' : ''}
-          onClick={() => setSelectedType('Tv Show')}
+          onClick={() => setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')}
         >
           TV Shows
         </button>
+
         <div className="genre-select-wrapper">
           <select
             value={selectedGenre}
             onChange={(e) => setSelectedGenre(e.target.value)}
           >
-            <option value="">Genre</option>
+            <option value="">All Genres</option>
             {genres.map((genre) => (
               <option key={genre} value={genre}>
                 {genre.charAt(0).toUpperCase() + genre.slice(1)}
@@ -106,8 +108,15 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              <button onClick={() => navigate('/manage-movies')}>Manage Movies</button>
-              <button onClick={onLogout}>Logout</button>
+              <button onClick={() => navigate('/admin')}>Manage Movies</button> 
+              
+              {/* added Logout for proper log out functionality */}
+              <Logout>
+                <button> 
+                  Logout
+              </button>
+              </Logout>
+              
             </div>
           )}
         </div>

@@ -1,7 +1,12 @@
-﻿namespace IntexProject.API.Data
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace IntexProject.API.Data
 {
     public class GenreRecommendations
     {
+        [Key]
+        [Column("user_id")]
         public int UserId { get; set; }
 
         public string? Action_Rec1 { get; set; }
