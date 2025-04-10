@@ -49,7 +49,7 @@ function OneMoviePage() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [movieId]);  
+  }, [movieId]);
 
   // Fetch content-based recommendations
   useEffect(() => {
@@ -61,10 +61,11 @@ function OneMoviePage() {
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         const posters = data.map((rec: any) => ({
-          movieId: rec.recommended_id || rec.movieId || rec.title,
-          title: rec.recommended_title || rec.title,
-          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+          movieId: rec.recommendedId || rec.movieId || rec.title,
+          title: rec.recommendedTitle || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommendedTitle || rec.title)}.jpg`,
         }));
+
         setContentRecs(posters);
       })
       .catch(() => setContentRecs([]));
@@ -221,7 +222,7 @@ function OneMoviePage() {
             </div>
           </div>
         ) : (
-          <p style={{color: "white"}}>Loading movie...</p>
+          <p style={{ color: 'white' }}>Loading movie...</p>
         )}
 
         {(contentRecs?.length > 0 || collabRecs?.length > 0) && (
