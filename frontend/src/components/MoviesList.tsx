@@ -21,6 +21,7 @@ function MoviesList({
   const [totalItems, setTotalItems] = useState<number>(0);
   const [, setLoading] = useState(false);
   const navigate = useNavigate();
+  
 
   const loadMovies = async () => {
     setLoading(true);
@@ -74,32 +75,36 @@ function MoviesList({
           }
         >
           <div className="movie-grid">
-            {movies.map((movie) => (
-              <div
-                onClick={() =>
-                  navigate(
-                    `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
-                  )
-                }
-                className="movie-card"
-                key={movie.movieId}
-              >
-                <img
-                  className="movie-thumbnail"
-                  src={`/images/movieThumbnails/${movie.title}.jpg`}
-                  alt={movie.title}
-                  onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder.jpg';
-                  }}
-                />
-                <div className="movie-overlay">
-                  <h2 className="card-title">{movie.title}</h2>
-                  <p><strong>Year:</strong> {movie.release_year}</p>
-                  <p><strong>Duration:</strong> {movie.duration}</p>
-                  <p><strong>Rating:</strong> {movie.rating}</p>
+            {movies.map((movie) => {
+              const cleanTitle = movie.title.replace(/[<>:"/\\|?*'’]/g, ""); // remove common special chars
+
+              return (
+                <div
+                  onClick={() =>
+                    navigate(
+                      `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
+                    )
+                  }
+                  className="movie-card"
+                  key={movie.movieId}
+                >
+                  <img
+                    className="movie-thumbnail"
+                    src={`https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`}
+                    alt={movie.title}
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/placeholder.jpg";
+                    }}
+                  />
+                  <div className="movie-overlay">
+                    <h2 className="card-title">{movie.title}</h2>
+                    <p><strong>Year:</strong> {movie.release_year}</p>
+                    <p><strong>Duration:</strong> {movie.duration}</p>
+                    <p><strong>Rating:</strong> {movie.rating}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </InfiniteScroll>
       </div>
