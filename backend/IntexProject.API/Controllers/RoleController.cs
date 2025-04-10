@@ -8,19 +8,23 @@ namespace IntexProject.API.Controllers;
 [ApiController]
 
 //uncomment this for the real thing:
-//[Authorize(Roles = "Administrator")]
+[Authorize(Roles = "Administrator")]
 
 //this is for testing:
-[AllowAnonymous]
+// [AllowAnonymous]
 public class RoleController : ControllerBase
 {
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly IUserClaimsPrincipalFactory<IdentityUser> _claimsFactory;
 
-    public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+    public RoleController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory)
     {
         _roleManager = roleManager;
         _userManager = userManager;
+        _signInManager = signInManager;
+        _claimsFactory = userClaimsPrincipalFactory;
     }
     
     [HttpPost("AddRole")]
@@ -40,6 +44,7 @@ public class RoleController : ControllerBase
         var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
         if (result.Succeeded)
         {
+            
             return Ok($"Role '{roleName}' created successfully.");
         }
 
@@ -69,6 +74,10 @@ public class RoleController : ControllerBase
         var result = await _userManager.AddToRoleAsync(user, roleName);
         if (result.Succeeded)
         {
+            var principal = await _claimsFactory.CreateAsync(user);
+            await _signInManager.SignOutAsync(); // optional but safe
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            
             return Ok($"Role '{roleName}' assigned to user '{userEmail}'.");
         }
 

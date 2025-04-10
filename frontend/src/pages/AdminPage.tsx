@@ -7,6 +7,7 @@ import NewMovieForm from '../components/NewMovieForm';
 import EditMovieForm from '../components/EditMovieForm';
 import AdminHeaderBar from '../components/AdminHeaderBar';
 import './AdminPage.css';
+import AuthorizeView from '../components/AuthorizeView';
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const AdminPage = () => {
 
   return (
     <>
+    <AuthorizeView>
       <AdminHeaderBar
         searchTitle={searchTitle}
         setSearchTitle={setSearchTitle}
@@ -158,6 +160,7 @@ const AdminPage = () => {
           />
         </div>
       </div>
+      </AuthorizeView>
     </>
   );
 };

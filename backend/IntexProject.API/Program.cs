@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using IntexProject.API.Data;
 using IntexProject.API.Services;
 using IntexProject.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     // Claims identity config
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 
 
     // Password policy config
@@ -54,7 +56,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 0;
 });
 
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomClaimsPrincipalFactory>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -138,7 +140,11 @@ app.MapGet("/pingauth", (ClaimsPrincipal user) =>
     }
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com"; // Ensure it's never null
-    return Results.Json(new { email = email }); // Return as JSON
+    var roles = user.Claims
+        .Where(c => c.Type == ClaimTypes.Role)
+        .Select(c => c.Value)
+        .ToList();
+    return Results.Json(new { email = email, roles = roles }); // Return as JSON
 }).RequireAuthorization();
 
 app.Run();
