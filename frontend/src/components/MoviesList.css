@@ -1,12 +1,9 @@
 .movie-scroll {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 fixed cards per row */
+  gap: 20px;
   padding: 20px 0;
   box-sizing: border-box;
-}
-
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1.5rem;
 }
 
 .movie-card {
@@ -50,4 +47,23 @@
 .card-title {
   font-size: 14px;
   margin-bottom: 5px;
+}
+
+/* Optional: make it mobile-friendly */
+@media (max-width: 1024px) {
+  .movie-scroll {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-scroll {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-scroll {
+    grid-template-columns: 1fr;
+  }
 }

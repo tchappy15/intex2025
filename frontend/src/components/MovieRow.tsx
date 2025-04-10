@@ -2,7 +2,6 @@
 import './MovieRow.css';
 import { useNavigate } from 'react-router-dom';
 
-
 interface Movie {
   movieId: string;
   title: string;
@@ -35,12 +34,11 @@ function MovieRow({ title, movies }: MovieRowProps) {
             style={{ cursor: 'pointer' }}
           >
             <img
+              loading="lazy"
               src={movie.posterUrl || '/images/placeholder.jpg'}
               alt={movie.title}
-              onError={(e) => {
-                e.currentTarget.src = '/images/placeholder.jpg';
-              }}
             />
+
             <p className="movie-title">{movie.title}</p>
           </div>
         ))}
