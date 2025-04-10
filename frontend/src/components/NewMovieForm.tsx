@@ -31,32 +31,40 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
     );
   };
 
+  const resetForm = () => {
+    setType('');
+    setTitle('');
+    setDirector('');
+    setReleaseYear(2024);
+    setRating('');
+    setDuration('');
+    setDescription('');
+    setSelectedGenres([]);
+    setCast('');
+    setCountry('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate required fields
+
     if (!type || !title || !country || !rating || !duration) {
       setError('Please fill in all required fields.');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
 
-    // Create the genre payload with all possible genres to match API expectations
     const genrePayload = GENRES.reduce((acc, genre) => {
       acc[genre] = selectedGenres.includes(genre) ? 1 : 0;
       return acc;
     }, {} as Record<string, number>);
 
-    // Format duration exactly as in the working version
-    const durationStr = String(duration);
     const formattedDuration =
       type === 'Movie'
-        ? `${durationStr} min`
-        : `${durationStr} Season${durationStr === '1' ? '' : 's'}`;
+        ? `${duration} min`
+        : `${duration} Season${duration === '1' ? '' : 's'}`;
 
-    // Create a complete movie object with all expected fields
     const newMovie = {
       type,
       title,
@@ -67,15 +75,16 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
       rating,
       duration: formattedDuration,
       description,
-      ...genrePayload // Spread in all genre fields
+      ...genrePayload,
     };
 
     try {
       await addMovie(newMovie);
+      resetForm();
       onSuccess();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error adding movie:', err);
-      setError('Failed to add movie.');
+      setError(err.message || 'Failed to add movie.');
     } finally {
       setLoading(false);
     }
@@ -109,34 +118,34 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
       <fieldset disabled={!type}>
         <div>
           <label className="required">Title</label>
-          <input 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            required 
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
           />
         </div>
 
         <div>
           <label>Director</label>
-          <input 
-            value={director} 
-            onChange={(e) => setDirector(e.target.value)} 
+          <input
+            value={director}
+            onChange={(e) => setDirector(e.target.value)}
           />
         </div>
 
         <div>
           <label>Cast</label>
-          <textarea 
-            value={cast} 
-            onChange={(e) => setCast(e.target.value)} 
+          <textarea
+            value={cast}
+            onChange={(e) => setCast(e.target.value)}
           />
         </div>
 
         <div>
           <label className="required">Country</label>
-          <select 
-            value={country} 
-            onChange={(e) => setCountry(e.target.value)} 
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
             required
           >
             <option value="">-- Select Country --</option>
@@ -184,9 +193,9 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
 
         <div>
           <label>Description</label>
-          <textarea 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
