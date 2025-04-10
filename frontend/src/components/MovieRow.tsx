@@ -21,7 +21,7 @@ function MovieRow({ title, movies }: MovieRowProps) {
   return (
     <div className="movie-row">
       <h2 className="row-title">{title}</h2>
-      <div className="movie-scroll">
+      <div className="movie-grid">
         {movies.map((movie) => (
           <div
             className="movie-poster-card"
