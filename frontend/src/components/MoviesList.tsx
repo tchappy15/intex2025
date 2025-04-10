@@ -57,66 +57,60 @@ function MoviesList({
 
   return (
     <>
-      <div className="movie-scroll">
-        <InfiniteScroll
-          dataLength={movies.length}
-          next={() => {
-            setTimeout(() => setPageNum((prev) => prev + 1), 300);
-          }}
-          hasMore={hasMore}
-          loader={
-            <p
-              style={{ textAlign: 'center', color: 'white', marginTop: '20px' }}
+      <InfiniteScroll
+        dataLength={movies.length}
+        next={() => {
+          setTimeout(() => setPageNum((prev) => prev + 1), 300);
+        }}
+        hasMore={hasMore}
+        loader={
+          <p style={{ textAlign: 'center', color: 'white', marginTop: '20px' }}>
+            Loading more movies...
+          </p>
+        }
+        endMessage={
+          <p style={{ textAlign: 'center', color: 'gray', marginTop: '20px' }}>
+            You've reached the end!
+          </p>
+        }
+      >
+        <div className="movie-grid">
+          {movies.map((movie) => (
+            <div
+              onClick={() =>
+                navigate(
+                  `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
+                )
+              }
+              className="movie-card"
+              key={movie.movieId}
             >
-              Loading more movies...
-            </p>
-          }
-          endMessage={
-            <p
-              style={{ textAlign: 'center', color: 'gray', marginTop: '20px' }}
-            >
-              You've reached the end!
-            </p>
-          }
-        >
-          <div className="movie-grid">
-            {movies.map((movie) => (
-              <div
-                onClick={() =>
-                  navigate(
-                    `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
-                  )
-                }
-                className="movie-card"
-                key={movie.movieId}
-              >
-                <img
-                  loading="lazy"
-                  className="movie-thumbnail"
-                  src={`/images/movieThumbnails/${movie.title}.jpg`}
-                  alt={movie.title}
-                  onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder.jpg';
-                  }}
-                />
+              <img
+                loading="lazy"
+                className="movie-thumbnail"
+                src={`/images/movieThumbnails/${movie.title}.jpg`}
+                alt={movie.title}
+                onError={(e) => {
+                  e.currentTarget.src = '/images/placeholder.jpg';
+                }}
+              />
 
-                <div className="movie-overlay">
-                  <h2 className="card-title">{movie.title}</h2>
-                  <p>
-                    <strong>Year:</strong> {movie.release_year}
-                  </p>
-                  <p>
-                    <strong>Duration:</strong> {movie.duration}
-                  </p>
-                  <p>
-                    <strong>Rating:</strong> {movie.rating}
-                  </p>
-                </div>
+              <div className="movie-overlay">
+                <h2 className="card-title">{movie.title}</h2>
+                <p>
+                  <strong>Year:</strong> {movie.release_year}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {movie.duration}
+                </p>
+                <p>
+                  <strong>Rating:</strong> {movie.rating}
+                </p>
               </div>
-            ))}
-          </div>
-        </InfiniteScroll>
-      </div>
+            </div>
+          ))}
+        </div>
+      </InfiniteScroll>
     </>
   );
 }
