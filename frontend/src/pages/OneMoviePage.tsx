@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
+import MovieRow from '../components/MovieRow';
 
 function OneMoviePage() {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ function OneMoviePage() {
   const [movie, setMovie] = useState<any>(null);
   const [rating, setRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
+  const [contentRecs, setContentRecs] = useState([]);
+  const [collabRecs, setCollabRecs] = useState([]);
 
   useEffect(() => {
     if (movieId) {
@@ -18,6 +21,44 @@ function OneMoviePage() {
         .catch((err) => console.error('Failed to load movie:', err));
     }
   }, [movieId]);
+
+  // Fetch content-based recommendations
+  useEffect(() => {
+    if (!movieId) return;
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        const posters = data.map((rec: any) => ({
+          movieId: rec.recommended_id || rec.movieId || rec.title,
+          title: rec.recommended_title || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+        }));
+        setContentRecs(posters);
+      })
+      .catch(() => setContentRecs([]));
+  }, [movieId]);
+
+  // Fetch collaborative recommendations
+  useEffect(() => {
+    if (!title) return;
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodeURIComponent(title)}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        const posters = data.map((rec: any) => ({
+          movieId: rec.recommended_id || rec.movieId || rec.title,
+          title: rec.recommended_title || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+        }));
+        setCollabRecs(posters);
+      })
+      .catch(() => setCollabRecs([]));
+  }, [title]);
 
   // Safely extract email from DOM
   useEffect(() => {
@@ -150,6 +191,23 @@ function OneMoviePage() {
         >
           Go Back
         </button>
+        {(contentRecs.length > 0 || collabRecs.length > 0) && (
+          <div className="recommendations mt-5">
+            <h3 style={{ color: 'white' }}>Recommended for You</h3>
+            {contentRecs.length > 0 && (
+              <MovieRow
+                title="You Might Also Like (Content-Based)"
+                movies={contentRecs}
+              />
+            )}
+            {collabRecs.length > 0 && (
+              <MovieRow
+                title="Users Also Watched (Collaborative Filtering)"
+                movies={collabRecs}
+              />
+            )}
+          </div>
+        )}
       </AuthorizeView>
     </>
   );
