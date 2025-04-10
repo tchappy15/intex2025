@@ -6,7 +6,6 @@ import Logout from './Logout';
 function AdminHeaderBar({
   searchTitle,
   setSearchTitle,
-  onLogout,
 }: {
   searchTitle: string;
   setSearchTitle: (title: string) => void;
