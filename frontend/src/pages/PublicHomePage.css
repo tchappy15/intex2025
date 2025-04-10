@@ -10,9 +10,13 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
+
+html, body {
+  overflow-x: hidden;
+}
+
 
 .body::after {
   content: "";
@@ -43,6 +47,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   margin: 0 auto;
+  margin-top: 80px;
   text-align: center;
   justify-content: center;
   z-index: 0;
@@ -73,20 +78,23 @@ body {
   background-color: #3d7b4b;
   border-color: #3d7b4b;
   color: white;
-  padding: 10px 20px;
+  padding: 14px 32px;         /* Increased padding */
+  font-size: 1.1rem;          /* Larger text */
   text-transform: uppercase;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 8px;         /* Slightly rounder */
   transition: all 0.3s ease;
+  letter-spacing: 0.5px;
 }
 
 .custom-btn:hover {
   background-color: #498f58;
   border-color: #498f58;
   transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
   color: white;
 }
+
 
 /* Fade in effect */
 @keyframes fadeIn {
@@ -97,4 +105,19 @@ body {
 /* Footer spacing */
 footer {
   margin-top: 50px;
+}
+
+
+.hero-header {
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 20px;
+  z-index: 3;
+  position: relative;
+  color: white;
+}
+
+.hero-logo {
+  max-width: 300px;
+  margin-bottom: -20px;
 }

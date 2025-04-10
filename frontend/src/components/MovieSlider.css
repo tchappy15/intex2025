@@ -1,0 +1,133 @@
+.slider-container {
+    margin-top: 60px;
+    padding: 0 10px;
+    color: white;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .slider-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
+  
+  .slider-fade-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+  }
+  
+  .slider::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .slider-poster {
+    height: 200px;
+    width: 140px;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .slider-poster:hover {
+    transform: scale(1.05);
+  }
+  
+  .poster-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .poster-title {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: white;
+    text-align: center;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    max-width: 140px;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+  
+  
+  .poster-wrapper:hover .poster-title {
+    opacity: 1;
+  }
+
+
+.slider-outer {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 14px;
+    z-index: 5;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+  }
+  
+  .slider-btn:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  .slider-btn.left {
+    left: 0;
+  }
+  
+  .slider-btn.right {
+    right: 0;
+  }
+  
+  
+  .fade-left,
+.fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.fade-left {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 102, 120, 0.6), rgba(0, 102, 120, 0));
+}
+
+.fade-right {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+}
+
+
+  
+  /* Hide arrows on mobile */
+  @media (max-width: 768px) {
+    .slider-btn {
+      display: none;
+    }
+  }
