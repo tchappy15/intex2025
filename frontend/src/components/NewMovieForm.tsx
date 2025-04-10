@@ -4,7 +4,7 @@ import { addMovie } from '../api/api';
 import { MOVIE_RATINGS } from '../constants/movieMPAARatings';
 import { TV_RATINGS } from '../constants/tvMPAARatings';
 import { COUNTRIES } from '../constants/countries';
-import './NewMovieForm.css'
+import './NewMovieForm.css';
 
 interface NewMovieFormProps {
   onSuccess: () => void;
@@ -15,7 +15,7 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
   const [type, setType] = useState('');
   const [title, setTitle] = useState('');
   const [director, setDirector] = useState('');
-  const [release_year, setrelease_year] = useState<number>(2024);
+  const [release_year, setReleaseYear] = useState<number>(2024);
   const [rating, setRating] = useState('');
   const [duration, setDuration] = useState('');
   const [description, setDescription] = useState('');
@@ -31,8 +31,27 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
     );
   };
 
+  const resetForm = () => {
+    setType('');
+    setTitle('');
+    setDirector('');
+    setReleaseYear(2024);
+    setRating('');
+    setDuration('');
+    setDescription('');
+    setSelectedGenres([]);
+    setCast('');
+    setCountry('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!type || !title || !country || !rating || !duration) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -61,9 +80,11 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
 
     try {
       await addMovie(newMovie);
+      resetForm();
       onSuccess();
-    } catch (err) {
-      setError('Failed to add movie.');
+    } catch (err: any) {
+      console.error('Error adding movie:', err);
+      setError(err.message || 'Failed to add movie.');
     } finally {
       setLoading(false);
     }
@@ -97,22 +118,36 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
       <fieldset disabled={!type}>
         <div>
           <label className="required">Title</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
 
         <div>
           <label>Director</label>
-          <input value={director} onChange={(e) => setDirector(e.target.value)} />
+          <input
+            value={director}
+            onChange={(e) => setDirector(e.target.value)}
+          />
         </div>
 
         <div>
           <label>Cast</label>
-          <textarea value={cast} onChange={(e) => setCast(e.target.value)} />
+          <textarea
+            value={cast}
+            onChange={(e) => setCast(e.target.value)}
+          />
         </div>
 
         <div>
           <label className="required">Country</label>
-          <select value={country} onChange={(e) => setCountry(e.target.value)} required>
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+          >
             <option value="">-- Select Country --</option>
             {COUNTRIES.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -125,7 +160,8 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
           <input
             type="number"
             value={release_year}
-            onChange={(e) => setrelease_year(parseInt(e.target.value))}
+            onChange={(e) => setReleaseYear(parseInt(e.target.value))}
+            required
           />
         </div>
 
@@ -157,7 +193,10 @@ const NewMovieForm: React.FC<NewMovieFormProps> = ({ onSuccess, onCancel }) => {
 
         <div>
           <label>Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
 
         <div>

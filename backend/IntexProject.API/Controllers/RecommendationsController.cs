@@ -30,22 +30,37 @@ public class RecommendationsController : ControllerBase
 
             var recommendedTitles = new List<string>
             {
-                recEntry.Rec1,
-                recEntry.Rec2,
-                recEntry.Rec3,
-                recEntry.Rec4,
-                recEntry.Rec5
+                recEntry.DemoRec1 ?? "",  // Replace null with an empty string
+                recEntry.DemoRec2 ?? "",
+                recEntry.DemoRec3 ?? "",
+                recEntry.DemoRec4 ?? "",
+                recEntry.DemoRec5 ?? "",
+                recEntry.ContentRec1 ?? "",
+                recEntry.ContentRec2 ?? "",
+                recEntry.ContentRec3 ?? "",
+                recEntry.ContentRec4 ?? "",
+                recEntry.ContentRec5 ?? "",
+                recEntry.CollabRec1 ?? "",
+                recEntry.CollabRec2 ?? "",
+                recEntry.CollabRec3 ?? "",
+                recEntry.CollabRec4 ?? "",
+                recEntry.CollabRec5 ?? ""
             }
-            .Where(title => !string.IsNullOrWhiteSpace(title))
+            .Where(title => !string.IsNullOrWhiteSpace(title))  // Still remove empty or white space titles
             .ToList();
+
+
 
             Console.WriteLine($"🎯 Titles for user {userId}: {string.Join(", ", recommendedTitles)}");
 
             var recommendedMovies = _moviesDbContext.Movies
-                .Where(m => recommendedTitles.Any(t => t.ToLower() == m.Title.ToLower()))
+                .Where(m => recommendedTitles.Contains(m.Title, StringComparer.OrdinalIgnoreCase))
                 .ToList();
 
-            Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies.");
+            // Log the resulting list of movies
+            Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies: {string.Join(", ", recommendedMovies.Select(m => m.Title))}");
+
+            // Return the data as JSON
             return Ok(recommendedMovies);
         }
         catch (Exception ex)
@@ -55,37 +70,38 @@ public class RecommendationsController : ControllerBase
         }
     }
 
-    // GET: api/recommendations/similar/Inception
-  [HttpGet("similar/{title}")]
-public IActionResult GetSimilarRecs(string title)
-{
-    var recRow = _context.CollaborativeMovieRecommendations
-        .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
 
-    if (recRow == null)
+        // GET: api/recommendations/similar/Inception
+    [HttpGet("similar/{title}")]
+    public IActionResult GetSimilarRecs(string title)
     {
-        return NotFound();
+        var recRow = _context.CollaborativeMovieRecommendations
+            .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
+
+        if (recRow == null)
+        {
+            return NotFound();
+        }
+
+        var recs = new List<object?>();
+
+        if (!string.IsNullOrWhiteSpace(recRow.Rec1))
+            recs.Add(new { title = recRow.Rec1 });
+
+        if (!string.IsNullOrWhiteSpace(recRow.Rec2))
+            recs.Add(new { title = recRow.Rec2 });
+
+        if (!string.IsNullOrWhiteSpace(recRow.Rec3))
+            recs.Add(new { title = recRow.Rec3 });
+
+        if (!string.IsNullOrWhiteSpace(recRow.Rec4))
+            recs.Add(new { title = recRow.Rec4 });
+
+        if (!string.IsNullOrWhiteSpace(recRow.Rec5))
+            recs.Add(new { title = recRow.Rec5 });
+
+        return Ok(recs);
     }
-
-    var recs = new List<object?>();
-
-    if (!string.IsNullOrWhiteSpace(recRow.Rec1))
-        recs.Add(new { title = recRow.Rec1 });
-
-    if (!string.IsNullOrWhiteSpace(recRow.Rec2))
-        recs.Add(new { title = recRow.Rec2 });
-
-    if (!string.IsNullOrWhiteSpace(recRow.Rec3))
-        recs.Add(new { title = recRow.Rec3 });
-
-    if (!string.IsNullOrWhiteSpace(recRow.Rec4))
-        recs.Add(new { title = recRow.Rec4 });
-
-    if (!string.IsNullOrWhiteSpace(recRow.Rec5))
-        recs.Add(new { title = recRow.Rec5 });
-
-    return Ok(recs);
-}
 
 
 

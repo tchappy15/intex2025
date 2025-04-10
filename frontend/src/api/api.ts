@@ -196,14 +196,6 @@ export async function deleteMovie(movieId: string): Promise<void> {
 }
 
 export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
-  // Convert 0/1 genre flags to true/false booleans
-  const booleanGenres = Object.fromEntries(
-    Object.entries(newMovie).map(([key, value]) => [
-      key,
-      value === 1 ? true : value === 0 ? false : value,
-    ])
-  );
-
   const response = await fetch(
     `${import.meta.env.VITE_API_BASE_URL}/Movies/AddMovie`,
     {
@@ -212,7 +204,7 @@ export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(booleanGenres), // FLAT object, not wrapped
+      body: JSON.stringify(newMovie), // ✅ Send raw 1/0 integers for genres
     }
   );
 
@@ -226,14 +218,6 @@ export async function updateMovie(
   movieId: string,
   updatedMovie: Partial<Movie>
 ): Promise<void> {
-  // Convert 0/1 to booleans for genres
-  const booleanGenres = Object.fromEntries(
-    Object.entries(updatedMovie).map(([key, value]) => [
-      key,
-      value === 1 ? true : value === 0 ? false : value,
-    ])
-  );
-
   const response = await fetch(
     `${import.meta.env.VITE_API_BASE_URL}/Movies/UpdateMovie/${movieId}`,
     {
@@ -242,7 +226,7 @@ export async function updateMovie(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(booleanGenres), // flat, not wrapped
+      body: JSON.stringify(updatedMovie), // ✅ Keep raw 1/0 genre fields
     }
   );
 
