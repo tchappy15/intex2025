@@ -11,7 +11,6 @@ function MovieHeaderBar({
   setSelectedGenre,
   searchTitle,
   setSearchTitle,
-  onLogout,
 }: {
   selectedType: string; 
   setSelectedType: (type: string) => void;
