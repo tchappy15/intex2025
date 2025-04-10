@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
+import './OneMoviePage.css';
 
 // Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
 // If it's not exported, we'll use the ref approach instead
