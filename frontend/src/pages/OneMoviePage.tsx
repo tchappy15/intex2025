@@ -13,12 +13,21 @@ import './OneMoviePage.css';
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
-  const [movie] = useState<any>(null);
+
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
+  const [movie, setMovie] = useState<any>(null);
+
+  useEffect(() => {
+    if (!movieId) return;
+
+    fetchMovieById(movieId)
+      .then(setMovie)
+      .catch((err) => console.error('Failed to load movie:', err));
+  }, [movieId]);
 
   // Fetch content-based recommendations
   useEffect(() => {
