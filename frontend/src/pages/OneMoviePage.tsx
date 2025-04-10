@@ -1,21 +1,21 @@
-import MovieRow from '../components/MovieRow'; // If not already imported
-
+import MovieRow from '../components/MovieRow';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import AuthorizeView from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
+import './OneMoviePage.css';
 
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
   const [movie, setMovie] = useState<any>(null);
   const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
 
-  //Content Filtering
   useEffect(() => {
     if (!movieId) return;
 
@@ -23,14 +23,9 @@ function OneMoviePage() {
       .then(setMovie)
       .catch((err) => console.error('Failed to load movie:', err));
 
-    console.log('📦 Fetching content recs for:', movieId);
-
-    fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
-    )
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`)
       .then((res) => {
-        if (!res.ok)
-          throw new Error(`No content recs found — likely not enough ratings.`);
+        if (!res.ok) throw new Error('No content recs found');
         return res.json();
       })
       .then((data) => {
@@ -40,26 +35,18 @@ function OneMoviePage() {
         }));
         setContentRecs(posters);
       })
-      .catch((err) => {
-        console.warn(err.message); // softer warning
-        setContentRecs([]); // show fallback message
-      });
+      .catch(() => setContentRecs([]));
   }, [movieId]);
 
-  // Collaborative Filtering
   useEffect(() => {
     if (!movie?.title) return;
-
     const encodedTitle = encodeURIComponent(movie.title);
 
-    fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${encodedTitle}`
-    )
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${encodedTitle}`)
       .then((res) => {
-        if (!res.ok) throw new Error(`No collab recs for ${movie?.title}`);
+        if (!res.ok) throw new Error('No collab recs found');
         return res.json();
       })
-
       .then((data) => {
         const posters = data.map((m: any) => ({
           ...m,
@@ -67,10 +54,9 @@ function OneMoviePage() {
         }));
         setCollabRecs(posters);
       })
-      .catch((err) => console.error('Collaborative recs error:', err));
+      .catch(() => setCollabRecs([]));
   }, [movie]);
 
-  // Safely extract email from DOM
   useEffect(() => {
     const interval = setInterval(() => {
       const emailElement = document.getElementById('user-email');
@@ -78,8 +64,7 @@ function OneMoviePage() {
         const email = emailElement.textContent?.trim();
         if (email) {
           setUserEmail(email);
-          console.log('✅ Set user email from DOM:', email);
-          clearInterval(interval); // stop polling once set
+          clearInterval(interval);
         }
       }
     }, 200);
@@ -91,12 +76,6 @@ function OneMoviePage() {
       alert('Please select a rating between 1 and 5');
       return;
     }
-
-    console.log('Submitting rating:', {
-      movieId: movieId,
-      rating: rating,
-      user_email: userEmail,
-    });
 
     try {
       await addRating(movieId!, rating, userEmail);
@@ -112,107 +91,48 @@ function OneMoviePage() {
   }
 
   return (
-    <>
+    <div className="one-movie-page">
       <AuthorizeView>
-        <span>
+        <div className="page-header">
+          <button onClick={() => navigate('/movies')}>Go Back</button>
           <Logout>
-            <button
-              style={{
-                position: 'fixed',
-                top: '10px',
-                left: '20px',
-                background: '#f8f9fa',
-                padding: '10px 15px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                fontSize: '16px',
-              }}
-            >
-              Logout{' '}
-              <span id="user-email">
-                <AuthorizedUser value="email" />
-              </span>
-            </button>
+            <button>Logout</button>
           </Logout>
-        </span>
+        </div>
 
-        <h1 style={{ color: 'white' }}>{title}</h1>
+        <h1>{title}</h1>
 
         {movie ? (
           <div className="card">
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">
-                <strong>Type:</strong> {movie.type}
-              </li>
-              <li className="list-group-item">
-                <strong>Release Year:</strong> {movie.release_year}
-              </li>
-              <li className="list-group-item">
-                <strong>Director:</strong> {movie.director || 'N/A'}
-              </li>
-              <li className="list-group-item">
-                <strong>Cast:</strong> {movie.cast || 'N/A'}
-              </li>
-              <li className="list-group-item">
-                <strong>Country:</strong> {movie.country || 'N/A'}
-              </li>
-              <li className="list-group-item">
-                <strong>Duration:</strong> {movie.duration}
-              </li>
-              <li className="list-group-item">
-                <strong>Rating:</strong> {movie.rating}
-              </li>
-              <li className="list-group-item">
-                <strong>Description:</strong> {movie.description}
-              </li>
-            </ul>
+            <div className="poster" />
+            <div className="movie-info">
+              <ul>
+                <li><strong>Type:</strong> {movie.type}</li>
+                <li><strong>Release Year:</strong> {movie.release_year}</li>
+                <li><strong>Director:</strong> {movie.director || 'N/A'}</li>
+                <li><strong>Cast:</strong> {movie.cast || 'N/A'}</li>
+                <li><strong>Country:</strong> {movie.country || 'N/A'}</li>
+                <li><strong>Duration:</strong> {movie.duration}</li>
+                <li><strong>Rating:</strong> {movie.rating}</li>
+                <li><strong>Description:</strong> {movie.description}</li>
+              </ul>
 
-            <div className="mt-3">
-              <h4 style={{ color: 'white' }}>Rate this movie</h4>
-              <select
-                value={rating}
-                onChange={(e) => setRating(parseInt(e.target.value))}
-              >
-                <option value={0}>Select a rating</option>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <option key={num} value={num}>
-                    {num} Star{num > 1 ? 's' : ''}
-                  </option>
-                ))}
-              </select>
-              <button
-                className="btn btn-primary ms-2"
-                onClick={handleRatingSubmit}
-              >
-                Submit Rating
-              </button>
-              <hr style={{ margin: '40px 0', borderTop: '1px solid #ccc' }} />
-
-              <div style={{ marginTop: '50px' }}>
-                {(contentRecs.length > 0 || collabRecs.length > 0) && (
-                  <>
-                    <h3 style={{ color: 'white', marginTop: '40px' }}>
-                      Recommended for You
-                    </h3>
-                    <div style={{ marginTop: '20px' }}>
-                      {contentRecs.length > 0 && (
-                        <MovieRow
-                          title="You Might Also Like (Content-Based)"
-                          movies={contentRecs}
-                        />
-                      )}
-                      {collabRecs.length > 0 && (
-                        <MovieRow
-                          title="Users Also Watched (Collaborative Filtering)"
-                          movies={collabRecs}
-                        />
-                      )}
-                    </div>
-                  </>
-                )}
+              <div className="rating-section">
+                <h4>Rate this movie</h4>
+                <div className="star-rating">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`star ${rating >= star || hoverRating >= star ? 'filled' : ''}`}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(0)}
+                    >
+                      ★
+                    </span>
+                  ))}
+                  <button onClick={handleRatingSubmit}>Submit Rating</button>
+                </div>
               </div>
             </div>
           </div>
@@ -220,14 +140,21 @@ function OneMoviePage() {
           <p>Loading movie...</p>
         )}
 
-        <button
-          className="btn btn-secondary mt-3"
-          onClick={() => navigate('/movies')}
-        >
-          Go Back
-        </button>
+        <div className="recommendations">
+          {(contentRecs.length > 0 || collabRecs.length > 0) && (
+            <>
+              <h3>Recommended for You</h3>
+              {contentRecs.length > 0 && (
+                <MovieRow title="You Might Also Like (Content-Based)" movies={contentRecs} />
+              )}
+              {collabRecs.length > 0 && (
+                <MovieRow title="Users Also Watched (Collaborative Filtering)" movies={collabRecs} />
+              )}
+            </>
+          )}
+        </div>
       </AuthorizeView>
-    </>
+    </div>
   );
 }
 
