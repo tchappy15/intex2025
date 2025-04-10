@@ -1,16 +1,31 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("UserRecommendations")]
-public class UserRecommendation
+namespace IntexProject.API.Data
 {
-    [Key]
-    [Column("user_id")]
-    public int UserId { get; set; }
+    [Table("UserRecommendations")]
+    public class UserRecommendation
+    {
+        [Key]
+        [Column("user_id")]
+        public int UserId { get; set; }
 
-    public string Rec1 { get; set; }
-    public string Rec2 { get; set; }
-    public string Rec3 { get; set; }
-    public string Rec4 { get; set; }
-    public string Rec5 { get; set; }
+        public string? DemoRec1 { get; set; }
+        public string? DemoRec2 { get; set; }
+        public string? DemoRec3 { get; set; }
+        public string? DemoRec4 { get; set; }
+        public string? DemoRec5 { get; set; }
+
+        public string? ContentRec1 { get; set; }
+        public string? ContentRec2 { get; set; }
+        public string? ContentRec3 { get; set; }
+        public string? ContentRec4 { get; set; }
+        public string? ContentRec5 { get; set; }
+
+        public string? CollabRec1 { get; set; }
+        public string? CollabRec2 { get; set; }
+        public string? CollabRec3 { get; set; }
+        public string? CollabRec4 { get; set; }
+        public string? CollabRec5 { get; set; }
+    }
 }
