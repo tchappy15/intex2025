@@ -19,7 +19,7 @@ function OneMoviePage() {
   const [userEmail, setUserEmail] = useState('');
   const [contentRecs, setContentRecs] = useState([]);
   const [collabRecs, setCollabRecs] = useState([]);
-  
+
   // Try to access UserContext if it's exported - if not, we'll use the ref approach
   // const userContext = useContext(UserContext);
 
@@ -75,6 +75,7 @@ function OneMoviePage() {
     )
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
+        console.log('📦 Collab Recs:', data);
         const posters = data.map((rec: any) => ({
           movieId: rec.recommended_id || rec.movieId || rec.title,
           title: rec.recommended_title || rec.title,
@@ -102,17 +103,17 @@ function OneMoviePage() {
       }
       return false; // Didn't get email yet
     };
-    
+
     // Try immediately
     if (checkForEmail()) return;
-    
+
     // If not successful, set up an interval to check
     const interval = setInterval(() => {
       if (checkForEmail()) {
         clearInterval(interval);
       }
     }, 200);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -217,7 +218,6 @@ function OneMoviePage() {
         ) : (
           <p>Loading movie...</p>
         )}
-
 
         {(contentRecs.length > 0 || collabRecs.length > 0) && (
           <div className="recommendations mt-5">

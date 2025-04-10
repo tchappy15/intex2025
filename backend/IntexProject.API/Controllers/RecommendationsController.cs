@@ -60,10 +60,13 @@ public class RecommendationsController : ControllerBase
     public IActionResult GetSimilarRecs(string title)
     {
         var recs = _context.CollaborativeMovieRecommendations
-            .FirstOrDefault(r => r.MovieTitle == title);
+            .Where(r => r.MovieTitle.ToLower() == title.ToLower())
+            .ToList();
 
-        return recs != null ? Ok(recs) : NotFound();
+
+        return recs.Any() ? Ok(recs) : NotFound();
     }
+
 
     // GET: api/recommendations/movie/s1234
     [HttpGet("movie/{movieId}")]
