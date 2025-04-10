@@ -17,7 +17,7 @@ function MoviesPage() {
   useEffect(() => {
     const fetchUserRecs = async () => {
       try {
-        const userId = 1; // or dynamic if you’ve got login working
+        const userId = 10; // or dynamic if you’ve got login working
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/recommendations/user/${userId}/full`,
           {

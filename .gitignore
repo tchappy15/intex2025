@@ -121,3 +121,4 @@ packages/
 .localhistory/
 backend/IntexProject.API/publish/appsettings.json
 backend/IntexProject.API/publish/
+backend/IntexProject.API/recommendations.sqbpro

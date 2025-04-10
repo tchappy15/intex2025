@@ -38,6 +38,29 @@ body {
 
 .privacy-img {
   max-width: 50%;
-  margin-top: -200px;
+  margin-top: -150px;
   margin-bottom: -200px;
+}
+
+.sticky-btn {
+  position: sticky;
+  top: 1rem;
+  float: right;
+  z-index: 10;
+  background-color: #416270; 
+  border-color: #2C4D5B; 
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px; /* full-rounded */
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+}
+
+.sticky-btn:hover{
+  background-color: #4f707e; 
+  border-color: #4f707e; 
+  color: white;
 }

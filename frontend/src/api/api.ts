@@ -115,7 +115,7 @@ export async function addRating(
       credentials: 'include',
       body: JSON.stringify({
         movieId: movieId,
-        rating: rating,
+        Rating: rating, //must match backend DTO exactly (uppercase R)
       }),
     }
   );

@@ -5,6 +5,7 @@ using Microsoft.Net.Http.Headers;
 using IntexProject.API.Data;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace IntexProject.API.Controllers
@@ -16,9 +17,11 @@ namespace IntexProject.API.Controllers
     public class MoviesController : ControllerBase
     {
         private MoviesDbContext _moviesDbContext;
-        public MoviesController(MoviesDbContext temp)
+        private readonly IConfiguration _configuration;
+        public MoviesController(MoviesDbContext temp, IConfiguration configuration)
         {
             _moviesDbContext = temp;
+            _configuration = configuration;
         }
 
         [HttpGet("GetMovies")]
@@ -26,9 +29,17 @@ namespace IntexProject.API.Controllers
             int pageSize = 10,
             int pageNum = 1,
             [FromQuery] string? genre = null,
-            [FromQuery] string? title = null)
+            [FromQuery] string? title = null,
+            [FromQuery] string? type = null)
         {
             var query = _moviesDbContext.Movies.AsQueryable();
+
+            //  Filter by type (case-insensitive)
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                query = query.Where(m => m.Type.ToLower() == type.ToLower());
+            }
+
 
             // Filter by title (if provided)
             if (!string.IsNullOrWhiteSpace(title))
@@ -36,7 +47,7 @@ namespace IntexProject.API.Controllers
                 query = query.Where(m => m.Title.ToLower().Contains(title.ToLower()));
             }
 
-            // Genre logic (already in place)
+            // Genre filter logic 
             var genreMap = typeof(Movie)
                 .GetProperties()
                 .Where(p => p.PropertyType == typeof(int))
@@ -64,13 +75,12 @@ namespace IntexProject.API.Controllers
 
             var returnMovies = new
             {
-                movies = movies,
-                totalNumMovies = totalNumMovies
+               movies,
+               totalNumMovies
             };
 
             return Ok(returnMovies);
         }
-
 
         [HttpGet("GetGenreTypes")]
         public IActionResult GetGenreTypes()
@@ -217,7 +227,7 @@ namespace IntexProject.API.Controllers
 
         public class RatingInputDto
         {
-            public string movieId { get; set; }
+            public required string movieId { get; set; }
             public int Rating { get; set; }
         }
 

@@ -1,6 +1,7 @@
-import React from 'react';
+//import React from 'react';
 import './MovieRow.css';
 import { useNavigate } from 'react-router-dom';
+
 
 interface Movie {
   movieId: string;
