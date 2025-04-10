@@ -61,7 +61,7 @@ function AdminHeaderBar({
             </div>
           )}
         </div>
-        <img src="/images/user.png" alt="Profile" className="admin-avatar" />
+        <img src="/images/user.jpg" alt="Profile" className="admin-avatar" />
       </div>
     </div>
   );
