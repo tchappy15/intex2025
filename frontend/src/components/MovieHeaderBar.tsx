@@ -76,7 +76,7 @@ function MovieHeaderBar({
             value={selectedGenre}
             onChange={(e) => setSelectedGenre(e.target.value)}
           >
-            <option value="">Genre</option>
+            <option value="">All Genres</option>
             {genres.map((genre) => (
               <option key={genre} value={genre}>
                 {genre.charAt(0).toUpperCase() + genre.slice(1)}
