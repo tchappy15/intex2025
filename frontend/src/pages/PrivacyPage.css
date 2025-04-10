@@ -1,45 +1,68 @@
 body {
-  margin-top: 0px;
-  padding: 0px;
-  justify-content: center;
+  margin: 0;
+  padding: 0;
   background-image: url('./../assets/dark-blue-blurred-background_1034-589.png');
   background-size: cover;
   background-position: center;
-  height: 100%;
+  min-height: 100vh;
   font-family: 'Oswald', sans-serif;
   position: relative;
 }
 
-.privacy-h1 {
-  padding-top: 100px;
-  font-weight: bold;
-  text-align: center;
+.privacy-img {
+  display: block;
+  margin: -30px auto -20px auto;
+  max-width: 250px; /* Smaller logo */
 }
 
 .privacy-div {
-  padding: 20px;
-  margin-top: 50px;
-  padding-left: 40px;
-}
-
-.privacy-section {
-  padding: 20px;
-  font-size: larger;
+  background-color: white;
+  padding: 40px;
   margin: 0 auto;
   max-width: 70%;
+  color: #1a202c; /* Tailwind's text-gray-800 */
+}
+
+.privacy-h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-top: 50px;
+  font-family: 'Georgia', serif;
+}
+
+.privacy-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
-@media (max-width: 768px) {
-  section {
-    max-width: 100%;
-  }
+.privacy-meta p {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 1.2; /* Even tighter spacing */
 }
 
-.privacy-img {
-  max-width: 50%;
-  margin-top: -150px;
-  margin-bottom: -200px;
+.privacy-section {
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+  text-align: left;
+}
+
+.privacy2-section {
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .privacy-div {
+    max-width: 90%;
+    padding: 20px;
+  }
 }
 
 .sticky-btn {
@@ -63,4 +86,8 @@ body {
   background-color: #4f707e; 
   border-color: #4f707e; 
   color: white;
+}
+
+.custom-rounded {
+  border-radius: 10px;
 }
