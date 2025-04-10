@@ -297,7 +297,7 @@ namespace IntexProject.API.Controllers
 
         public class RatingInputDto
         {
-            public string movieId { get; set; }
+            public required string movieId { get; set; }
             public int Rating { get; set; }
         }
 
