@@ -26,7 +26,7 @@ function MoviesPage() {
         }}
       />
 
-      <AuthorizeView>
+      {/* <AuthorizeView> */}
         <div className="movies-page">
           <div className="movies-container">
 
@@ -42,7 +42,7 @@ function MoviesPage() {
             />
           </div>
         </div>
-      </AuthorizeView>
+      {/* </AuthorizeView> */}
     </>
   );
 }

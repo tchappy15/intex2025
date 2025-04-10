@@ -77,3 +77,36 @@ border-radius: 10px;
   margin: 0 auto 1rem auto; /* centers the block, aligns text left */
   padding-left: 0rem;  
 }
+
+.next-back-btn {
+  background-color: #3d7b4b; 
+  border-color: #739e7d; 
+  color: white;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.next-back-btn:hover {
+  background-color: #498f58; 
+  border-color: #498f58;
+  color: white;
+}
+
+.next-back-cancel-btn {
+  background-color: #416270; 
+  border-color: #2C4D5B; 
+  color: white;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.next-back-cancel-btn:hover {
+  background-color: #4f707e; 
+  border-color: #4f707e; 
+  color: white;
+}
+
+.check-format {
+  flex-direction: column;
+  margin-left: 140px;
+}

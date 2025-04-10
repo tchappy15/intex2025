@@ -111,7 +111,7 @@ function MovieHeaderBar({
             </div>
           )}
         </div>
-        <img src="/images/user.jpg" alt="Profile" className="movie-avatar" />
+        <img src="/images/Cassy.png" alt="Profile" className="movie-avatar" />
       </div>
     </div>
   );
