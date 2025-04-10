@@ -59,18 +59,20 @@ function MovieHeaderBar({
       />
 
       <div className="movie-header-buttons">
-        <button
+      <button
           className={selectedType === 'Movie' ? 'active' : ''}
-          onClick={() => setSelectedType('Movie')}
+          onClick={() => setSelectedType(selectedType === 'Movie' ? '' : 'Movie')}
         >
           Movies
         </button>
+
         <button
           className={selectedType === 'Tv Show' ? 'active' : ''}
-          onClick={() => setSelectedType('Tv Show')}
+          onClick={() => setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')}
         >
           TV Shows
         </button>
+
         <div className="genre-select-wrapper">
           <select
             value={selectedGenre}
