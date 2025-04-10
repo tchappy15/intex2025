@@ -116,20 +116,20 @@ function MoviesPage() {
 
   return (
     <>
-      <MovieHeaderBar
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        selectedGenre={selectedGenre}
-        setSelectedGenre={setSelectedGenre}
-        searchTitle={searchTitle}
-        setSearchTitle={setSearchTitle}
-        onLogout={() => {
-          // Add your logout logic here
-          window.location.href = '/login'; // Or use navigate('/login')
-        }}
-      />
-
       <AuthorizeView>
+        <MovieHeaderBar
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          selectedGenre={selectedGenre}
+          setSelectedGenre={setSelectedGenre}
+          searchTitle={searchTitle}
+          setSearchTitle={setSearchTitle}
+          onLogout={() => {
+            // Add your logout logic here
+            window.location.href = '/login'; // Or use navigate('/login')
+          }}
+        />
+
         <div className="movies-page">
           <div className="movies-container">
             {/* Recommender Row */}
