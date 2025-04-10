@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace IntexProject.API.Data
 {
     [Table("UserRecommendations")]
-    public class UserRecommendations
+    public class UserRecommendation
     {
         [Key]
         [Column("user_id")]
