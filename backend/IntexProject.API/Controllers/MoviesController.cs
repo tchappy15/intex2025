@@ -5,6 +5,9 @@ using Microsoft.Net.Http.Headers;
 using IntexProject.API.Data;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace IntexProject.API.Controllers
@@ -16,9 +19,11 @@ namespace IntexProject.API.Controllers
     public class MoviesController : ControllerBase
     {
         private MoviesDbContext _moviesDbContext;
-        public MoviesController(MoviesDbContext temp)
+        private readonly IConfiguration _configuration;
+        public MoviesController(MoviesDbContext temp, IConfiguration configuration)
         {
             _moviesDbContext = temp;
+            _configuration = configuration;
         }
 
         [HttpGet("GetMovies")]
@@ -71,6 +76,73 @@ namespace IntexProject.API.Controllers
             return Ok(returnMovies);
         }
 
+        [HttpGet("with-recommendations")]
+        public async Task<IActionResult> GetMoviesWithRecommendations()
+        {
+            var recommendedMovieIds = new HashSet<string>();
+            var recommendedTitles = new HashSet<string>();
+
+            // Connect to SQLite recommendations DB
+            using (var recConn = new SqliteConnection(_configuration.GetConnectionString("RecommendationsConnection")))
+            {
+                await recConn.OpenAsync();
+
+                var cmd = recConn.CreateCommand();
+                cmd.CommandText = @"
+                    SELECT movie_id FROM ContentRecommendations
+                    UNION
+                    SELECT movie_title FROM CollaborativeMovieRecommendations
+                ";
+
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    var val = reader.GetString(0);
+                    if (val.StartsWith("s")) recommendedMovieIds.Add(val);
+                    else recommendedTitles.Add(val);
+                }
+            }
+
+            // Connect to Azure Movies DB
+            using (var sqlConn = new SqlConnection(_configuration.GetConnectionString("MoviesConnection")))
+            {
+                await sqlConn.OpenAsync();
+
+                var idParams = recommendedMovieIds.Select((id, i) => $"@id{i}").ToArray();
+                var titleParams = recommendedTitles.Select((t, i) => $"@title{i}").ToArray();
+
+                var sql = $@"
+                    SELECT * FROM Movies
+                    WHERE show_id IN ({string.Join(",", idParams)})
+                    OR title IN ({string.Join(",", titleParams)})
+                ";
+
+                var cmd = new SqlCommand(sql, sqlConn);
+
+                for (int i = 0; i < recommendedMovieIds.Count; i++)
+                    cmd.Parameters.AddWithValue(idParams[i], recommendedMovieIds.ElementAt(i));
+
+                for (int i = 0; i < recommendedTitles.Count; i++)
+                    cmd.Parameters.AddWithValue(titleParams[i], recommendedTitles.ElementAt(i));
+
+                var result = new List<Movie>();
+
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    result.Add(new Movie
+                    {
+                        MovieId = reader["show_id"]?.ToString() ?? "", // if you're okay with empty fallback
+                        Title = reader["title"]?.ToString() ?? "Untitled",
+                        Type = reader["type"]?.ToString() ?? "Unknown",
+                        Rating = reader["rating"]?.ToString() ?? "Unrated",
+                        Duration = reader["duration"]?.ToString() ?? "N/A",
+                        Description = reader["description"]?.ToString() ?? "No description available"
+                    });
+                }
+                return Ok(result);
+            }
+        }
 
         [HttpGet("GetGenreTypes")]
         public IActionResult GetGenreTypes()
