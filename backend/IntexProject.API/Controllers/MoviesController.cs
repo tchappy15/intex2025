@@ -31,9 +31,17 @@ namespace IntexProject.API.Controllers
             int pageSize = 10,
             int pageNum = 1,
             [FromQuery] string? genre = null,
-            [FromQuery] string? title = null)
+            [FromQuery] string? title = null,
+            [FromQuery] string? type = null)
         {
             var query = _moviesDbContext.Movies.AsQueryable();
+
+            //  Filter by type (case-insensitive)
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                query = query.Where(m => m.Type.ToLower() == type.ToLower());
+            }
+
 
             // Filter by title (if provided)
             if (!string.IsNullOrWhiteSpace(title))
@@ -41,7 +49,7 @@ namespace IntexProject.API.Controllers
                 query = query.Where(m => m.Title.ToLower().Contains(title.ToLower()));
             }
 
-            // Genre logic (already in place)
+            // Genre filter logic 
             var genreMap = typeof(Movie)
                 .GetProperties()
                 .Where(p => p.PropertyType == typeof(int))
@@ -69,8 +77,8 @@ namespace IntexProject.API.Controllers
 
             var returnMovies = new
             {
-                movies = movies,
-                totalNumMovies = totalNumMovies
+               movies,
+               totalNumMovies
             };
 
             return Ok(returnMovies);
