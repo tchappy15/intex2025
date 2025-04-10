@@ -3,22 +3,23 @@ import { Navigate } from 'react-router-dom';
 import { pingAuth } from '../api/api';
 
 interface User {
-  email: string;
+  email: string,
+  roles: string[];
 }
 
-const UserContext = createContext<User | null>(null);
+export const UserContext = createContext<User | null>(null);
 
 function AuthorizeView(props: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({ email: '' });
+  const [user, setUser] = useState<User>({ email: '', roles: [] });
 
   useEffect(() => {
     async function fetchAuthUser() {
       try {
         const data = await pingAuth();
         if (data.email) {
-          setUser({ email: data.email });
+          setUser({ email: data.email, roles: data.roles });
           setAuthorized(true);
         } else {
           throw new Error('Invalid user session');

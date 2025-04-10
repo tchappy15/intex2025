@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './MovieHeaderBar.css';
 import { useNavigate } from 'react-router-dom';
 import { fetchGenres } from '../api/api';
 import Logout from './Logout';
+import { UserContext } from './AuthorizeView';
 
 function MovieHeaderBar({
   selectedType,
@@ -23,6 +24,7 @@ function MovieHeaderBar({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [genres, setGenres] = useState<string[]>([]);
   const navigate = useNavigate();
+  const user = useContext(UserContext);
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -108,7 +110,8 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              <button onClick={() => navigate('/admin')}>Manage Movies</button> 
+              {user?.roles.includes("Administrator") && (
+              <button onClick={() => navigate('/admin')}>Manage Movies</button> )}
               
               {/* added Logout for proper log out functionality */}
               <Logout>
