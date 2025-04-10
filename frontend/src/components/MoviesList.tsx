@@ -1,3 +1,4 @@
+// MoviesList.tsx
 import { useEffect, useState } from 'react';
 import { Movie } from '../types/Movie';
 import { useNavigate } from 'react-router-dom';
@@ -72,38 +73,34 @@ function MoviesList({
             </p>
           }
         >
-          {movies.map((movie) => (
-            <div
-              onClick={() =>
-                navigate(
-                  `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
-                )
-              }
-              className="movie-card"
-              key={movie.movieId}
-            >
-              <img
-                className="movie-thumbnail"
-                src={`/images/movieThumbnails/${movie.title}.jpg`}
-                alt={movie.title}
-                onError={(e) => {
-                  e.currentTarget.src = '/images/placeholder.jpg';
-                }}
-              />
-              <div className="movie-overlay">
-                <h2 className="card-title">{movie.title}</h2>
-                <p>
-                  <strong>Year:</strong> {movie.release_year}
-                </p>
-                <p>
-                  <strong>Duration:</strong> {movie.duration}
-                </p>
-                <p>
-                  <strong>Rating:</strong> {movie.rating}
-                </p>
+          <div className="movie-grid">
+            {movies.map((movie) => (
+              <div
+                onClick={() =>
+                  navigate(
+                    `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
+                  )
+                }
+                className="movie-card"
+                key={movie.movieId}
+              >
+                <img
+                  className="movie-thumbnail"
+                  src={`/images/movieThumbnails/${movie.title}.jpg`}
+                  alt={movie.title}
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/placeholder.jpg';
+                  }}
+                />
+                <div className="movie-overlay">
+                  <h2 className="card-title">{movie.title}</h2>
+                  <p><strong>Year:</strong> {movie.release_year}</p>
+                  <p><strong>Duration:</strong> {movie.duration}</p>
+                  <p><strong>Rating:</strong> {movie.rating}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </InfiniteScroll>
       </div>
     </>
