@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
-import { addRating } from '../api/api';
+import { addRating, fetchMovieById } from '../api/api';
 import './OneMoviePage.css';
 
 // Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
