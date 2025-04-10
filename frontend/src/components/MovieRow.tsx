@@ -22,7 +22,7 @@ function MovieRow({ title, movies }: MovieRowProps) {
       <div className="movie-scroll">
         {movies.map((movie) => (
           <Link
-            to={`/movies/${movie.title}/${movie.movieId}`}
+            to={`/movie/${movie.title}/${movie.movieId}`}
             key={movie.movieId}
             className="movie-link"
           >
