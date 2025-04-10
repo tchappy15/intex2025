@@ -75,11 +75,12 @@ function OneMoviePage() {
     )
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        console.log('📦 Collab Recs:', data);
+        console.log('📦 Clean Collab Recs:', data); // debug log
+
         const posters = data.map((rec: any) => ({
-          movieId: rec.recommended_id || rec.movieId || rec.title,
-          title: rec.recommended_title || rec.title,
-          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+          movieId: rec.title, // Use title as fallback ID
+          title: rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.title)}.jpg`,
         }));
         setCollabRecs(posters);
       })
@@ -219,9 +220,8 @@ function OneMoviePage() {
           <p>Loading movie...</p>
         )}
 
-        {(contentRecs.length > 0 || collabRecs.length > 0) && (
+        {(contentRecs?.length > 0 || collabRecs?.length > 0) && (
           <div className="recommendations mt-5">
-            <h3 style={{ color: 'white' }}>Recommended for You</h3>
             {contentRecs.length > 0 && (
               <MovieRow
                 title="You Might Also Like (Content-Based)"
