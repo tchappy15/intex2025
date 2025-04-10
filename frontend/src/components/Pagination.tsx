@@ -41,12 +41,13 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex flex-col items-center mt-6">
+    <div className="flex flex-col items-center mt-6 w-full max-w-4xl px-4 mx-auto">
       <div className="flex flex-wrap gap-2 justify-center mb-2">
         <button
           disabled={pageNum === 1}
           onClick={() => onPageChange(pageNum - 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-100 disabled:opacity-50 transition"
+
         >
           Previous
         </button>
@@ -58,11 +59,12 @@ const Pagination = ({
             <button
               key={i}
               onClick={() => onPageChange(page)}
-              className={`px-3 py-1 rounded ${
+              className={`px-4 py-2 border rounded-md transition ${
                 page === pageNum
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white hover:bg-gray-100'
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white text-black border-gray-300 hover:bg-gray-100'
               }`}
+              
             >
               {page}
             </button>
@@ -72,27 +74,31 @@ const Pagination = ({
         <button
           disabled={pageNum === totalPages}
           onClick={() => onPageChange(pageNum + 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-100 disabled:opacity-50 transition"
         >
           Next
         </button>
       </div>
 
-      <label className="text-sm">
-        Results per page:&nbsp;
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            onPageSizeChange(Number(e.target.value));
-            onPageChange(1); // reset to page 1
-          }}
-          className="border px-2 py-1 rounded"
-        >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-      </label>
+      <div className="flex justify-center w-full mt-4">
+        <div className="inline-flex items-center gap-2">
+          <label className="text-sm font-medium whitespace-nowrap">Results per page:</label>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              onPageSizeChange(Number(e.target.value));
+              onPageChange(1);
+            }}
+            className="border border-gray-300 rounded px-3 py-2 bg-white shadow-sm focus:outline-none"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+      </div>
+
+
     </div>
   );
 };

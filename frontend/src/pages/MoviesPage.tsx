@@ -56,7 +56,7 @@ function MoviesPage() {
         }}
       />
 
-      <AuthorizeView>
+      {/* <AuthorizeView> */}
         <div className="movies-page">
           <div className="movies-container">
             {/* Recommender Row */}
@@ -71,7 +71,7 @@ function MoviesPage() {
             />
           </div>
         </div>
-      </AuthorizeView>
+      {/* </AuthorizeView> */}
     </>
   );
 }
