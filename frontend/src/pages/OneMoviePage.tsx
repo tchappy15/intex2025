@@ -1,37 +1,120 @@
+import MovieRow from '../components/MovieRow';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
-import { fetchMovieById, submitRating } from '../api/api';
+import { addRating, fetchMovieById } from '../api/api';
+import './OneMoviePage.css';
+
+// Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
+// If it's not exported, we'll use the ref approach instead
+// import { UserContext } from '../components/AuthorizeView';
 
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
   const [movie, setMovie] = useState<any>(null);
   const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
+  const [contentRecs, setContentRecs] = useState([]);
+  const [collabRecs, setCollabRecs] = useState([]);
+
+  // Try to access UserContext if it's exported - if not, we'll use the ref approach
+  // const userContext = useContext(UserContext);
 
   useEffect(() => {
-    if (movieId) {
-      fetchMovieById(movieId)
-        .then(setMovie)
-        .catch((err) => console.error('Failed to load movie:', err));
-    }
+    if (!movieId) return;
+
+    fetchMovieById(movieId)
+      .then(setMovie)
+      .catch((err) => console.error('Failed to load movie:', err));
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error('No content recs found');
+        return res.json();
+      })
+      .then((data) => {
+        const posters = data.map((m: any) => ({
+          ...m,
+          posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+        }));
+        setContentRecs(posters);
+      })
+      .catch(() => setContentRecs([]));
   }, [movieId]);
 
-  // Safely extract email from DOM
+  // Fetch content-based recommendations
   useEffect(() => {
-    const interval = setInterval(() => {
-      const emailElement = document.getElementById('user-email');
-      if (emailElement) {
-        const email = emailElement.textContent?.trim();
+    if (!movieId) return;
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        const posters = data.map((rec: any) => ({
+          movieId: rec.recommended_id || rec.movieId || rec.title,
+          title: rec.recommended_title || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+        }));
+        setContentRecs(posters);
+      })
+      .catch(() => setContentRecs([]));
+  }, [movieId]);
+
+  // Fetch collaborative recommendations
+  useEffect(() => {
+    if (!title) return;
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodeURIComponent(title)}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        console.log('📦 Clean Collab Recs:', data); // debug log
+
+        const posters = data.map((rec: any) => ({
+          movieId: rec.title, // Use title as fallback ID
+          title: rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.title)}.jpg`,
+        }));
+        setCollabRecs(posters);
+      })
+      .catch(() => setCollabRecs([]));
+  }, [title]);
+
+  // Safely extract email from DOM
+
+  // Use a more reliable approach to get the email
+  useEffect(() => {
+    // Create a function to check for the email
+    const checkForEmail = () => {
+      const emailEl = document.getElementById('user-email-container');
+      if (emailEl && emailEl.textContent) {
+        const email = emailEl.textContent.trim();
         if (email) {
           setUserEmail(email);
-          console.log('✅ Set user email from DOM:', email);
-          clearInterval(interval); // stop polling once set
+          console.log('✅ Email captured:', email);
+          return true; // Successfully got email
         }
       }
+      return false; // Didn't get email yet
+    };
+
+    // Try immediately
+    if (checkForEmail()) return;
+
+    // If not successful, set up an interval to check
+    const interval = setInterval(() => {
+      if (checkForEmail()) {
+        clearInterval(interval);
+      }
     }, 200);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -41,17 +124,23 @@ function OneMoviePage() {
       return;
     }
 
+    if (!userEmail) {
+      alert('User email is not available. Please try again in a moment.');
+      console.error('User email not available for rating submission');
+      return;
+    }
+
     console.log('Submitting rating:', {
-      show_id: movieId,
+      movieId: movieId,
       rating: rating,
       user_email: userEmail,
     });
 
     try {
-      await submitRating(movieId!, rating, userEmail);
+      await addRating(movieId!, rating, userEmail);
       alert('Rating submitted!');
     } catch (err) {
-      console.error(err);
+      console.error('Error submitting rating:', err);
       alert('Error submitting rating.');
     }
   };
@@ -61,72 +150,94 @@ function OneMoviePage() {
   }
 
   return (
-    <>
+    <div className="one-movie-page">
       <AuthorizeView>
-        <span>
-          <Logout>
-            <button
-              style={{
-                position: 'fixed',
-                top: '10px',
-                left: '20px',
-                background: '#f8f9fa',
-                padding: '10px 15px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                fontSize: '16px',
-              }}
-            >
-              Logout <span id="user-email"><AuthorizedUser value="email" /></span>
-            </button>
-          </Logout>
-        </span>
+        {/* Hidden email container that we can reference */}
+        <div id="user-email-container" style={{ display: 'none' }}>
+          <AuthorizedUser value="email" />
+        </div>
 
-        <h1 style={{ color: 'white' }}>{title}</h1>
+        <div className="page-header">
+          <button onClick={() => navigate('/movies')}>Go Back</button>
+          <Logout>
+            <button>Logout</button>
+          </Logout>
+        </div>
+
+        <h1>{title}</h1>
 
         {movie ? (
           <div className="card">
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item"><strong>Type:</strong> {movie.type}</li>
-              <li className="list-group-item"><strong>Release Year:</strong> {movie.release_year}</li>
-              <li className="list-group-item"><strong>Director:</strong> {movie.director || 'N/A'}</li>
-              <li className="list-group-item"><strong>Cast:</strong> {movie.cast || 'N/A'}</li>
-              <li className="list-group-item"><strong>Country:</strong> {movie.country || 'N/A'}</li>
-              <li className="list-group-item"><strong>Duration:</strong> {movie.duration}</li>
-              <li className="list-group-item"><strong>Rating:</strong> {movie.rating}</li>
-              <li className="list-group-item"><strong>Description:</strong> {movie.description}</li>
-            </ul>
+            <div className="poster" />
+            <div className="movie-info">
+              <ul>
+                <li>
+                  <strong>Type:</strong> {movie.type}
+                </li>
+                <li>
+                  <strong>Release Year:</strong> {movie.release_year}
+                </li>
+                <li>
+                  <strong>Director:</strong> {movie.director || 'N/A'}
+                </li>
+                <li>
+                  <strong>Cast:</strong> {movie.cast || 'N/A'}
+                </li>
+                <li>
+                  <strong>Country:</strong> {movie.country || 'N/A'}
+                </li>
+                <li>
+                  <strong>Duration:</strong> {movie.duration}
+                </li>
+                <li>
+                  <strong>Rating:</strong> {movie.rating}
+                </li>
+                <li>
+                  <strong>Description:</strong> {movie.description}
+                </li>
+              </ul>
 
-            <div className="mt-3">
-              <h4 style={{ color: 'white' }}>Rate this movie</h4>
-              <select
-                value={rating}
-                onChange={(e) => setRating(parseInt(e.target.value))}
-              >
-                <option value={0}>Select a rating</option>
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <option key={num} value={num}>
-                    {num} Star{num > 1 ? 's' : ''}
-                  </option>
-                ))}
-              </select>
-              <button className="btn btn-primary ms-2" onClick={handleRatingSubmit}>
-                Submit Rating
-              </button>
+              <div className="rating-section">
+                <h4>Rate this movie</h4>
+                <div className="star-rating">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`star ${rating >= star || hoverRating >= star ? 'filled' : ''}`}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(0)}
+                    >
+                      ★
+                    </span>
+                  ))}
+                  <button onClick={handleRatingSubmit}>Submit Rating</button>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
           <p>Loading movie...</p>
         )}
 
-        <button className="btn btn-secondary mt-3" onClick={() => navigate('/movies')}>
-          Go Back
-        </button>
+        {(contentRecs?.length > 0 || collabRecs?.length > 0) && (
+          <div className="recommendations mt-5">
+            {contentRecs.length > 0 && (
+              <MovieRow
+                title="You Might Also Like (Content-Based)"
+                movies={contentRecs}
+              />
+            )}
+            {collabRecs.length > 0 && (
+              <MovieRow
+                title="Users Also Watched (Collaborative Filtering)"
+                movies={collabRecs}
+              />
+            )}
+          </div>
+        )}
       </AuthorizeView>
-    </>
+    </div>
   );
 }
 

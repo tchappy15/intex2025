@@ -1,3 +1,17 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 /* @import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
 
 #root {

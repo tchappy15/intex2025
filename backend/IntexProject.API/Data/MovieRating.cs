@@ -6,10 +6,10 @@ namespace IntexProject.API.Data;
 public class MovieRating
 {
     [Column("user_id")]
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 
-    [Column("show_id")]
-    public string ShowId { get; set; }
+    [Column("movieId")]
+    public string MovieId { get; set; }
 
     [Column("rating")]
     public int Rating { get; set; }

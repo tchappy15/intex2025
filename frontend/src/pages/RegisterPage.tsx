@@ -198,35 +198,43 @@ function Register() {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                <div style={{ display: 'flex', gap: '10rem', justifyContent: 'center', marginTop: '1rem' }}>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="next-back-cancel-btn btn-login text-uppercase fw-bold custom-rounded"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={() => {
+                      const { firstName, lastName, phone, email, password, confirmPassword } = formData;
+                      if (
+                        firstName &&
+                        lastName &&
+                        phone.length === 10 &&
+                        email &&
+                        password &&
+                        confirmPassword
+                      ) {
+                        setStep(2);
+                        setError('');
+                      } else {
+                        setError('Please fill in all required fields.');
+                      }
+                    }}
+                    className="next-back-btn btn-login text-uppercase fw-bold px-4 custom-rounded"
+                  >
+                    Next
                   </button>
                 </div>
-                <button
-                  onClick={() => {
-                    const { firstName, lastName, phone, email, password, confirmPassword } = formData;
-                    if (
-                      firstName &&
-                      lastName &&
-                      phone.length === 10 &&
-                      email &&
-                      password &&
-                      confirmPassword
-                    ) {
-                      setStep(2);
-                      setError('');
-                    } else {
-                      setError('Please fill in all required fields.');
-                    }
-                  }}
-                  className="log-btn btn-login text-uppercase fw-bold custom-rounded"
-                >
-                  Next
-                </button>
               </div>
-            )}
+              )}
 
             {step === 2 && (
               <div>
-                <h4 style={{ color: 'white' }}>Step 2: Get to Know You</h4>
+                <h4 className="register-h4" style={{ color: 'white' }}>Step 2: Get to Know You</h4>
                 <input
                   name="age"
                   placeholder="Age"
@@ -271,8 +279,11 @@ function Register() {
                   required
                   className={`form-control mb-2 ${error && !formData.zip ? 'is-invalid' : ''}`}
                 />
-                <div className="d-flex justify-content-between">
-                  <button onClick={prevStep} className="btn btn-secondary">
+                <div style={{ display: 'flex', gap: '10rem', justifyContent: 'center', marginTop: '1rem' }}>
+                  <button
+                    onClick={prevStep}
+                    className="next-back-cancel-btn btn-login text-uppercase fw-bold custom-rounded"
+                  >
                     Back
                   </button>
                   <button
@@ -285,23 +296,25 @@ function Register() {
                         setError('Please fill in all required fields.');
                       }
                     }}
-                    className="btn btn-primary"
+                    className="next-back-btn btn-login text-uppercase fw-bold px-4 custom-rounded"
                   >
                     Next
                   </button>
                 </div>
+
               </div>
             )}
             
             {step === 3 && (
               <div>
-                <h4 style={{ color: 'white' }}>
+                <h4 className="register-h4" style={{ color: 'white' }}>
                   Step 3: Other Streaming Services (Optional)
                 </h4>
-                {streamingServices.map(({ label, name }) => (
-                  <div key={name} className="form-check">
+                <div className="check-format">
+                  {streamingServices.map(({ label, name }) => (
+                    <div key={name} className="form-check d-flex align-items-center">
                     <input
-                      className="form-check-input"
+                      className="form-check-input me-2" 
                       type="checkbox"
                       name={name}
                       checked={!!formData[name]}
@@ -310,16 +323,24 @@ function Register() {
                     <label
                       className="form-check-label text-white"
                       htmlFor={name}
+                      style={{ marginBottom: 0 }} // remove bottom margin too
                     >
                       {label}
                     </label>
                   </div>
                 ))}
-                <div className="d-flex justify-content-between mt-3">
-                  <button onClick={prevStep} className="btn btn-secondary">
+                </div>
+                <div style={{ display: 'flex', gap: '10rem', justifyContent: 'center', marginTop: '1rem' }}>
+                  <button
+                    onClick={prevStep}
+                    className="next-back-cancel-btn btn-login text-uppercase fw-bold custom-rounded"
+                  >
                     Back
                   </button>
-                  <button onClick={handleSubmit} className="btn btn-success">
+                  <button
+                    onClick={handleSubmit}
+                    className="next-back-btn btn-login text-uppercase fw-bold px-4 custom-rounded"
+                  >
                     Finish
                   </button>
                 </div>

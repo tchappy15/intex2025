@@ -4,6 +4,7 @@ import { GENRES } from '../constants/genres';
 import { updateMovie } from '../api/api';
 import { MOVIE_RATINGS } from '../constants/movieMPAARatings';
 import { TV_RATINGS } from '../constants/tvMPAARatings';
+import './EditMovieForm.css'
 
 interface EditMovieFormProps {
   movie: Movie;
@@ -86,13 +87,13 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
   const ratings = type === 'Movie' ? MOVIE_RATINGS : type === 'TV Show' ? TV_RATINGS : [];
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow p-4 rounded mb-4">
-      <h2 className="text-lg font-semibold mb-4">Edit {type || 'Item'}</h2>
+    <form onSubmit={handleSubmit} className="edit-movie-form">
+      <h2 className="edit-movie-title">Edit {type || 'Item'}</h2>
 
       {error && <p className="text-red-500 mb-2">{error}</p>}
 
-      <div className="mb-2">
-        <label className="block font-medium">Type</label>
+      <div>
+        <label className="block font-medium">Type *</label>
         <select
           className="border px-2 py-1 w-full"
           value={type}
@@ -180,7 +181,7 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
 
         <div>
           <label className="block font-medium mb-2">Select Genres:</label>
-          <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-scroll border p-2 rounded">
+          <div className="genre-checkboxes max-h-48 overflow-y-scroll">
             {GENRES.map((genre) => (
               <label key={genre} className="flex items-center">
                 <input
@@ -189,25 +190,25 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
                   onChange={() => handleGenreChange(genre)}
                   className="mr-2"
                 />
-                {genre}
+                {genre.replace(/([a-z])([A-Z])/g, '$1 $2')}
               </label>
             ))}
           </div>
         </div>
       </fieldset>
 
-      <div className="flex gap-2 mt-4">
+      <div className="edit-movie-buttons">
         <button
           type="submit"
           disabled={loading || !type}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="save-button"
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+          className="cancel-button"
         >
           Cancel
         </button>
