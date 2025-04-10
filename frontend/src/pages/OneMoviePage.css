@@ -43,14 +43,14 @@ body, .one-movie-page {
     gap: 30px;
   }
   
-  .poster {
+  /* .poster {
     flex: 0 0 250px;
     height: 375px;
     background-image: url('/images/movieThumbnails/placeholder.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 8px;
-  }
+  } */
   
   .movie-info {
     flex: 1;
@@ -138,5 +138,13 @@ body, .one-movie-page {
   .recommendations h3 {
     margin-bottom: 20px;
     color: #ffffff;
+  }
+  
+  .movie-thumbnail {
+    flex: 0 0 250px;
+    height: 375px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   }
   
