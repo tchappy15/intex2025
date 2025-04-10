@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
-import { addRating, fetchMovieById } from '../api/api';
+import { addRating } from '../api/api';
 import './OneMoviePage.css';
 
 // Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
@@ -13,6 +13,7 @@ import './OneMoviePage.css';
 function OneMoviePage() {
   const navigate = useNavigate();
   const { title, movieId } = useParams();
+
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [userEmail, setUserEmail] = useState('');
