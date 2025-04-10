@@ -11,11 +11,16 @@ import AdminPage from './pages/AdminPage';
 import PrivacyPage from './pages/PrivacyPage';
 import Footer from './components/Footer';
 import CookieConsent from 'react-cookie-consent';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 import { useLocation } from 'react-router-dom'
+import { useContext } from 'react';
+import { UserContext } from './components/AuthorizeView';
+
 
 function AppWrapper() {
   const location = useLocation();
   const isPublicHomePage = location.pathname === '/';
+  const user = useContext(UserContext);
 
   return (
     
@@ -35,7 +40,7 @@ function AppWrapper() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={user?.roles.includes('Administrator') ? <AdminPage /> : <UnauthorizedPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </div>
