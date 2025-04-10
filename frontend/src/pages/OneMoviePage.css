@@ -29,6 +29,11 @@ body, .one-movie-page {
     background-color: #444;
   }
   
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
   .card {
     display: flex;
     background-color: #1e1e1e;
@@ -45,6 +50,11 @@ body, .one-movie-page {
     background-size: cover;
     background-position: center;
     border-radius: 8px;
+  }
+  
+  .movie-info {
+    flex: 1;
+    text-align: left;
   }
   
   .movie-info ul {
@@ -85,9 +95,7 @@ body, .one-movie-page {
     transition: color 0.2s, transform 0.2s;
   }
   
-  .star.filled,
-  .star:hover,
-  .star:hover ~ .star {
+  .star.filled {
     color: #ffaa00;
     transform: scale(1.3);
   }
