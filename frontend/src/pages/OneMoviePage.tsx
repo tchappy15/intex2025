@@ -101,7 +101,7 @@ function OneMoviePage() {
     <div className="one-movie-page">
       <AuthorizeView>
         <div className="page-header">
-          <button onClick={() => navigate('/movies')}>Go Back</button>
+          <button onClick={() => navigate('/movie')}>Go Back</button>
           <Logout>
             <button>Logout</button>
           </Logout>
