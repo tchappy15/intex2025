@@ -217,7 +217,7 @@ function OneMoviePage() {
             </div>
           </div>
         ) : (
-          <p>Loading movie...</p>
+          <p style={{color: "white"}}>Loading movie...</p>
         )}
 
         {(contentRecs?.length > 0 || collabRecs?.length > 0) && (

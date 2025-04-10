@@ -122,7 +122,7 @@ function MoviesList({
       /> */}
 
       {loading && (
-        <p style={{ textAlign: 'center', marginTop: '20px' }}>
+        <p style={{ textAlign: 'center', marginTop: '20px', color: "white"}}>
           Loading more movies...
         </p>
       )}
