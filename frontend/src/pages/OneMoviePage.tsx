@@ -47,6 +47,10 @@ function OneMoviePage() {
       .catch(() => setContentRecs([]));
   }, [movieId]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [movieId]);  
+
   // Fetch content-based recommendations
   useEffect(() => {
     if (!movieId) return;
