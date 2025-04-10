@@ -22,11 +22,18 @@ function OneMoviePage() {
       .then(setMovie)
       .catch((err) => console.error('Failed to load movie:', err));
 
+    console.log('📦 Fetching content recs for:', movieId);
+    console.log('📦 Fetching collab recs for:', movie?.title);
+
     // Content Filtering
     fetch(
       `${import.meta.env.VITE_API_BASE_URL}/recommendations/content/${movieId}`
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`No content recs for ${movieId}`);
+        return res.json();
+      })
+
       .then((data) => {
         const posters = data.map((m: any) => ({
           ...m,
@@ -46,7 +53,11 @@ function OneMoviePage() {
     fetch(
       `${import.meta.env.VITE_API_BASE_URL}/recommendations/collab/${encodedTitle}`
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`No collab recs for ${movie?.title}`);
+        return res.json();
+      })
+
       .then((data) => {
         const posters = data.map((m: any) => ({
           ...m,
