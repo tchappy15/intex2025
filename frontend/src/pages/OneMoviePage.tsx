@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
-import './OneMoviePage.css';
+import MovieRow from '../components/MovieRow';
 
 // Import the UserContext directly (you may need to export it from AuthorizeView.tsx)
 // If it's not exported, we'll use the ref approach instead
@@ -45,24 +45,45 @@ function OneMoviePage() {
       .catch(() => setContentRecs([]));
   }, [movieId]);
 
+  // Fetch content-based recommendations
   useEffect(() => {
-    if (!movie?.title) return;
-    const encodedTitle = encodeURIComponent(movie.title);
+    if (!movieId) return;
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodedTitle}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('No collab recs found');
-        return res.json();
-      })
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        const posters = data.map((m: any) => ({
-          ...m,
-          posterUrl: `/images/movieThumbnails/${m.title}.jpg`,
+        const posters = data.map((rec: any) => ({
+          movieId: rec.recommended_id || rec.movieId || rec.title,
+          title: rec.recommended_title || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
+        }));
+        setContentRecs(posters);
+      })
+      .catch(() => setContentRecs([]));
+  }, [movieId]);
+
+  // Fetch collaborative recommendations
+  useEffect(() => {
+    if (!title) return;
+
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodeURIComponent(title)}`
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        const posters = data.map((rec: any) => ({
+          movieId: rec.recommended_id || rec.movieId || rec.title,
+          title: rec.recommended_title || rec.title,
+          posterUrl: `/images/movieThumbnails/${encodeURIComponent(rec.recommended_title || rec.title)}.jpg`,
         }));
         setCollabRecs(posters);
       })
       .catch(() => setCollabRecs([]));
-  }, [movie]);
+  }, [title]);
+
+  // Safely extract email from DOM
 
   // Use a more reliable approach to get the email
   useEffect(() => {
@@ -179,25 +200,30 @@ function OneMoviePage() {
           <p>Loading movie...</p>
         )}
 
-        <div className="recommendations">
-          {(contentRecs.length > 0 || collabRecs.length > 0) && (
-            <>
-              <h3>Recommended for You</h3>
-              {contentRecs.length > 0 && (
-                <MovieRow
-                  title="You Might Also Like (Content-Based)"
-                  movies={contentRecs}
-                />
-              )}
-              {collabRecs.length > 0 && (
-                <MovieRow
-                  title="Users Also Watched (Collaborative Filtering)"
-                  movies={collabRecs}
-                />
-              )}
-            </>
-          )}
-        </div>
+        <button
+          className="btn btn-secondary mt-3"
+          onClick={() => navigate('/movies')}
+        >
+          Go Back
+        </button>
+        {(contentRecs.length > 0 || collabRecs.length > 0) && (
+          <div className="recommendations mt-5">
+            <h3 style={{ color: 'white' }}>Recommended for You</h3>
+            {contentRecs.length > 0 && (
+              <MovieRow
+                title="You Might Also Like (Content-Based)"
+                movies={contentRecs}
+              />
+            )}
+            {collabRecs.length > 0 && (
+              <MovieRow
+                title="Users Also Watched (Collaborative Filtering)"
+                movies={collabRecs}
+              />
+            )}
+          </div>
+        )}
+
       </AuthorizeView>
     </div>
   );
