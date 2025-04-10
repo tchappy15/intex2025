@@ -12,11 +12,14 @@ const PrivacyPage = () => {
   
   return (
     <>
-      <img
-        className="privacy-img mx-auto block"
-        src="/images/Logo.png"
-        alt="CineNiche Film Camera Logo"
-      />
+      {/* <div className="flex justify-center">
+        <img
+          className="privacy-img"
+          src="/images/Logo.png"
+          alt="CineNiche Film Camera Logo"
+        />
+      </div> */}
+      
       <div className="privacy-div max-w-3xl mx-auto p-6 text-gray-800 container bg-white">
           <button
           onClick={() => navigate('/')}
