@@ -54,9 +54,12 @@ public class RecommendationsController : ControllerBase
             Console.WriteLine($"🎯 Titles for user {userId}: {string.Join(", ", recommendedTitles)}");
 
             // Query the Movies DbContext using case-insensitive title comparison
+            // Pull all movies first, then filter by recommended titles (case-insensitive)
             var recommendedMovies = _moviesDbContext.Movies
+                .AsEnumerable() // forces client-side filtering
                 .Where(m => recommendedTitles.Contains(m.Title, StringComparer.OrdinalIgnoreCase))
                 .ToList();
+
 
             // Log the resulting list of movie titles
             Console.WriteLine($"✅ Found {recommendedMovies.Count} matching movies: {string.Join(", ", recommendedMovies.Select(m => m.Title))}");
