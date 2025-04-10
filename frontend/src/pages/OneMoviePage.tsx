@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import AuthorizeView from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
-import MovieRow from '../components/MovieRow';
 
 function OneMoviePage() {
   const navigate = useNavigate();
@@ -23,7 +22,9 @@ function OneMoviePage() {
       .then(setMovie)
       .catch((err) => console.error('Failed to load movie:', err));
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`)
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/movie/${movieId}`
+    )
       .then((res) => {
         if (!res.ok) throw new Error('No content recs found');
         return res.json();
@@ -128,14 +129,30 @@ function OneMoviePage() {
             <div className="poster" />
             <div className="movie-info">
               <ul>
-                <li><strong>Type:</strong> {movie.type}</li>
-                <li><strong>Release Year:</strong> {movie.release_year}</li>
-                <li><strong>Director:</strong> {movie.director || 'N/A'}</li>
-                <li><strong>Cast:</strong> {movie.cast || 'N/A'}</li>
-                <li><strong>Country:</strong> {movie.country || 'N/A'}</li>
-                <li><strong>Duration:</strong> {movie.duration}</li>
-                <li><strong>Rating:</strong> {movie.rating}</li>
-                <li><strong>Description:</strong> {movie.description}</li>
+                <li>
+                  <strong>Type:</strong> {movie.type}
+                </li>
+                <li>
+                  <strong>Release Year:</strong> {movie.release_year}
+                </li>
+                <li>
+                  <strong>Director:</strong> {movie.director || 'N/A'}
+                </li>
+                <li>
+                  <strong>Cast:</strong> {movie.cast || 'N/A'}
+                </li>
+                <li>
+                  <strong>Country:</strong> {movie.country || 'N/A'}
+                </li>
+                <li>
+                  <strong>Duration:</strong> {movie.duration}
+                </li>
+                <li>
+                  <strong>Rating:</strong> {movie.rating}
+                </li>
+                <li>
+                  <strong>Description:</strong> {movie.description}
+                </li>
               </ul>
 
               <div className="rating-section">
@@ -184,7 +201,6 @@ function OneMoviePage() {
             )}
           </div>
         )}
-
       </AuthorizeView>
     </div>
   );
