@@ -1,4 +1,4 @@
-.movie-scroll {
+.movie-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5 fixed cards per row */
   gap: 20px;

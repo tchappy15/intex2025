@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './MovieHeaderBar.css';
 import { useNavigate } from 'react-router-dom';
 import { fetchGenres } from '../api/api';
 import Logout from './Logout';
+import { UserContext } from './AuthorizeView';
 
 function MovieHeaderBar({
   selectedType,
@@ -12,7 +13,7 @@ function MovieHeaderBar({
   searchTitle,
   setSearchTitle,
 }: {
-  selectedType: string; 
+  selectedType: string;
   setSelectedType: (type: string) => void;
   selectedGenre: string;
   setSelectedGenre: (genre: string) => void;
@@ -23,6 +24,7 @@ function MovieHeaderBar({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [genres, setGenres] = useState<string[]>([]);
   const navigate = useNavigate();
+  const user = useContext(UserContext);
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -59,16 +61,20 @@ function MovieHeaderBar({
       />
 
       <div className="movie-header-buttons">
-      <button
+        <button
           className={selectedType === 'Movie' ? 'active' : ''}
-          onClick={() => setSelectedType(selectedType === 'Movie' ? '' : 'Movie')}
+          onClick={() =>
+            setSelectedType(selectedType === 'Movie' ? '' : 'Movie')
+          }
         >
           Movies
         </button>
 
         <button
           className={selectedType === 'Tv Show' ? 'active' : ''}
-          onClick={() => setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')}
+          onClick={() =>
+            setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')
+          }
         >
           TV Shows
         </button>
@@ -108,19 +114,20 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              <button onClick={() => navigate('/admin')}>Manage Movies</button> 
-              
+              {user?.roles.includes('Administrator') && (
+                <button onClick={() => navigate('/admin')}>
+                  Manage Movies
+                </button>
+              )}
+
               {/* added Logout for proper log out functionality */}
               <Logout>
-                <button> 
-                  Logout
-              </button>
+                <button>Logout</button>
               </Logout>
-              
             </div>
           )}
         </div>
-        <img src="/images/user.jpg" alt="Profile" className="movie-avatar" />
+        <img src="/images/user.png" alt="Profile" className="movie-avatar" />
       </div>
     </div>
   );
