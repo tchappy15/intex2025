@@ -21,39 +21,19 @@ function MoviesList({
   const [totalPages, setTotalPages] = useState<number>(0);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [showRecommendedOnly, setShowRecommendedOnly] = useState(false);
 
   useEffect(() => {
     const loadMovies = async () => {
       setLoading(true);
 
       try {
-        let data;
-
-        if (showRecommendedOnly) {
-          const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/Movies/with-recommendations`,
-            {
-              credentials: 'include', // important if your API requires auth
-            }
-          );
-
-          if (!res.ok) {
-            console.error(`❌ Error: ${res.status} ${res.statusText}`);
-            return; // Exit early to avoid calling .json()
-          }
-
-          const json = await res.json();
-          data = { movies: json, totalCount: json.length };
-        } else {
-          data = await fetchMoviesFiltered(
-            pageSize,
-            pageNum,
-            selectedGenre,
-            searchTitle,
-            selectedType
-          );
-        }
+        const data = await fetchMoviesFiltered(
+          pageSize,
+          pageNum,
+          selectedGenre,
+          searchTitle,
+          selectedType
+        );
 
         setMovies((prev) => {
           return pageNum === 1 ? data.movies : [...prev, ...data.movies];
@@ -69,14 +49,7 @@ function MoviesList({
     };
 
     loadMovies();
-  }, [
-    pageSize,
-    pageNum,
-    selectedGenre,
-    searchTitle,
-    selectedType,
-    showRecommendedOnly,
-  ]);
+  }, [pageSize, pageNum, selectedGenre, searchTitle, selectedType]);
 
   useEffect(() => {
     setPageNum(1); // Reset pagination when filters/search change
@@ -98,21 +71,6 @@ function MoviesList({
 
   return (
     <>
-      {/* ✅ Toggle UI for recommended movies */}
-      <div style={{ margin: '20px', textAlign: 'center' }}>
-        <label style={{ color: 'white' }}>
-          <input
-            type="checkbox"
-            checked={showRecommendedOnly}
-            onChange={() => {
-              setShowRecommendedOnly(!showRecommendedOnly);
-              setPageNum(1); // Reset pagination
-            }}
-          />{' '}
-          Show Only Movies With Recommendations
-        </label>
-      </div>
-
       {/* 🎬 Movie grid */}
       <div className="movie-scroll">
         {movies.map((movie) => (
