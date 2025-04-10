@@ -44,6 +44,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     // Claims identity config
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email; // Ensure email is stored in claims
+    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
 
 
     // Password policy config
@@ -55,7 +56,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 0;
 });
 
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomClaimsPrincipalFactory>();
 
 
 builder.Services.ConfigureApplicationCookie(options =>

@@ -13,7 +13,7 @@ function MovieHeaderBar({
   searchTitle,
   setSearchTitle,
 }: {
-  selectedType: string; 
+  selectedType: string;
   setSelectedType: (type: string) => void;
   selectedGenre: string;
   setSelectedGenre: (genre: string) => void;
@@ -61,16 +61,20 @@ function MovieHeaderBar({
       />
 
       <div className="movie-header-buttons">
-      <button
+        <button
           className={selectedType === 'Movie' ? 'active' : ''}
-          onClick={() => setSelectedType(selectedType === 'Movie' ? '' : 'Movie')}
+          onClick={() =>
+            setSelectedType(selectedType === 'Movie' ? '' : 'Movie')
+          }
         >
           Movies
         </button>
 
         <button
           className={selectedType === 'Tv Show' ? 'active' : ''}
-          onClick={() => setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')}
+          onClick={() =>
+            setSelectedType(selectedType === 'Tv Show' ? '' : 'Tv Show')
+          }
         >
           TV Shows
         </button>
@@ -110,20 +114,24 @@ function MovieHeaderBar({
           </button>
           {dropdownOpen && (
             <div className="movie-dropdown-menu">
-              {user?.roles.includes("Administrator") && (
-              <button onClick={() => navigate('/admin')}>Manage Movies</button> )}
+              <p style={{ fontSize: '0.75rem', color: '#888' }}>
+                Roles: {user?.roles.join(', ') || 'None'}
+              </p>
               
+              {user?.roles.includes('Administrator') && (
+                <button onClick={() => navigate('/admin')}>
+                  Manage Movies
+                </button>
+              )}
+
               {/* added Logout for proper log out functionality */}
               <Logout>
-                <button> 
-                  Logout
-              </button>
+                <button>Logout</button>
               </Logout>
-              
             </div>
           )}
         </div>
-        <img src="/images/user.jpg" alt="Profile" className="movie-avatar" />
+        <img src="/images/user.png" alt="Profile" className="movie-avatar" />
       </div>
     </div>
   );
