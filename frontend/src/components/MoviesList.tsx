@@ -61,15 +61,21 @@ function MoviesList({
       <div className="movie-scroll">
         <InfiniteScroll
           dataLength={movies.length}
-          next={() => setPageNum((prev) => prev + 1)}
+          next={() => {
+            setTimeout(() => setPageNum((prev) => prev + 1), 300);
+          }}
           hasMore={hasMore}
           loader={
-            <p style={{ textAlign: 'center', color: 'white', marginTop: '20px' }}>
+            <p
+              style={{ textAlign: 'center', color: 'white', marginTop: '20px' }}
+            >
               Loading more movies...
             </p>
           }
           endMessage={
-            <p style={{ textAlign: 'center', color: 'gray', marginTop: '20px' }}>
+            <p
+              style={{ textAlign: 'center', color: 'gray', marginTop: '20px' }}
+            >
               You've reached the end!
             </p>
           }
