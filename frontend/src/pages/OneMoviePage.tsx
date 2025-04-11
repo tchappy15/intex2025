@@ -2,7 +2,6 @@ import MovieRow from '../components/MovieRow';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
-import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
 import './OneMoviePage.css';
 
@@ -64,8 +63,8 @@ function OneMoviePage() {
     if (!title) return;
 
     fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodeURIComponent(title)}`
-    )
+      `${import.meta.env.VITE_API_BASE_URL}/recommendations/similar/${encodeURIComponent(title)}/${movieId}`
+    )    
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         const posters = data.map((rec: any) => {
@@ -140,9 +139,6 @@ function OneMoviePage() {
 
         <div className="page-header">
           <button onClick={() => navigate('/movies')}>Go Back</button>
-          <Logout>
-            <button>Logout</button>
-          </Logout>
         </div>
 
         <h1>{title}</h1>

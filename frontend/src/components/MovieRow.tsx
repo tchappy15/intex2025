@@ -1,4 +1,3 @@
-//import React from 'react';
 import './MovieRow.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,8 +36,12 @@ function MovieRow({ title, movies }: MovieRowProps) {
               loading="lazy"
               src={movie.posterUrl || '/images/placeholder.jpg'}
               alt={movie.title}
+              className="movie-thumbnail"
+              onError={(e) => {
+                e.currentTarget.src =
+                  'https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg';
+              }}
             />
-
             <p className="movie-title">{movie.title}</p>
           </div>
         ))}
