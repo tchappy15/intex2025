@@ -19,28 +19,31 @@ body {
   }
   
   .unauth-logo {
-    max-width: 200px;
-    margin-bottom: 30px;
+    width: 35%;
+    margin-top: -150px;
+    margin-bottom: -40px;
   }
   
   .unauth-card {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     text-align: center;
     width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     max-width: 400px;
   }
   
   .unauth-card h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
+    color: white;
   }
   
   .unauth-card p {
     font-size: 1.1rem;
     line-height: 1.5;
+    color: white;
   }
   
   .unauth-btn {
