@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // import { Movie } from '../types/Movie'; 
 
 
-interface PartialMovie {
+export interface PartialMovie {
   movieId: string;
   title: string;
   posterUrl?: string;
