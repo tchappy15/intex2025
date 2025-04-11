@@ -1,16 +1,33 @@
 import './MovieRow.css';
 import { useNavigate } from 'react-router-dom';
+// import { Movie } from '../types/Movie'; 
 
-interface Movie {
+
+interface PartialMovie {
   movieId: string;
   title: string;
   posterUrl?: string;
+  release_year?: number;
+  duration?: string;
+  rating?: string;
 }
+
 
 interface MovieRowProps {
   title: string;
-  movies: Movie[];
+  movies: PartialMovie[];
 }
+
+export function sanitizeTitle(title: string): string {
+  return title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/[<>:"/\\|?*'’!.,()&]/g, "") // remove punctuation
+    .replace(/\s+/g, " ") // collapse spaces
+    .trim();
+}
+
+
 
 function MovieRow({ title, movies }: MovieRowProps) {
   const navigate = useNavigate();
@@ -21,20 +38,21 @@ function MovieRow({ title, movies }: MovieRowProps) {
     <div className="movie-row">
       <h2 className="row-title">{title}</h2>
       <div className="movie-grid">
-        {movies.map((movie) => (
-          <div
-            onClick={() =>
-              navigate(
-                `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
-              )
-            }
-            className="movie-poster-card"
-            style={{ cursor: 'pointer' }}
-            key={movie.movieId}
-          >
+        {movies.map((movie) => {
+          const cleanTitle = sanitizeTitle(movie.title);
+          return (
+            <div
+              onClick={() =>
+                navigate(
+                  `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
+                )
+              }
+              className="movie-card"
+              key={movie.movieId}
+            >
             <img
               loading="lazy"
-              src={movie.posterUrl || '/images/placeholder.jpg'}
+              src={`https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`} // movie.posterUrl || '/images/placeholder.jpg'
               alt={movie.title}
               className="movie-thumbnail"
               onError={(e) => {
@@ -42,9 +60,15 @@ function MovieRow({ title, movies }: MovieRowProps) {
                   'https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg';
               }}
             />
-            <p className="movie-title">{movie.title}</p>
+            <div className="movie-overlay">
+              <h2 className="card-title">{movie.title}</h2>
+              <p><strong>Year:</strong> {movie.release_year}</p>
+              <p><strong>Duration:</strong> {movie.duration}</p>
+              <p><strong>Rating:</strong> {movie.rating}</p>
+            </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
