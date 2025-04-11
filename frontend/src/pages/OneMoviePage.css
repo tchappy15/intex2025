@@ -13,6 +13,13 @@ body {
   margin: 0 auto;
 }
 
+.log-cancel-btn {
+  background-color: #416270; 
+  border-color: #2C4D5B; 
+  color: white;
+  width: 70%;
+  margin: 0 auto;
+}
   
   .page-header {
     display: flex;

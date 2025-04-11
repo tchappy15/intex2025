@@ -150,7 +150,7 @@ function OneMoviePage() {
         </div>
 
         <div className="page-header">
-          <button onClick={() => navigate('/movies')}>Go Back</button>
+          <button className='log-cancel-btn' onClick={() => navigate('/movies')}>Go Back</button>
         </div>
 
         <h1 style={{color: "white"}}>{title}</h1>
@@ -222,13 +222,13 @@ function OneMoviePage() {
           <div className="recommendations mt-5">
             {contentRecs.length > 0 && (
               <MovieRow
-                title="You Might Also Like (Content-Based)"
+                title="You Might Also Like"
                 movies={contentRecs}
               />
             )}
             {collabRecs.length > 0 && (
               <MovieRow
-                title="Users Also Watched (Collaborative Filtering)"
+                title="Users Also Watched"
                 movies={collabRecs}
               />
             )}
