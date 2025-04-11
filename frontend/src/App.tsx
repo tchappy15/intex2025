@@ -25,10 +25,10 @@ function AppWrapper() {
       </CookieConsent> */}
 
       <CookieConsent
-        debug={true} // 👈 shows banner every time (remove after testing)
         buttonText="Accept"
+        declineButtonText="Decline"
+        enableDeclineButton
         cookieName="user_cookie_consent"
-        sameSite="None"
         style={{ background: "#2c2c2c", fontFamily: "Georgia, serif" }}
         buttonStyle={{
           color: "#fff",
@@ -37,16 +37,22 @@ function AppWrapper() {
           borderRadius: "8px",
           padding: "8px 16px"
         }}
-        expires={365}
-        onAccept={() => {
-          console.log("✅ Cookie consent accepted");
+        declineButtonStyle={{
+          color: "#fff",
+          backgroundColor: "#555",
+          fontWeight: "bold",
+          borderRadius: "8px",
+          padding: "8px 16px",
+          marginLeft: "10px"
         }}
-        >
-          This site uses cookies to improve your experience. See our{' '}
-          <a href="/privacy" style={{ color: '#ffcc00', textDecoration: 'underline' }}>
-            Privacy Policy
-          </a>.
-        </CookieConsent>
+        expires={365}
+      >
+        This site uses cookies to improve your experience. See our{' '}
+        <a href="/privacy" style={{ color: '#ffcc00', textDecoration: 'underline' }}>
+          Privacy Policy
+        </a>.
+      </CookieConsent>
+
 
 
 
