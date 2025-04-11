@@ -23,14 +23,14 @@ function MovieRow({ title, movies }: MovieRowProps) {
       <div className="movie-grid">
         {movies.map((movie) => (
           <div
-            className="movie-poster-card"
-            key={movie.movieId}
             onClick={() =>
               navigate(
                 `/movie/${encodeURIComponent(movie.title)}/${movie.movieId}`
               )
             }
+            className="movie-poster-card"
             style={{ cursor: 'pointer' }}
+            key={movie.movieId}
           >
             <img
               loading="lazy"
@@ -38,7 +38,7 @@ function MovieRow({ title, movies }: MovieRowProps) {
               alt={movie.title}
               className="movie-thumbnail"
               onError={(e) => {
-                e.currentTarget.src =
+                e.currentTarget.src = 
                   'https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg';
               }}
             />

@@ -77,47 +77,77 @@ public class RecommendationsController : ControllerBase
 
 
         // GET: api/recommendations/similar/Inception
-    [HttpGet("similar/{title}/{movieId}")]
-    public IActionResult GetSimilarRecs(string title, string movieId)
+    // GET: api/recommendations/similar/Inception
+    // [HttpGet("similar/{title}")]
+    // public IActionResult GetSimilarRecs(string title)
+    // {
+    //     var recRow = _context.CollaborativeMovieRecommendations
+    //         .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
+
+    //     if (recRow == null)
+    //     {
+    //         return NotFound();
+    //     }
+
+    //     var recs = new List<object?>();
+
+    //     if (!string.IsNullOrWhiteSpace(recRow.Rec1))
+    //         recs.Add(new { title = recRow.Rec1 });
+
+    //     if (!string.IsNullOrWhiteSpace(recRow.Rec2))
+    //         recs.Add(new { title = recRow.Rec2 });
+
+    //     if (!string.IsNullOrWhiteSpace(recRow.Rec3))
+    //         recs.Add(new { title = recRow.Rec3 });
+
+    //     if (!string.IsNullOrWhiteSpace(recRow.Rec4))
+    //         recs.Add(new { title = recRow.Rec4 });
+
+    //     if (!string.IsNullOrWhiteSpace(recRow.Rec5))
+    //         recs.Add(new { title = recRow.Rec5 });
+
+    //     return Ok(recs);
+    // }
+
+[HttpGet("similar/{title}/{movieId}")]
+public IActionResult GetSimilarRecs(string title, string movieId)
+{
+    var recRow = _context.CollaborativeMovieRecommendations
+        .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
+
+    if (recRow == null)
     {
-        var recRow = _context.CollaborativeMovieRecommendations
-            .FirstOrDefault(r => r.MovieTitle.ToLower() == title.ToLower());
-
-        if (recRow == null)
-        {
-            return NotFound();
-        }
-
-        // Helper to get ID from Movies table based on title
-        string? GetMovieId(string recTitle)
-        {
-            return _moviesDbContext.Movies
-                .Where(m => m.Title.ToLower() == recTitle.ToLower())
-                .Select(m => m.MovieId)
-                .FirstOrDefault();
-        }
-
-        var recs = new List<object?>();
-
-        if (!string.IsNullOrWhiteSpace(recRow.Rec1))
-            recs.Add(new { movieId = GetMovieId(recRow.Rec1), title = recRow.Rec1 });
-
-        if (!string.IsNullOrWhiteSpace(recRow.Rec2))
-            recs.Add(new { movieId = GetMovieId(recRow.Rec2), title = recRow.Rec2 });
-
-        if (!string.IsNullOrWhiteSpace(recRow.Rec3))
-            recs.Add(new { movieId = GetMovieId(recRow.Rec3), title = recRow.Rec3 });
-
-        if (!string.IsNullOrWhiteSpace(recRow.Rec4))
-            recs.Add(new { movieId = GetMovieId(recRow.Rec4), title = recRow.Rec4 });
-
-        if (!string.IsNullOrWhiteSpace(recRow.Rec5))
-            recs.Add(new { movieId = GetMovieId(recRow.Rec5), title = recRow.Rec5 });
-
-        return Ok(recs);
+        return NotFound();
     }
 
+    // Helper to safely lookup movieId from Movies table by title
+    string? GetMovieId(string recTitle)
+    {
+        return _moviesDbContext.Movies
+            .Where(m => m.Title.ToLower() == recTitle.ToLower())
+            .Select(m => m.MovieId)
+            .FirstOrDefault();
+    }
 
+    var recs = new List<object?>();
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec1))
+        recs.Add(new { title = recRow.Rec1, movieId = GetMovieId(recRow.Rec1) });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec2))
+        recs.Add(new { title = recRow.Rec2, movieId = GetMovieId(recRow.Rec2) });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec3))
+        recs.Add(new { title = recRow.Rec3, movieId = GetMovieId(recRow.Rec3) });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec4))
+        recs.Add(new { title = recRow.Rec4, movieId = GetMovieId(recRow.Rec4) });
+
+    if (!string.IsNullOrWhiteSpace(recRow.Rec5))
+        recs.Add(new { title = recRow.Rec5, movieId = GetMovieId(recRow.Rec5) });
+
+    return Ok(recs);
+}
 
 
     // GET: api/recommendations/movie/s1234
