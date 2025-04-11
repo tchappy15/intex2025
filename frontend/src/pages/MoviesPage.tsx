@@ -12,10 +12,10 @@ import './MoviesPage.css';
 
 const sanitizeTitle = (title: string) => {
   return title
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "") // remove accent marks
-    .replace(/[<>:"/\\|?*'’!.,()&]/g, "") // remove punctuation
-    .replace(/\s+/g, " ") // collapse multiple spaces
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '') // remove accent marks
+    .replace(/[<>:"/\\|?*'’!.,()&]/g, '') // remove punctuation
+    .replace(/\s+/g, ' ') // collapse multiple spaces
     .trim();
 };
 
@@ -55,6 +55,9 @@ function MoviesPage() {
       try {
         const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
         const userId = storedUser?.id;
+        console.log('📦 Stored User:', storedUser);
+        console.log('🧠 userId:', storedUser?.id);
+
         if (!userId) return; // Optionally handle no-user edge case
 
         const response = await fetch(
@@ -73,7 +76,6 @@ function MoviesPage() {
             posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
           };
         });
-        
 
         setUserRecs(recsWithPosters);
       } catch (err) {
@@ -121,21 +123,20 @@ function MoviesPage() {
           .map((key) => {
             const entry = genreRecs[key]; // Now an object: { title, movieId }
             if (!entry || !entry.title || !entry.movieId) return null;
-  
+
             const cleanTitle = sanitizeTitle(entry.title);
-  
+
             return {
               movieId: entry.movieId,
               title: entry.title,
-              release_year: entry.release_year, 
-              duration: entry.duration,     
-              rating: entry.rating,            
+              release_year: entry.release_year,
+              duration: entry.duration,
+              rating: entry.rating,
               posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
             } as PartialMovie;
           })
           .filter((movie): movie is PartialMovie => !!movie)
       : [];
-  
 
   return (
     <>
