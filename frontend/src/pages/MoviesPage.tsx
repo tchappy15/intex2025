@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
-import type { PartialMovie } from '../components/MovieRow'; // If not already imported
-
 // import axios from 'axios';
 
 import AuthorizeView from '../components/AuthorizeView';
@@ -9,15 +7,6 @@ import MovieRow from '../components/MovieRow';
 import MoviesList from '../components/MoviesList';
 import MovieHeaderBar from '../components/MovieHeaderBar';
 import './MoviesPage.css';
-
-const sanitizeTitle = (title: string) => {
-  return title
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '') // remove accent marks
-    .replace(/[<>:"/\\|?*'’!.,()&]/g, '') // remove punctuation
-    .replace(/\s+/g, ' ') // collapse multiple spaces
-    .trim();
-};
 
 function MoviesPage() {
   const [selectedGenre, setSelectedGenre] = useState<string>('');
@@ -53,13 +42,7 @@ function MoviesPage() {
   useEffect(() => {
     const fetchUserRecs = async () => {
       try {
-        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-        const userId = storedUser?.id;
-        console.log('📦 Stored User:', storedUser);
-        console.log('🧠 userId:', storedUser?.id);
-
-        if (!userId) return; // Optionally handle no-user edge case
-
+        const userId = 10; // or dynamic if you’ve got login working
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/recommendations/user/${userId}/full`,
           {
@@ -69,13 +52,10 @@ function MoviesPage() {
 
         const data = await response.json();
 
-        const recsWithPosters = data.map((movie: any) => {
-          const cleanTitle = sanitizeTitle(movie.title);
-          return {
-            ...movie,
-            posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
-          };
-        });
+        const recsWithPosters = data.map((movie: any) => ({
+          ...movie,
+          posterUrl: `/images/movieThumbnails/${movie.title}.jpg`,
+        }));
 
         setUserRecs(recsWithPosters);
       } catch (err) {
@@ -116,26 +96,25 @@ function MoviesPage() {
   } as const;
 
   const normalizedGenre = normalizedGenreMap[selectedGenre] ?? null;
-
   const genreRecRow =
     genreRecs && normalizedGenre && genrePosterMap[normalizedGenre]
       ? genrePosterMap[normalizedGenre]
           .map((key) => {
-            const entry = genreRecs[key]; // Now an object: { title, movieId }
-            if (!entry || !entry.title || !entry.movieId) return null;
-
-            const cleanTitle = sanitizeTitle(entry.title);
-
-            return {
-              movieId: entry.movieId,
-              title: entry.title,
-              release_year: entry.release_year,
-              duration: entry.duration,
-              rating: entry.rating,
-              posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
-            } as PartialMovie;
+            const title = genreRecs[key];
+            return title
+              ? {
+                  movieId: title,
+                  title,
+                  posterUrl: `/images/movieThumbnails/${encodeURIComponent(title)}.jpg`,
+                }
+              : null;
           })
-          .filter((movie): movie is PartialMovie => !!movie)
+          .filter(
+            (
+              movie
+            ): movie is { movieId: string; title: string; posterUrl: string } =>
+              !!movie
+          )
       : [];
 
   return (
@@ -166,7 +145,7 @@ function MoviesPage() {
             )}
 
             {/* All Movies */}
-            <h2 className="row-title">Entertainment A-Z</h2>
+            <h2 className="row-title">Movies A-Z</h2>
             <MoviesList
               selectedType={selectedType}
               selectedGenre={selectedGenre}
