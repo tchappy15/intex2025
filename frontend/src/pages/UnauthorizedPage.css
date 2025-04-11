@@ -22,6 +22,9 @@ body {
     width: 35%;
     margin-top: -150px;
     margin-bottom: -40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .unauth-card {
