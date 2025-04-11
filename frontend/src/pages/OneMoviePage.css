@@ -121,17 +121,6 @@ body {
     font-family: 'Oswald', sans-serif;
   }
   
-  .toast {
-    margin-top: 15px;
-    background-color: #28a745;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 16px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-    animation: fadeInOut 3s ease-in-out;
-  }
-  
   @keyframes fadeInOut {
     0% { opacity: 0; transform: translateY(-10px); }
     10% { opacity: 1; transform: translateY(0); }
@@ -160,24 +149,27 @@ body {
 
   .toast {
     position: fixed;
-    bottom: 30px;
+    top: 30px; /* ← moved to the top */
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: #3d7b4b; /* green success look */
     color: white;
     padding: 12px 24px;
     border-radius: 8px;
+    font-size: 16px;
+    font-family: Oswald, sans-serif;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 9999;
-    font-family: Oswald, sans-serif;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   }
   
   .toast.show {
     opacity: 1;
     visibility: visible;
   }
+  
   
   
   @media (max-width: 768px) {
