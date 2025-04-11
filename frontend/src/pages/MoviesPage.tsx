@@ -71,8 +71,9 @@ function MoviesPage() {
       try {
         const userId = 10; // Replace dynamically if you have auth
         const response = await fetch(
-          ${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}
+          `${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}`
         );
+
         const data = await response.json();
         setGenreRecs(data); // Save full genre recs object
       } catch (err) {
