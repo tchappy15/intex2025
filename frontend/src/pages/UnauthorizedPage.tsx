@@ -14,12 +14,14 @@ const UnauthorizedPage = () => {
       <Link to='/'>
         <img
           className="unauth-logo"
-          src="/images/logo.png"
-          alt="CineNiche Film Camera Logo"
+          src="/images/Logo.png"
+          alt="CineNiche Logo"
         />
       </Link>
 
       <div className="unauth-card">
+        <h1>Unauthorized</h1>
+        <p>You are not authorized to view this page.</p>
         <button
           onClick={() => navigate('/movies')}
           className="unauth-btn custom-rounded"
@@ -27,9 +29,6 @@ const UnauthorizedPage = () => {
         >
           Back
         </button>
-
-        <h1>Unauthorized</h1>
-        <p>You are not authorized to view this page.</p>
       </div>
     </div>
   );
