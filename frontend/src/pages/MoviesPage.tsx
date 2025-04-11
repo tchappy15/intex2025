@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import type { PartialMovie } from '../components/MovieRow'; // If not already imported
+
 // import axios from 'axios';
 
 import AuthorizeView from '../components/AuthorizeView';
@@ -119,15 +121,13 @@ function MoviesPage() {
             return {
               movieId: entry.movieId,
               title: entry.title,
+              release_year: entry.release_year, 
+              duration: entry.duration,     
+              rating: entry.rating,            
               posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
-            };
+            } as PartialMovie;
           })
-          .filter(
-            (
-              movie
-            ): movie is { movieId: string; title: string; posterUrl: string } =>
-              !!movie
-          )
+          .filter((movie): movie is PartialMovie => !!movie)
       : [];
   
 
