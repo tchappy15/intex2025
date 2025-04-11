@@ -106,21 +106,22 @@ function MoviesPage() {
   } as const;
 
   const normalizedGenre = normalizedGenreMap[selectedGenre] ?? null;
+
   const genreRecRow =
     genreRecs && normalizedGenre && genrePosterMap[normalizedGenre]
       ? genrePosterMap[normalizedGenre]
           .map((key) => {
-            const title = genreRecs[key];
-            if (!title) return null;
-          
-            const cleanTitle = sanitizeTitle(title);
+            const entry = genreRecs[key]; // Now an object: { title, movieId }
+            if (!entry || !entry.title || !entry.movieId) return null;
+  
+            const cleanTitle = sanitizeTitle(entry.title);
+  
             return {
-              movieId: title,
-              title,
+              movieId: entry.movieId,
+              title: entry.title,
               posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
             };
           })
-      
           .filter(
             (
               movie
@@ -128,6 +129,7 @@ function MoviesPage() {
               !!movie
           )
       : [];
+  
 
   return (
     <>
@@ -157,7 +159,7 @@ function MoviesPage() {
             )}
 
             {/* All Movies */}
-            <h2 className="row-title">Movies A-Z</h2>
+            <h2 className="row-title">Entertainment A-Z</h2>
             <MoviesList
               selectedType={selectedType}
               selectedGenre={selectedGenre}

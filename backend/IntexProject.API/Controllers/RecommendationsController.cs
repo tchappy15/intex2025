@@ -173,15 +173,50 @@ public IActionResult GetSimilarRecs(string title, string movieId)
                 return NotFound();
             }
 
-            return Ok(recEntry);
+            // Local helper to look up movieId by title from the MoviesDbContext
+            string? GetMovieIdByTitle(string? title) =>
+                _moviesDbContext.Movies
+                    .Where(m => m.Title == title)
+                    .Select(m => m.MovieId.ToString())
+                    .FirstOrDefault();
+
+            var result = new
+            {
+                action_Rec1 = new { title = recEntry.Action_Rec1, movieId = GetMovieIdByTitle(recEntry.Action_Rec1) },
+                action_Rec2 = new { title = recEntry.Action_Rec2, movieId = GetMovieIdByTitle(recEntry.Action_Rec2) },
+                action_Rec3 = new { title = recEntry.Action_Rec3, movieId = GetMovieIdByTitle(recEntry.Action_Rec3) },
+
+                comedies_Rec1 = new { title = recEntry.Comedies_Rec1, movieId = GetMovieIdByTitle(recEntry.Comedies_Rec1) },
+                comedies_Rec2 = new { title = recEntry.Comedies_Rec2, movieId = GetMovieIdByTitle(recEntry.Comedies_Rec2) },
+                comedies_Rec3 = new { title = recEntry.Comedies_Rec3, movieId = GetMovieIdByTitle(recEntry.Comedies_Rec3) },
+
+                children_Rec1 = new { title = recEntry.Children_Rec1, movieId = GetMovieIdByTitle(recEntry.Children_Rec1) },
+                children_Rec2 = new { title = recEntry.Children_Rec2, movieId = GetMovieIdByTitle(recEntry.Children_Rec2) },
+                children_Rec3 = new { title = recEntry.Children_Rec3, movieId = GetMovieIdByTitle(recEntry.Children_Rec3) },
+
+                drama_Rec1 = new { title = recEntry.Drama_Rec1, movieId = GetMovieIdByTitle(recEntry.Drama_Rec1) },
+                drama_Rec2 = new { title = recEntry.Drama_Rec2, movieId = GetMovieIdByTitle(recEntry.Drama_Rec2) },
+                drama_Rec3 = new { title = recEntry.Drama_Rec3, movieId = GetMovieIdByTitle(recEntry.Drama_Rec3) },
+
+                fantasy_Rec1 = new { title = recEntry.Fantasy_Rec1, movieId = GetMovieIdByTitle(recEntry.Fantasy_Rec1) },
+                fantasy_Rec2 = new { title = recEntry.Fantasy_Rec2, movieId = GetMovieIdByTitle(recEntry.Fantasy_Rec2) },
+                fantasy_Rec3 = new { title = recEntry.Fantasy_Rec3, movieId = GetMovieIdByTitle(recEntry.Fantasy_Rec3) },
+
+                thriller_Rec1 = new { title = recEntry.Thriller_Rec1, movieId = GetMovieIdByTitle(recEntry.Thriller_Rec1) },
+                thriller_Rec2 = new { title = recEntry.Thriller_Rec2, movieId = GetMovieIdByTitle(recEntry.Thriller_Rec2) },
+                thriller_Rec3 = new { title = recEntry.Thriller_Rec3, movieId = GetMovieIdByTitle(recEntry.Thriller_Rec3) }
+            };
+
+            return Ok(result);
         }
         catch (Exception ex)
         {
-            // Log the error
             Console.WriteLine($"Error retrieving genre recommendations for user {userId}: {ex.Message}");
             return StatusCode(500, new { message = "Server error", error = ex.Message });
         }
     }
+
+
 
 
 
