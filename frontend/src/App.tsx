@@ -20,9 +20,41 @@ function AppWrapper() {
 
   return (
     <div className="app-wrapper">
-      <CookieConsent buttonText="Sure thing!!" cookieName="user_cookie_consent">
+      {/* <CookieConsent buttonText="Sure thing!!" cookieName="user_cookie_consent">
         This website uses cookies to enhance the user experience.
+      </CookieConsent> */}
+
+      <CookieConsent
+        buttonText="Accept"
+        declineButtonText="Decline"
+        enableDeclineButton
+        cookieName="user_cookie_consent"
+        style={{ background: "#2c2c2c", fontFamily: "Georgia, serif" }}
+        buttonStyle={{
+          color: "#fff",
+          backgroundColor: "#416270",
+          fontWeight: "bold",
+          borderRadius: "8px",
+          padding: "8px 16px"
+        }}
+        declineButtonStyle={{
+          color: "#fff",
+          backgroundColor: "#555",
+          fontWeight: "bold",
+          borderRadius: "8px",
+          padding: "8px 16px",
+          marginLeft: "10px"
+        }}
+        expires={365}
+      >
+        This site uses cookies to improve your experience. See our{' '}
+        <a href="/privacy" style={{ color: '#ffcc00', textDecoration: 'underline' }}>
+          Privacy Policy
+        </a>.
       </CookieConsent>
+
+
+
 
       <div className={isPublicHomePage ? 'app-content' : ''}>
         <Routes>

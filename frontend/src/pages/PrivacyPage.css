@@ -26,10 +26,8 @@ body {
 .privacy-h1 {
   font-size: 2rem;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
-  padding-top: 50px;
   font-family: 'Georgia', serif;
+  margin: 0;
 }
 
 .privacy-meta {
@@ -58,6 +56,14 @@ body {
   text-align: center;
 }
 
+.privacy-header-row {
+  position: relative;
+  text-align: center;
+  padding-top: 40px;
+  margin-bottom: 1.5rem;
+}
+
+
 @media (max-width: 768px) {
   .privacy-div {
     max-width: 90%;
@@ -66,20 +72,18 @@ body {
 }
 
 .sticky-btn {
-  position: sticky;
-  top: 1rem;
-  float: right;
-  z-index: 10;
-  background-color: #416270; 
-  border-color: #2C4D5B; 
+  position: fixed; 
+  top: 3rem;
+  right: 2rem;
+  z-index: 100;
+  background-color: #416270;
+  border-color: #2C4D5B;
   color: white;
   padding: 0.5rem 1rem;
-  border-radius: 9999px; /* full-rounded */
   font-weight: bold;
   text-transform: uppercase;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   border: none;
-  cursor: pointer;
 }
 
 .sticky-btn:hover{

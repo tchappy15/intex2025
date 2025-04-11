@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('./../assets/dark-blue-blurred-background_1034-589.png');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Georgia', serif;
+    color: white;
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .unauth-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .unauth-logo {
+    width: 35%;
+    margin-top: -150px;
+    margin-bottom: -40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .unauth-card {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+  }
+  
+  .unauth-card h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: white;
+  }
+  
+  .unauth-card p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: white;
+  }
+  
+  .unauth-btn {
+    background-color: #416270;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .unauth-btn:hover {
+    background-color: #4f707e;
+  }
+  

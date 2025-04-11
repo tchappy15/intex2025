@@ -195,7 +195,7 @@ export async function deleteMovie(movieId: string): Promise<void> {
   }
 }
 
-export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
+export async function addMovie(newMovie: Partial<Movie>): Promise<Movie> {
   const response = await fetch(
     `${import.meta.env.VITE_API_BASE_URL}/Movies/AddMovie`,
     {
@@ -204,7 +204,7 @@ export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newMovie), // ✅ Send raw 1/0 integers for genres
+      body: JSON.stringify(newMovie),
     }
   );
 
@@ -212,6 +212,8 @@ export async function addMovie(newMovie: Partial<Movie>): Promise<void> {
     const message = await response.text();
     throw new Error(`Failed to add movie: ${message}`);
   }
+
+  return await response.json(); // Return the created movie (with auto-generated MovieId)
 }
 
 export async function updateMovie(

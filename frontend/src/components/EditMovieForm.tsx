@@ -20,6 +20,7 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
   const [type, setType] = useState(movie.type || '');
   const [title, setTitle] = useState(movie.title);
   const [director, setDirector] = useState(movie.director);
+  const [cast, setCast] = useState(movie.cast || '');
   const [release_year, setrelease_year] = useState(movie.release_year);
   const [rating, setRating] = useState(movie.rating);
   const [duration, setDuration] = useState(() => {
@@ -74,6 +75,7 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
       type,
       title,
       director,
+      cast,
       release_year,
       rating,
       duration: formattedDuration,
@@ -134,6 +136,15 @@ const EditMovieForm: React.FC<EditMovieFormProps> = ({
             className="border px-2 py-1 w-full"
             value={director}
             onChange={(e) => setDirector(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label className="block font-medium">Cast</label>
+          <textarea
+            className="border px-2 py-1 w-full"
+            value={cast}
+            onChange={(e) => setCast(e.target.value)}
           />
         </div>
 

@@ -17,19 +17,22 @@ const PrivacyPage = () => {
     <Link to='/'>
       <img
         className="privacy-img"
-        src="src/assets/CineNicheFull.png"
+        src="/images/Logo.png"
         alt="CineNiche Film Camera Logo"
       />
     </Link>
     <div className="privacy-div">
-        <button
+      <div className="privacy-header-row">
+      <h1 className="privacy-h1">Privacy Policy – CineNiche</h1>
+      </div>
+          <button
           onClick={() => navigate('/')}
           className="sticky-btn custom-rounded"
           type="button"
           >
             Back
         </button>
-        <h1 className="privacy-h1">Privacy Policy – CineNiche</h1>
+        
         
         <div className="privacy-meta">
           <p>Effective Date: 11 April 2025</p>
