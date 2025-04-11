@@ -8,6 +8,15 @@ import MoviesList from '../components/MoviesList';
 import MovieHeaderBar from '../components/MovieHeaderBar';
 import './MoviesPage.css';
 
+const sanitizeTitle = (title: string) => {
+  return title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // remove accent marks
+    .replace(/[<>:"/\\|?*'’!.,()&]/g, "") // remove punctuation
+    .replace(/\s+/g, " ") // collapse multiple spaces
+    .trim();
+};
+
 function MoviesPage() {
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [searchTitle, setSearchTitle] = useState<string>('');
@@ -52,10 +61,14 @@ function MoviesPage() {
 
         const data = await response.json();
 
-        const recsWithPosters = data.map((movie: any) => ({
-          ...movie,
-          posterUrl: `/images/movieThumbnails/${movie.title}.jpg`,
-        }));
+        const recsWithPosters = data.map((movie: any) => {
+          const cleanTitle = sanitizeTitle(movie.title);
+          return {
+            ...movie,
+            posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
+          };
+        });
+        
 
         setUserRecs(recsWithPosters);
       } catch (err) {
@@ -73,7 +86,6 @@ function MoviesPage() {
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}`
         );
-
         const data = await response.json();
         setGenreRecs(data); // Save full genre recs object
       } catch (err) {
@@ -94,18 +106,21 @@ function MoviesPage() {
   } as const;
 
   const normalizedGenre = normalizedGenreMap[selectedGenre] ?? null;
+
   const genreRecRow =
     genreRecs && normalizedGenre && genrePosterMap[normalizedGenre]
       ? genrePosterMap[normalizedGenre]
           .map((key) => {
-            const title = genreRecs[key];
-            return title
-              ? {
-                  movieId: title,
-                  title,
-                  posterUrl: `/images/movieThumbnails/${encodeURIComponent(title)}.jpg`,
-                }
-              : null;
+            const entry = genreRecs[key]; // Now an object: { title, movieId }
+            if (!entry || !entry.title || !entry.movieId) return null;
+  
+            const cleanTitle = sanitizeTitle(entry.title);
+  
+            return {
+              movieId: entry.movieId,
+              title: entry.title,
+              posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${cleanTitle}.jpg`,
+            };
           })
           .filter(
             (
@@ -114,6 +129,7 @@ function MoviesPage() {
               !!movie
           )
       : [];
+  
 
   return (
     <>
@@ -143,7 +159,7 @@ function MoviesPage() {
             )}
 
             {/* All Movies */}
-            <h2 className="row-title">Movies A-Z</h2>
+            <h2 className="row-title">Entertainment A-Z</h2>
             <MoviesList
               selectedType={selectedType}
               selectedGenre={selectedGenre}
