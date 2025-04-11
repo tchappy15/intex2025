@@ -69,9 +69,9 @@ function MoviesPage() {
   useEffect(() => {
     const fetchGenreRecs = async () => {
       try {
-        const userId = 10; // or dynamic if you’ve got login working
+        const userId = 10; // Replace dynamically if you have auth
         const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}`
+          ${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}
         );
         const data = await response.json();
         setGenreRecs(data); // Save full genre recs object
