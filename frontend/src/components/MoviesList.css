@@ -1,9 +1,10 @@
 .movie-grid-list {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 250px);
   gap: 20px;
   padding: 20px 0;
-  max-width: 1300px;
+  box-sizing: border-box;
+  max-width: 1400px;
   margin: 0 auto;
   justify-items: center;
 }
