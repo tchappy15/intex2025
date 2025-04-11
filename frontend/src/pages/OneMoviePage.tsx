@@ -25,6 +25,17 @@ function OneMoviePage() {
   const [collabRecs, setCollabRecs] = useState([]);
   const [movie, setMovie] = useState<any>(null);
 
+  const showToast = () => {
+    const toast = document.getElementById('toast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  };
+  
+
   useEffect(() => {
     if (!movieId) return;
 
@@ -117,7 +128,8 @@ function OneMoviePage() {
 
     try {
       await addRating(movieId!, rating, userEmail);
-      alert('Rating submitted!');
+      setRating(0); // clear the stars
+      showToast();  // show fancy message
     } catch (err) {
       console.error('Error submitting rating:', err);
       alert('Error submitting rating.');
@@ -141,7 +153,7 @@ function OneMoviePage() {
           <button onClick={() => navigate('/movies')}>Go Back</button>
         </div>
 
-        <h1>{title}</h1>
+        <h1 style={{color: "white"}}>{title}</h1>
 
         {movie ? (
           <div className="card">
@@ -222,6 +234,8 @@ function OneMoviePage() {
             )}
           </div>
         )}
+
+        <div id="toast" className="toast">Rating submitted!</div>
       </AuthorizeView>
     </div>
   );
