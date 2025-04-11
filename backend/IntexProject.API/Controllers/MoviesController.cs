@@ -5,7 +5,7 @@ using Microsoft.Net.Http.Headers;
 using IntexProject.API.Data;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using System.ComponentModel.DataAnnotations;
-
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntexProject.API.Controllers
@@ -18,10 +18,13 @@ namespace IntexProject.API.Controllers
     {
         private MoviesDbContext _moviesDbContext;
         private readonly IConfiguration _configuration;
-        public MoviesController(MoviesDbContext temp, IConfiguration configuration)
+        private readonly ILogger<MoviesController> _logger;
+
+        public MoviesController(MoviesDbContext temp, IConfiguration configuration, ILogger<MoviesController> logger)
         {
             _moviesDbContext = temp;
             _configuration = configuration;
+            _logger = logger;
         }
 
         [HttpGet("GetMovies")]
@@ -220,29 +223,48 @@ namespace IntexProject.API.Controllers
 
 
 
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMovieById(string id)
         {
-            var movie = await _moviesDbContext.Movies.FirstOrDefaultAsync(m => m.MovieId == id);
-            if (movie == null)
+            try
             {
-                return NotFound();
-            }
-            else if (id != movie.MovieId || int.Parse(movie.MovieId) < 0)
-            {
-                return BadRequest("Invalid Movie ID.");
-            }
-            else if (string.IsNullOrEmpty(movie.MovieId) || movie.MovieId.StartsWith("s"))
-            {
-                return BadRequest("Invalid Movie ID format. Must be 's####'.");
-            }
-            else if (string.IsNullOrEmpty(movie.Title))
-            {
-                return BadRequest("Title is a required field.");
-            }
+                var movie = await _moviesDbContext.Movies.FirstOrDefaultAsync(m => m.MovieId == id);
 
-            return Ok(movie);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                if (string.IsNullOrEmpty(movie.MovieId))
+                {
+                    return BadRequest("Movie ID is missing.");
+                }
+
+                if (!Regex.IsMatch(movie.MovieId, @"^s\d+$"))
+                {
+                    return BadRequest("Invalid Movie ID format. Must be 's' followed by digits.");
+                }
+
+                if (id != movie.MovieId)
+                {
+                    return BadRequest("Mismatched movie ID.");
+                }
+
+                if (string.IsNullOrEmpty(movie.Title))
+                {
+                    return BadRequest("Title is a required field.");
+                }
+
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching movie with ID {id}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
+
 
 
         [HttpPost("AddRating/{useremail}")]

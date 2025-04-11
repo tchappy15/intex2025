@@ -142,9 +142,12 @@ body, .one-movie-page {
   
   .movie-thumbnail {
     flex: 0 0 250px;
+    width: 250px;
     height: 375px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: #2c2c2c;
   }
+  
   

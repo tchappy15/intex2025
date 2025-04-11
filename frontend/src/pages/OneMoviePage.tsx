@@ -6,7 +6,6 @@ import Logout from '../components/Logout';
 import { addRating, fetchMovieById } from '../api/api';
 import './OneMoviePage.css';
 
-// Utility to clean movie titles
 const sanitizeTitle = (title: string) => {
   return title
     .normalize('NFKD')
@@ -48,7 +47,7 @@ function OneMoviePage() {
           return {
             movieId: rec.recommendedId || rec.movieId || rec.title,
             title: rec.recommendedTitle || rec.title,
-            posterUrl: `/images/movieThumbnails/${encodeURIComponent(cleanTitle)}.jpg`,
+            posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${encodeURIComponent(cleanTitle)}.jpg`,
           };
         });
 
@@ -74,7 +73,7 @@ function OneMoviePage() {
           return {
             movieId: rec.title,
             title: rec.title,
-            posterUrl: `/images/movieThumbnails/${encodeURIComponent(cleanTitle)}.jpg`,
+            posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${encodeURIComponent(cleanTitle)}.jpg`,
           };
         });
         setCollabRecs(posters);
