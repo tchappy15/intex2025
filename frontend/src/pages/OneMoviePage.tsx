@@ -224,12 +224,14 @@ function OneMoviePage() {
               <MovieRow
                 title="You Might Also Like"
                 movies={contentRecs}
+                showDetails={false}
               />
             )}
             {collabRecs.length > 0 && (
               <MovieRow
                 title="Users Also Watched"
                 movies={collabRecs}
+                showDetails={false}
               />
             )}
           </div>

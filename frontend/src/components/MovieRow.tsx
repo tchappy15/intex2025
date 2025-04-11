@@ -16,6 +16,7 @@ interface PartialMovie {
 interface MovieRowProps {
   title: string;
   movies: PartialMovie[];
+  showDetails?: boolean;
 }
 
 export function sanitizeTitle(title: string): string {
@@ -29,7 +30,7 @@ export function sanitizeTitle(title: string): string {
 
 
 
-function MovieRow({ title, movies }: MovieRowProps) {
+function MovieRow({ title, movies, showDetails = true }: MovieRowProps) {
   const navigate = useNavigate();
 
   if (!movies || movies.length === 0) return null;
@@ -60,12 +61,14 @@ function MovieRow({ title, movies }: MovieRowProps) {
                   'https://cinenicheposters0215.blob.core.windows.net/movie-posters/Bee Movie.jpg';
               }}
             />
+            {showDetails && (
             <div className="movie-overlay">
               <h2 className="card-title">{movie.title}</h2>
               <p><strong>Year:</strong> {movie.release_year}</p>
               <p><strong>Duration:</strong> {movie.duration}</p>
               <p><strong>Rating:</strong> {movie.rating}</p>
             </div>
+            )}
           </div>
           );
         })}
