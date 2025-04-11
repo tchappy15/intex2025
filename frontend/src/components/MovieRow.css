@@ -9,74 +9,46 @@
   margin-bottom: 10px;
 }
 
-/* .movie-scroll {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* <-- Always 5 columns */
-/* gap: 20px;
-    box-sizing: border-box;
-    padding: 10px 0;
-  } */
-.movie-scroll {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 10px 0;
-  overflow: hidden;
-}
-
+/* Grid of cards */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 fixed cards per row */
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
   padding: 20px 0;
   box-sizing: border-box;
 }
 
+/* Individual card */
 .movie-poster-card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  background: #1a1a1a;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
-
-.movie-poster-card img {
-  width: 100px;
-  height: auto;
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-/* .movie-poster-card {
-  width: 100%; /* Fills the column space */
-/* aspect-ratio: 2 / 3;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease; */
-/* }  */
 
 .movie-poster-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
-/* @media (max-width: 1024px) {
-  .movie-scroll {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* Poster image */
+.movie-poster-card img {
+  width: 250px;
+  height: 375px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #2c2c2c;
 }
 
-@media (max-width: 768px) {
-  .movie-scroll {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* Movie title */
+.movie-title {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #f0f0f0;
+  text-align: center;
+  word-wrap: break-word;
 }
-
-@media (max-width: 500px) {
-  .movie-scroll {
-    grid-template-columns: 1fr;
-  }
-} */
