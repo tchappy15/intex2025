@@ -25,8 +25,10 @@ function AppWrapper() {
       </CookieConsent> */}
 
       <CookieConsent
+        debug={true} // 👈 shows banner every time (remove after testing)
         buttonText="Accept"
         cookieName="user_cookie_consent"
+        sameSite="None"
         style={{ background: "#2c2c2c", fontFamily: "Georgia, serif" }}
         buttonStyle={{
           color: "#fff",
@@ -36,12 +38,15 @@ function AppWrapper() {
           padding: "8px 16px"
         }}
         expires={365}
-      >
-        This site uses cookies to improve your experience. See our{' '}
-        <a href="/privacy" style={{ color: '#ffcc00', textDecoration: 'underline' }}>
-          Privacy Policy
-        </a>.
-      </CookieConsent>
+        onAccept={() => {
+          console.log("✅ Cookie consent accepted");
+        }}
+        >
+          This site uses cookies to improve your experience. See our{' '}
+          <a href="/privacy" style={{ color: '#ffcc00', textDecoration: 'underline' }}>
+            Privacy Policy
+          </a>.
+        </CookieConsent>
 
 
 
