@@ -23,11 +23,11 @@
 /* Grid of cards */
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(4, 250px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   padding: 20px 0;
   box-sizing: border-box;
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 0 auto;
   justify-items: center;
 }
@@ -36,15 +36,17 @@
 .movie-card {
   background-color: #000;
   border-radius: 8px;
+  overflow: hidden;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
   transition: transform 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 250px;
-  height: 375px;
-  overflow: hidden;
+  width: 100%;
+  max-width: 250px;
+  aspect-ratio: 2 / 3;
 }
 
 .movie-card:hover {
@@ -52,8 +54,8 @@
 }
 
 .movie-thumbnail {
-  width: 250px;
-  height: 375px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 8px;
@@ -88,19 +90,19 @@
 
 /* Responsive grid breakpoints */
 @media (max-width: 1024px) {
-  .movie-grid {
+  .movie-grid-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .movie-grid {
+  .movie-grid-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .movie-grid {
+  .movie-grid-list {
     grid-template-columns: 1fr;
   }
 }
