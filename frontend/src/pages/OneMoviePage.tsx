@@ -70,7 +70,7 @@ function OneMoviePage() {
         const posters = data.map((rec: any) => {
           const cleanTitle = sanitizeTitle(rec.title);
           return {
-            movieId: rec.title,
+            movieId: rec.movieId,
             title: rec.title,
             posterUrl: `https://cinenicheposters0215.blob.core.windows.net/movie-posters/${encodeURIComponent(cleanTitle)}.jpg`,
           };
