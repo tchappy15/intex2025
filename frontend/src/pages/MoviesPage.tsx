@@ -116,7 +116,7 @@ function MoviesPage() {
 
   return (
     <>
-      {/* <AuthorizeView> */}
+      <AuthorizeView>
         <MovieHeaderBar
           selectedType={selectedType}
           setSelectedType={setSelectedType}
@@ -150,7 +150,7 @@ function MoviesPage() {
             />
           </div>
         </div>
-      {/* </AuthorizeView> */}
+      </AuthorizeView>
     </>
   );
 }
