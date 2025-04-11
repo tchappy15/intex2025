@@ -143,34 +143,27 @@ namespace IntexProject.API.Controllers
         [HttpDelete("DeleteMovie/{movieId}")]
         public IActionResult DeleteMovie(string movieId)
         {
-                       
+            // Validate MovieId format: must be like "s123"
+            if (string.IsNullOrWhiteSpace(movieId) || !Regex.IsMatch(movieId, @"^s\d{3,}$"))
+            {
+                return BadRequest("Invalid Movie ID format. Must be 's###'.");
+            }
+
+            // Look up the movie safely (parameterized query behind the scenes)
             var movie = _moviesDbContext.Movies.FirstOrDefault(m => m.MovieId == movieId);
             if (movie == null)
             {
-                return NotFound();
-            }
-            else if (movie.MovieId != movieId)
-            {
-                return BadRequest("Movie ID mismatch.");
-            }
-            else if (int.Parse(movie.MovieId) < 0)
-            {
-                return BadRequest("Invalid Movie ID.");
-            }
-            else if (string.IsNullOrEmpty(movie.MovieId) || movie.MovieId.StartsWith("s"))
-            {
-                return BadRequest("Invalid Movie ID format. Must be 's####'.");
-            }
-            else if (string.IsNullOrEmpty(movie.Title))
-            {
-                return BadRequest("Title is a required field.");
+                return NotFound("Movie not found.");
             }
 
+            // Proceed to delete
             _moviesDbContext.Movies.Remove(movie);
             _moviesDbContext.SaveChanges();
 
-            return NoContent();
+            return NoContent(); // 204
         }
+
+
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("AddMovie")]
