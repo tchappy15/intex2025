@@ -150,7 +150,7 @@ function OneMoviePage() {
         </div>
 
         <div className="page-header">
-          <button className='log-cancel-btn' onClick={() => navigate('/movies')}>Go Back</button>
+          <button className='log-cancel-btn' onClick={() => navigate('/movies')}>Home</button>
         </div>
 
         <h1 style={{color: "white"}}>{title}</h1>
