@@ -19,6 +19,42 @@ namespace IntexProject.API.Controllers
         private MoviesDbContext _moviesDbContext;
         private readonly IConfiguration _configuration;
         private readonly ILogger<MoviesController> _logger;
+        private static readonly string[] GENRES = new[]
+            {
+                "Action",
+                "Adventure",
+                "AnimeSeriesInternationalTVShows",
+                "BritishTVShowsDocuseriesInternationalTVShows",
+                "Children",
+                "Comedies",
+                "ComediesDramasInternationalMovies",
+                "ComediesInternationalMovies",
+                "ComediesRomanticMovies",
+                "CrimeTVShowsDocuseries",
+                "Documentaries",
+                "DocumentariesInternationalMovies",
+                "Docuseries",
+                "Dramas",
+                "DramasInternationalMovies",
+                "DramasRomanticMovies",
+                "FamilyMovies",
+                "Fantasy",
+                "HorrorMovies",
+                "InternationalMoviesThrillers",
+                "InternationalTVShowsRomanticTVShowsTVDramas",
+                "KidsTV",
+                "LanguageTVShows",
+                "Musicals",
+                "NatureTV",
+                "RealityTV",
+                "Spirituality",
+                "TVAction",
+                "TVComedies",
+                "TVDramas",
+                "TalkShowsTVComedies",
+                "Thrillers"
+            };
+
 
         public MoviesController(MoviesDbContext temp, IConfiguration configuration, ILogger<MoviesController> logger)
         {
@@ -144,33 +180,35 @@ namespace IntexProject.API.Controllers
             {
                 return BadRequest("Invalid movie data.");
             }
-            else if (newMovie.MovieId != null && int.Parse(newMovie.MovieId) < 0)
+
+            // If MovieId is provided, validate it
+            if (!string.IsNullOrEmpty(newMovie.MovieId) && !Regex.IsMatch(newMovie.MovieId, @"^s\d{3,}$"))
             {
-                return BadRequest("Invalid Movie ID.");
-            }
-            else if (string.IsNullOrEmpty(newMovie.MovieId) || newMovie.MovieId.StartsWith("s"))
-            {
-                return BadRequest("Invalid Movie ID format. Must be 's####'.");
-            }
-            else if (string.IsNullOrEmpty(newMovie.Title) || string.IsNullOrEmpty(newMovie.Director) || string.IsNullOrEmpty(newMovie.Country))
-            {
-                return BadRequest("Title is a required field.");
+                return BadRequest("Invalid Movie ID format. Must be 's###'.");
             }
 
-            // Auto-generate the next available movieId in "s####" format
-            var lastId = _moviesDbContext.Movies
-                .OrderByDescending(m => m.MovieId)
-                .Select(m => m.MovieId)
-                .FirstOrDefault(); // e.g., "s8019"
-
-            int nextIdNumber = 1;
-
-            if (!string.IsNullOrEmpty(lastId) && lastId.StartsWith("s") && int.TryParse(lastId.Substring(1), out int lastNum))
+            if (string.IsNullOrEmpty(newMovie.Title) || string.IsNullOrEmpty(newMovie.Director) || string.IsNullOrEmpty(newMovie.Country))
             {
-                nextIdNumber = lastNum + 1;
+                return BadRequest("Title, Director, and Country are required fields.");
             }
 
-            newMovie.MovieId = $"s{nextIdNumber}";
+            // Auto-generate the next available movieId in "s####" format if not provided
+            if (string.IsNullOrEmpty(newMovie.MovieId))
+            {
+                var lastId = _moviesDbContext.Movies
+                    .OrderByDescending(m => m.MovieId)
+                    .Select(m => m.MovieId)
+                    .FirstOrDefault(); // e.g., "s8019"
+
+                int nextIdNumber = 1;
+
+                if (!string.IsNullOrEmpty(lastId) && lastId.StartsWith("s") && int.TryParse(lastId.Substring(1), out int lastNum))
+                {
+                    nextIdNumber = lastNum + 1;
+                }
+
+                newMovie.MovieId = $"s{nextIdNumber}";
+            }
 
             _moviesDbContext.Movies.Add(newMovie);
             _moviesDbContext.SaveChanges();
@@ -178,7 +216,8 @@ namespace IntexProject.API.Controllers
             return CreatedAtAction(nameof(GetMovies), new { id = newMovie.MovieId }, newMovie);
         }
 
-        [Authorize(Roles = "Administrator")]
+
+   [Authorize(Roles = "Administrator")]
         [HttpPut("UpdateMovie/{movieId}")]
         public IActionResult UpdateMovie(string movieId, [FromBody] Movie updatedMovie)
         {
@@ -186,17 +225,15 @@ namespace IntexProject.API.Controllers
             {
                 return BadRequest("Invalid movie data.");
             }
-            else if (string.IsNullOrEmpty(updatedMovie.MovieId) || updatedMovie.MovieId.StartsWith("s"))
+
+            if (!string.IsNullOrEmpty(updatedMovie.MovieId) && !Regex.IsMatch(updatedMovie.MovieId, @"^s\d{3,}$"))
             {
-                return BadRequest("Invalid Movie ID format. Must be 's####'.");
+                return BadRequest("Invalid Movie ID format. Must be 's###'.");
             }
-            else if (string.IsNullOrEmpty(updatedMovie.Title))
+
+            if (string.IsNullOrEmpty(updatedMovie.Title))
             {
                 return BadRequest("Title is a required field.");
-            }
-            else if (int.Parse(updatedMovie.MovieId) < 0)
-            {
-                return BadRequest("Invalid Movie ID.");
             }
 
             var existingMovie = _moviesDbContext.Movies.FirstOrDefault(m => m.MovieId == movieId);
@@ -205,7 +242,7 @@ namespace IntexProject.API.Controllers
                 return NotFound();
             }
 
-            // Update only the fields that are editable
+            // Update editable fields
             existingMovie.Title = updatedMovie.Title;
             existingMovie.Director = updatedMovie.Director;
             existingMovie.Cast = updatedMovie.Cast;
@@ -214,7 +251,17 @@ namespace IntexProject.API.Controllers
             existingMovie.Rating = updatedMovie.Rating;
             existingMovie.Duration = updatedMovie.Duration;
             existingMovie.Description = updatedMovie.Description;
-            // Add genre fields here as needed
+
+            // Update genre fields
+            foreach (var genre in GENRES)
+                {
+                    var prop = typeof(Movie).GetProperty(genre);
+                    if (prop != null)
+                    {
+                        var value = prop.GetValue(updatedMovie);
+                        prop.SetValue(existingMovie, value);
+                    }
+                }
 
             _moviesDbContext.SaveChanges();
 
