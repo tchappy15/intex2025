@@ -83,7 +83,7 @@ function MoviesList({
           </p>
         }
       >
-        <div className="movie-grid">
+        <div className="movie-grid-list">
           {movies.map((movie) => {
             const cleanTitle = sanitizeTitle(movie.title);
 
