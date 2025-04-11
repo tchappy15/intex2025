@@ -42,7 +42,10 @@ function MoviesPage() {
   useEffect(() => {
     const fetchUserRecs = async () => {
       try {
-        const userId = 10; // or dynamic if you’ve got login working
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = storedUser?.id;
+        if (!userId) return; // Optionally handle no-user edge case
+
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/recommendations/user/${userId}/full`,
           {
@@ -69,7 +72,10 @@ function MoviesPage() {
   useEffect(() => {
     const fetchGenreRecs = async () => {
       try {
-        const userId = 10; // Replace dynamically if you have auth
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = storedUser?.id;
+        if (!userId) return; // Optionally handle no-user edge case
+
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/recommendations/genre/${userId}`
         );
